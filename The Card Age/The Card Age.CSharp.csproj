@@ -67,14 +67,44 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>Assets\Scenes\The_Card_Age_game_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>Assets\Scenes\The_Card_Age_game_Data\Managed\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>Assets\Scenes\The_Card_Age_game_Data\Managed\System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>Assets\Scenes\The_Card_Age_game_Data\Managed\System.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>Assets\Scenes\The_Card_Age_game_Data\Managed\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Assets\Scenes\The_Card_Age_game_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scenes\The_Card_Age_game_Data\Managed\Assembly-CSharp.dll" />
     <Compile Include="Assets\Scripts\CardCenterScreen.cs" />
     <Compile Include="Assets\Scripts\LoadNextScene.cs" />
     <Compile Include="Assets\Scripts\MenuCamControl.cs" />
+    <Compile Include="Assets\Scripts\MouseFunctions.cs" />
+    <Compile Include="Assets\Scripts\NewBehaviourScript.cs" />
+    <Compile Include="Assets\Scripts\NextScene.cs" />
+    <Compile Include="Assets\Scripts\Options.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu.cs" />
+    <Compile Include="Assets\Scripts\PlayVideo.cs" />
     <Compile Include="Assets\Scripts\TextBlink.cs" />
     <Compile Include="Assets\Scripts\TitleScreenButton.cs" />
     <Compile Include="Assets\Scripts\TitleScreenFadeIn.cs" />
+    <Compile Include="Assets\Scripts\clickSound.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Scenes\The_Card_Age_game_Data\Managed\UnityEngine.xml" />
+    <None Include="Assets\Scenes\The_Card_Age_game_Data\Mono\etc\mono\mconfig\config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

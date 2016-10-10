@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MenuCamControl : MonoBehaviour
+public class MainMenuCamControl : MonoBehaviour
 {
     public Transform currentMount;
     public float speed = 0.1f;
