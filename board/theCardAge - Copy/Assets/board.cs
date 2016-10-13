@@ -185,8 +185,9 @@ public class board : MonoBehaviour
     }
     private void _DrawDebug()
     {
-        Vector3 widthLine = Vector3.right * _row;
-        Vector3 heightLine = Vector3.forward * _col;
+        Vector3 widthLine = Vector3.right * _col;
+        Vector3 heightLine = Vector3.forward * _row;
+
         for (int i = 0; i <= _row; i++)
         {
             Vector3 start = Vector3.forward * i;
