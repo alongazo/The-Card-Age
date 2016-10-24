@@ -70,6 +70,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CardCenterScreen.cs" />
+    <Compile Include="Assets\Scripts\Cards\BaseCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\BossCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Deck.cs" />
+    <Compile Include="Assets\Scripts\Cards\Globals.cs" />
+    <Compile Include="Assets\Scripts\Cards\MinionCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\Player.cs" />
+    <Compile Include="Assets\Scripts\Cards\PlayingCard.cs" />
+    <Compile Include="Assets\Scripts\Cards\TestCardThing.cs" />
     <Compile Include="Assets\Scripts\LoadNextScene.cs" />
     <Compile Include="Assets\Scripts\MenuCamControl.cs" />
     <Compile Include="Assets\Scripts\TextBlink.cs" />

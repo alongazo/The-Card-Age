@@ -67,7 +67,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             //Debug.Log(hit.point.x + " " + hit.point.z);
 
             //boardScript.GetComponent<board>().SpawnChessman(0, boardScript.GetComponent<board>().selectionX, boardScript.GetComponent<board>().selectionY);
-            boardScript.Spawn(5, boardScript.selectionX, boardScript.selectionY);
+            boardScript.Spawn(0, boardScript.selectionX, boardScript.selectionY);
         }
 
     }

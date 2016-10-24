@@ -8,7 +8,7 @@ public class board : MonoBehaviour
     private static int _col = 10;
     public static board Instance { set; get; }
     private bool[,] allowedMoves { set; get; }
-    public Card[,] cards { set; get; }
+    public Card[,] cards { set; get; } // cards is the 2D array to signify cards on the board
     private Card selectedCard;
 
     private const float TILE_SIZE = 1.0f;
