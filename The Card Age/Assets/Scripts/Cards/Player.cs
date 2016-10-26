@@ -9,29 +9,39 @@ public class Player
     bool turnIsDone;
     string selectedAction;
 
-    public Player(BossCard heroCard, string deckInfo)
+    public Player(string bossName, string deckInfo)
     {
-        string[] cardNames = deckInfo; 
-        List<PlayingCard> newCards = new List<PlayingCard>();
-        BossCard newHero = heroCard;
-        for (int i=0; i<cardNames.Length; i++)
-        {
-            newCards.Add(cardDictionary[cardNames[i]]);
-        }
-
+        string[] cardNames = deckInfo.Split(',');
+        wholeDeck = new Deck(bossName, cardNames);
+        hand = new List<PlayingCard>();
         turnIsDone = false;
         selectedAction = "";
     }
     
     public void DrawCard(bool again)
     {
-        if (numCardsInHand < 7)
+        if (hand.Count < 7)
         {
-            hand.Add(wholeDeck.DrawCard());
-            if (again)
+            if (hand.Count == 0)
             {
-                turnIsDone = true;
+                for (int i=0; i<4; i++)
+                {
+                    hand.Add(wholeDeck.DrawCard());
+                }
+            }
+            else {
+                hand.Add(wholeDeck.DrawCard());
+                if (again)
+                {
+                    turnIsDone = true;
+                }
             }
         }
+    }
+
+    public bool getTurnIsDone() { return turnIsDone; }
+    public void selectACard(PlayingCard card)
+    {
+        selectedAction = card.GetActions()[0];
     }
 }

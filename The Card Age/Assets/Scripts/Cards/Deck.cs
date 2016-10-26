@@ -18,6 +18,7 @@ public class Deck
 
     public Deck(string bossName, string[]cardNames)
     {
+        playableDeck = new List<PlayingCard>();
         heroCard = Globals.bossDatabase[bossName];
         foreach (string name in cardNames)
         {
@@ -43,8 +44,8 @@ public class Deck
 
     public string SaveDeck()
     {
-        string saveString = playableDeck.Count.ToString() + " : " + playableDeck[0];
-        for (int i=1; i<playableDeck.Count; i++)
+        string saveString = playableDeck.Count.ToString() + 1 + " : " + heroCard.GetName();
+        for (int i=0; i<playableDeck.Count; i++)
         {
             saveString += "," + playableDeck[i].GetName();
         }

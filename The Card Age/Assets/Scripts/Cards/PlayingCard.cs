@@ -110,7 +110,9 @@ public class PlayingCard
     protected void ModifyAttack(int changeby) { attack += changeby; }
     
 
-    
+    // Get functions
+    public string GetName() { return cardName; }
+    public List<string> GetActions() { return actions; }
 
     // Skill card skills - template class T is either PlayingCard or BossCard
     void Heal<T>(T target) { }

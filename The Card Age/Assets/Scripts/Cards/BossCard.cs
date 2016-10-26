@@ -4,7 +4,7 @@ using System.Collections;
 public class BossCard : PlayingCard
 {
     int ap, baseAP;
-    bool endOfTurn;
+    //bool endOfTurn;
 
     // Not really important
     int level;
@@ -16,7 +16,26 @@ public class BossCard : PlayingCard
         base.LoadCard(stats);
         actions.Insert(2, "Defend");
         ap = baseAP = stats[1];
-        endOfTurn = false;
+        //endOfTurn = false;
+
+        if (stats.Length > 7)
+        {
+            level = stats[7];
+            experience = stats[8];
+        }
+        else {
+            level = 1;
+            experience = 0;
+        }
+    }
+
+    public bool UseSkill(int cost)
+    {
+        if (ap > 0)
+        {
+            ap = Mathf.Max(0, ap - cost);
+        }
+        return ap == 0;
     }
 
     public void Defend()
@@ -38,7 +57,6 @@ public class BossCard : PlayingCard
     }
     public void RecieveEXP(int newExperience)
     {
-        float factor = 0.89F + level*0.01F;
-        experience += Mathf.CeilToInt(newExperience / level); 
+        experience += Mathf.CeilToInt(newExperience / (0.89F + level * 0.01F)); 
     }
 }

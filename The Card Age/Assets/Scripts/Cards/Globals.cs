@@ -13,7 +13,6 @@ public class Globals : MonoBehaviour
     {
         PlayingCard newCard;
         BossCard newBossCard;
-        string[] allInfoEachCard = textfile.text.Split('\n');
         foreach (string cardInfo in textfile.text.Split('\n'))
         {
             string[] splitInfo = System.Text.RegularExpressions.Regex.Split(cardInfo, ",:");
