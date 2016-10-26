@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Title Screen.unity
+- path: C:/Users/Audrey/Desktop/The-Card-Age/board/theCardAge - Copy/Assets/chessgame.unity
   isLoaded: 1
   isActive: 1
