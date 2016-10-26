@@ -21,6 +21,14 @@ public class board : MonoBehaviour
     public List<GameObject> chessmanPrefabs;
     private List<GameObject> activeCard = new List<GameObject>();
 
+    
+    private bool isAttacking = false;
+    private bool doneAttacking = false;
+    private float startAttackTime;
+    private Vector3 attackCardPosition;
+    private Vector3 targetCardPosition;
+    private float totalDistance;
+    
 
     public bool isWhiteTurn = true;
 	// Use this for initialization
@@ -29,21 +37,48 @@ public class board : MonoBehaviour
         Instance = this;
         //SpawnAllCards();
         activeCard = new List<GameObject>();
-        cards = new Card[_row, _col];
+        cards = new Card[_col, _row];
+        SpawnDebug();
     }
 
     // Update is called once per frame
     void Update () {
         updateSelection();
         _DrawDebug();
-
-
-        if (Input.GetMouseButtonDown(0))
+        // card attack animation / card move toward target
+        if (isAttacking == true && doneAttacking == false)
+        {
+            //Debug.Log("Hello we are attacking");
+            float currentTime = (Time.time - startAttackTime);
+            float journeyFraction = currentTime / totalDistance;
+            //Debug.Log(currentTime + " "  + totalDistance  + " " + journeyFraction);
+            selectedCard.transform.position = Vector3.Lerp(attackCardPosition, targetCardPosition, journeyFraction * 25);
+            if (selectedCard.transform.position == targetCardPosition)
+            {
+                doneAttacking = true;
+                startAttackTime = Time.time;
+            }
+        }
+        // card done attack animation / card return back to original position
+        else if (doneAttacking == true)
+        {
+            float currentTime = (Time.time - startAttackTime);
+            float journeyFraction = currentTime / totalDistance;
+            //Debug.Log(currentTime + " " + totalDistance + " " + journeyFraction);
+            selectedCard.transform.position = Vector3.Lerp(targetCardPosition, attackCardPosition, journeyFraction * 3);
+            if (selectedCard.transform.position == attackCardPosition)
+            {
+                doneAttacking = false;
+                isAttacking = false;
+            }
+        }
+        else if (Input.GetMouseButtonDown(0))
         {
             //Debug.Log("hello");
             if (selectionX > -1 && selectionY > -1)
             {
                 Vector3 temp = GetTileCenter(selectionX, selectionY);
+                Debug.Log(selectionX + " " + selectionY);
                 if (selectedCard == null)
                 {
                     //Debug.Log("select");
@@ -73,6 +108,7 @@ public class board : MonoBehaviour
         Debug.Log(selectedCard.name);
         BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
     }
+
     private void MoveCard(int x, int y)
     {
         if (allowedMoves[x,y])
@@ -80,21 +116,40 @@ public class board : MonoBehaviour
             Card c = cards[x, y];
             if (c != null && c.isWhite != isWhiteTurn)
             {
+                Debug.Log("attack");
                 if (c.GetType() == typeof(King))
                 {
                     return;
                 }
+                // set variable for card attack animation
+                attackCardPosition = selectedCard.transform.position;
+                targetCardPosition = GetTileCenter(x,y);
+                startAttackTime = Time.time;
+                totalDistance = Vector3.Distance(attackCardPosition, targetCardPosition);
+                //Debug.Log(totalDistance);
+                isAttacking = true;
+
+                // destroy card "not done yet" currently card get destroyed before attack. 
+                // I will eventually destroy the card after attack when card class is completed
                 activeCard.Remove(c.gameObject);
                 Destroy(c.gameObject);
+
             }
-            cards[selectedCard.CurrentX, selectedCard.CurrentY] = null;
-            selectedCard.transform.position = GetTileCenter(x, y);
-            selectedCard.SetPosition(x, y);
-            cards[x, y] = selectedCard;
-            isWhiteTurn = !isWhiteTurn;
+            else
+            {
+                Debug.Log("check");
+                cards[selectedCard.CurrentX, selectedCard.CurrentY] = null;
+                selectedCard.transform.position = GetTileCenter(x, y);
+                selectedCard.SetPosition(x, y);
+                cards[x, y] = selectedCard;
+                isWhiteTurn = !isWhiteTurn;
+            }
         }
         BoardHighlights.Instance.HideHighlights();
-        selectedCard = null;
+        if (isAttacking == false)
+        {
+            selectedCard = null;
+        }
     }
     private void updateSelection()
     {
@@ -123,6 +178,10 @@ public class board : MonoBehaviour
         cards[x, y] = go.GetComponent<Card>();
         cards[x, y].SetPosition(x, y);
         activeCard.Add(go);
+    }
+    private void SpawnDebug()
+    {
+        Spawn(11, 3, 3);
     }
     //private void SpawnAllCards()
     //{
