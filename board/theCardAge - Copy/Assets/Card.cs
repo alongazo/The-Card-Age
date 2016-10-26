@@ -17,6 +17,6 @@ public abstract class Card : MonoBehaviour {
     
     public virtual bool[,] PossibleMove()
     {
-        return new bool[1,1];
+        return new bool[8,8];
     }
 }

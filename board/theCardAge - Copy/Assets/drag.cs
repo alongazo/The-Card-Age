@@ -9,7 +9,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public enum slot{ Weapon, Head, Chest, Legs, Feet, Inventory};
     public slot typeOfItem = slot.Weapon;
     GameObject placeholder;
-
+    public int itemIndex;
     public board boardScript;
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -67,7 +67,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             //Debug.Log(hit.point.x + " " + hit.point.z);
 
             //boardScript.GetComponent<board>().SpawnChessman(0, boardScript.GetComponent<board>().selectionX, boardScript.GetComponent<board>().selectionY);
-            boardScript.Spawn(0, boardScript.selectionX, boardScript.selectionY);
+            boardScript.Spawn(itemIndex, boardScript.selectionX, boardScript.selectionY);
         }
 
     }
