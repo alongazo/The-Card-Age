@@ -3,11 +3,12 @@ using System.Collections;
 using UnityEngine.UI;
 public class TextBlink : MonoBehaviour {
     public Text play;
+    public float timeToAppear = 0;
     private bool fade = true;
     private bool initiateFade = false;
  	// Use this for initialization
 	void Start () {
-        StartCoroutine(Wait(10));
+        StartCoroutine(Wait(timeToAppear));
 	}
 	
 	// Update is called once per frame

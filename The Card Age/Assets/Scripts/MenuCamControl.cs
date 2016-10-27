@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainMenuCamControl : MonoBehaviour
+public class MenuCamControl : MonoBehaviour
 {
     public Transform currentMount;
+    public Transform changeMount;
     public float speed = 0.1f;
     public float zoom = 1.0f;
     public Camera cameraComp;
@@ -18,6 +19,7 @@ public class MainMenuCamControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         transform.position = Vector3.Lerp(transform.position, currentMount.position, speed);
         transform.rotation = Quaternion.Slerp(transform.rotation, currentMount.rotation, speed);
         /*float velocity = Vector3.Magnitude(transform.position - lastPosition);
