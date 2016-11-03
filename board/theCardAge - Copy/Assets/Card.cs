@@ -15,10 +15,11 @@ public class Card : MonoBehaviour {
 
     public bool isWhite;
 
-    private void Awake()
-    {
-        //health.Initialize(linkedPlayingCard.GetHealth());
-    }
+    //code for AP bar (delete when finish)
+    //private void Awake()
+    //{
+    //    //health.Initialize(linkedPlayingCard.GetHealth());
+    //}
     void Update()
     {
         // debugging

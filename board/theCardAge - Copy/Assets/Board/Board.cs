@@ -96,6 +96,7 @@ public class Board : MonoBehaviour
         // left click
         else if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("Left click pressed");
             Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
             //Debug.Log("hello");
             if (selectionX > -1 && selectionY > -1)
@@ -120,13 +121,13 @@ public class Board : MonoBehaviour
         // right click (show card information)
         else if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
+            Debug.Log("Right click pressed");
+            //Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
             if (selectionX > -1 && selectionY > -1)
             {
-                if (selectedCard == null)
-                {
-                    RightSelectCard(selectionX, selectionY);
-                }
+                //Debug.Log("x, y: " + selectionX.ToString() + " " + selectionY.ToString());
+
+                RightSelectCard(selectionX, selectionY);
 
             }
         }
@@ -150,6 +151,7 @@ public class Board : MonoBehaviour
     private void RightSelectCard(int x, int y)
         // opens left panel
     {
+        Debug.Log("In RightSelectCard function");
         rightPanelScript.ViewCardStat(cards[x, y]);
     }
 
