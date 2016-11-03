@@ -7,7 +7,9 @@ public class Board : MonoBehaviour
 {
 
     [SerializeField]
-    public RightStats rightPanelScript;
+    public RightStats rightPanelScriptPlayer;
+    [SerializeField]
+    public RightStats rightPanelScriptEnemy;
 
     [SerializeField]
     public LeftPanel leftPanelScript;
@@ -224,15 +226,21 @@ public class Board : MonoBehaviour
         cards[x, y] = go.GetComponent<Card>();
         //Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
         cards[x, y].SetPosition(x, y);
-        cards[x, y].Link(Globals.cardDatabase["Angel"]);
+        if (cards[x, y].isWhite)
+            cards[x, y].Link(Globals.cardDatabase["Angel"]);
+        else
+            cards[x, y].Link(Globals.cardDatabase["Pixie"]);
         //Debug.Log(cards[x, y].IsLinked());
         activeCard.Add(go);
         
         if (cards[x, y].isWhite)
         {
-            rightPanelScript.CreateHPBar(cards[x, y]);
+            rightPanelScriptPlayer.CreateHPBar(cards[x, y]);
         }
-        
+        else if (!cards[x,y].isWhite)
+        {
+            rightPanelScriptEnemy.CreateHPBar(cards[x, y]);
+        }
     }
     private void SpawnDebug()
     {

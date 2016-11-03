@@ -38,9 +38,11 @@ public class Card : MonoBehaviour {
         health.LinkBarToObject(card);
         health.Initialize(linkedPlayingCard.GetHealth());
     }
-    public void Attack(Card otherCard)
+    public void Attack(Card attackingCard)
     {
-        linkedPlayingCard.AttackEnemy(otherCard.linkedPlayingCard);
+        Debug.Log(attackingCard.linkedPlayingCard.GetName() + " is attacking");
+        attackingCard.linkedPlayingCard.AttackEnemy(linkedPlayingCard);
+        health.CurrentVal = linkedPlayingCard.GetHealth();
     }
     public float GetHPVal()
     {
