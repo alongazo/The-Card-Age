@@ -7,13 +7,12 @@ public class Board : MonoBehaviour
 {
 
     [SerializeField]
-    public RightStats rightPanelScriptPlayer;
+    private LeftPanel leftPanelScriptPlayer;
     [SerializeField]
-    public RightStats rightPanelScriptEnemy;
+    private LeftPanel leftPanelScriptEnemy;
 
     [SerializeField]
-    public LeftPanel leftPanelScript;
-    
+    private RightPanel rightPanelScript;
 
     private static int _row = Globals.numRows;
     private static int _col = Globals.numCols;
@@ -151,7 +150,7 @@ public class Board : MonoBehaviour
     private void RightSelectCard(int x, int y)
         // opens left panel
     {
-        leftPanelScript.ViewCardStat(cards[x, y]);   
+        rightPanelScript.ViewCardStat(cards[x, y]);
     }
 
     private void MoveCard(int x, int y)
@@ -235,11 +234,11 @@ public class Board : MonoBehaviour
         
         if (cards[x, y].isWhite)
         {
-            rightPanelScriptPlayer.CreateHPBar(cards[x, y]);
+            leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
         }
         else if (!cards[x,y].isWhite)
         {
-            rightPanelScriptEnemy.CreateHPBar(cards[x, y]);
+            leftPanelScriptEnemy.CreateHPBar(cards[x, y]);
         }
     }
     private void SpawnDebug()

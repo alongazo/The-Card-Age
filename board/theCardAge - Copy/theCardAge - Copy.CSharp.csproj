@@ -64,12 +64,6 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Board\Bar.cs" />
@@ -77,7 +71,7 @@
     <Compile Include="Assets\Board\BoardHighlights.cs" />
     <Compile Include="Assets\Board\LeftPanel.cs" />
     <Compile Include="Assets\Board\Mana.cs" />
-    <Compile Include="Assets\Board\RightStats.cs" />
+    <Compile Include="Assets\Board\RightPanel.cs" />
     <Compile Include="Assets\Board\ScrollableList.cs" />
     <Compile Include="Assets\Board\Stat.cs" />
     <Compile Include="Assets\Board\drag.cs" />

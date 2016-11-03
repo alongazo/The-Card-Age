@@ -62,12 +62,14 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         //EventSystem.current.RaycastAll(eventData) // get a list of things underneath
         Destroy(placeholder);
         RaycastHit hit;
+        // find where the mouse is on the board when left click is released
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
         {
-            //Debug.Log(hit.point.x + " " + hit.point.z);
-
-            //boardScript.GetComponent<board>().SpawnChessman(0, boardScript.GetComponent<board>().selectionX, boardScript.GetComponent<board>().selectionY);
-            boardScript.Spawn(itemIndex, boardScript.selectionX, boardScript.selectionY);
+            // check if no card is on the tile
+            if (boardScript.cards[boardScript.selectionX, boardScript.selectionY] == null)
+            {
+                boardScript.Spawn(itemIndex, boardScript.selectionX, boardScript.selectionY);
+            }
         }
 
     }

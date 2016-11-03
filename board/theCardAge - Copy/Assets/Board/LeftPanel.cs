@@ -1,138 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using System.Collections.Generic;
 
 public class LeftPanel : MonoBehaviour {
-    [SerializeField]
-    private Text cardNameTextBox1;
-    [SerializeField]
-    private RawImage cardImage1;
-    [SerializeField]
-    private Text cardStrengthTextBox1;
-    [SerializeField]
-    private Text cardDefenseTextBox1;
-    [SerializeField]
-    private Text cardDescriptionTextBox1;
-    [SerializeField]
-    private Text cardHPBox1;
 
-
+    // Use this for initialization
+    public GameObject itemPrefab;
+    //private int itemCount = 1;
+    public Board boardScript;
     [SerializeField]
-    private Text cardNameTextBox2;
-    [SerializeField]
-    private RawImage cardImage2;
-    [SerializeField]
-    private Text cardStrengthTextBox2;
-    [SerializeField]
-    private Text cardDefenseTextBox2;
-    [SerializeField]
-    private Text cardDescriptionTextBox2;
-    [SerializeField]
-    private Text cardHPBox2;
-
-  
-    [SerializeField]
-    private RectTransform rightPanel1;
-    [SerializeField]
-    private RectTransform rightPanel2;
-
-
-    private Animator anim1;
-    private Animator anim2;
-    private int prevRightPanelX = -1;
-    private int prevRightPanelY = -1;
-
-    int slideIn1 = Animator.StringToHash("slideIn");
-    int slideIn2 = Animator.StringToHash("slideIn");
-    
-
-    private bool rightPanel1On = false;
-
-    private void Awake () {
-        anim1 = rightPanel1.GetComponent<Animator>();
-        anim2 = rightPanel2.GetComponent<Animator>();
-    }
-	
-
-
-    public void ViewCardStat(Card card)
+    private float height;
+    //private List<GameObject> itemPrefabList;
+    void Start()
     {
-        Debug.Log("is card null: " + (card == null));
-        if (card == null)
-        {
-            prevRightPanelX = -1;
-            prevRightPanelY = -1;
-            rightPanel1On = false;
-            anim1.SetBool(slideIn1, false);
-            anim2.SetBool(slideIn2, false);
+        //itemPrefabList = new List<GameObject>();
+        //itemCount = boardScript.activeCard.Count;
+        RectTransform rowRectTransform = itemPrefab.GetComponent<RectTransform>();
+        height = rowRectTransform.rect.height;
 
-            return;
+
+    }
+
+    public void CreateHPBar(Card cardPiece)
+    {
+        int boardCount = boardScript.activeCard.Count;
+        RectTransform containerRectTransform = gameObject.GetComponent<RectTransform>();
+        Debug.Log("Creating HP Bar");
+
+        // create hp bar game object
+        GameObject newItem = Instantiate(itemPrefab) as GameObject;
+        // change the name of the game object
+        newItem.name = gameObject.name + " item at (" + boardCount + ")";
+        // set the parent
+        newItem.transform.SetParent(gameObject.transform);
+
+        // check if scroll panel need to be resize to fit all items
+        if ((boardCount * height) > containerRectTransform.sizeDelta.y)
+        {
+            Debug.Log("changing: " + containerRectTransform.sizeDelta);
+            containerRectTransform.sizeDelta = new Vector2(containerRectTransform.sizeDelta.x, boardCount * height);
+
         }
+
+        // set hp bar to card class
+        cardPiece.SetHPBar(newItem);
+        cardPiece.LinkBarToObject(newItem);
         
-        if (prevRightPanelX != card.CurrentX || prevRightPanelY != card.CurrentY)
-        {
-            prevRightPanelX = card.CurrentX;
-            prevRightPanelY = card.CurrentY;
-            if (card != null)
-            {
-
-                if (rightPanel1On == false)
-                {
-                    rightPanel1On = true;
-                    // Display name on right panel
-                    cardNameTextBox1.text = card.Name();
-
-                    // Display image
-                    cardImage1.texture = card.Image();
-
-                    // Display HP on right panel
-                    cardHPBox1.text = card.Health() + "/" + card.MaxHealth();
-
-                    // Display strength on right panel
-                    string[] temp = cardStrengthTextBox1.text.Split(':');  
-                    cardStrengthTextBox1.text = temp[0] +": " + card.Strength();
-                    // Display defense on right panel
-                    temp = cardDefenseTextBox1.text.Split(':');
-                    cardDefenseTextBox1.text = temp[0] + ": " + card.Defense();
-
-                    cardDescriptionTextBox1.text = card.Description();
-
-                    // play right panel slide in/out animation
-                    anim1.SetBool(slideIn1, true);
-                    anim2.SetBool(slideIn2, false);
-                }
-                else if (rightPanel1On == true)
-                {
-                    rightPanel1On = false;
-
-                    //cardNameTextBox2.text = card.name;
-
-                    // Display image
-                    cardImage2.texture = card.Image();
-
-                    // Display name on right panel
-                    cardNameTextBox2.text = card.Name();
-
-                    // Display HP on right panel
-                    cardHPBox2.text = card.Health() + "/" + card.MaxHealth();
-
-                    // Display strength on right panel
-                    string[] temp = cardStrengthTextBox2.text.Split(':');
-                    cardStrengthTextBox2.text = temp[0] + ": " + card.Strength();
-                    // Display defense on right panel
-                    temp = cardDefenseTextBox2.text.Split(':');
-                    cardDefenseTextBox2.text = temp[0] + ": " + card.Defense();
-
-                    cardDescriptionTextBox2.text = card.Description();
-                    anim2.SetBool(slideIn2, true);
-                    anim1.SetBool(slideIn1, false);
-
-                }
-            }
-        }
-
-
-
+        //cardPiece.health.bar = newItem.GetComponent(typeof(Bar));
     }
 }
