@@ -1,22 +1,129 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Card : MonoBehaviour {
-    private int row = 8;
-    private int col = 8;
-    public int CurrentX { set; get; }
-    public int CurrentY { set; get; }
+public class Card : MonoBehaviour {
+    [SerializeField]
+    private GameObject rightHPBar;
+
+    [SerializeField]
+    public Stat health;
+    public int CurrentX { get; set; }
+    public int CurrentY { get; set; }
+
+    // Attaching BaseCard to this card
+    BaseCard linkedPlayingCard;
 
     public bool isWhite;
+
+    private void Awake()
+    {
+        //health.Initialize(linkedPlayingCard.GetHealth());
+    }
+    void Update()
+    {
+        // debugging
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            linkedPlayingCard.AttackEnemy(linkedPlayingCard);
+            health.CurrentVal = linkedPlayingCard.GetHealth();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            linkedPlayingCard.RestoreCard();
+            health.CurrentVal = linkedPlayingCard.GetHealth();
+        }
+    }
+    public void LinkBarToObject(GameObject card)
+    {
+        health.LinkBarToObject(card);
+        health.Initialize(linkedPlayingCard.GetHealth());
+    }
+    public void Attack(Card otherCard)
+    {
+        linkedPlayingCard.AttackEnemy(otherCard.linkedPlayingCard);
+    }
+    public float GetHPVal()
+    {
+        return health.CurrentVal;
+    }
+    public void SetHPBar(GameObject HPBar)
+    {
+        rightHPBar = HPBar;
+
+
+
+        // add the card's name
+        foreach (UnityEngine.UI.Text textItem in rightHPBar.GetComponents<UnityEngine.UI.Text>())
+        {
+            Debug.Log(textItem.name);
+            if (textItem.name == "Name")
+            {
+                textItem.text = linkedPlayingCard.GetName();
+            }
+        }
+    }
+    public GameObject GetHPBar()
+    {
+        return rightHPBar;
+    }
 
     public void SetPosition(int x, int y)
     {
         CurrentX = x;
         CurrentY = y;
     }
-    
-    public virtual bool[,] PossibleMove()
+    public string Description()
     {
-        return new bool[8,8];
+        return linkedPlayingCard.getDescription();
+    }
+    public bool[,] PossibleMove()
+    {
+        Debug.Log("In Possible Move, is linked? " + IsLinked().ToString());
+        return linkedPlayingCard.PossibleMove();
+    }
+
+    public int Defense() { return linkedPlayingCard.GetDefense(); }
+    public int Strength() { return linkedPlayingCard.GetAttack(); }
+
+
+    // Attaching BaseCard to this card
+    public void Link(PlayingCard toLink)
+    {
+        linkedPlayingCard = new PlayingCard(toLink);
+        linkedPlayingCard.Link(this);
+    }
+    public void Unlink()
+    {
+        linkedPlayingCard.Unlink();
+        linkedPlayingCard = null;
+    }
+    public void CheckLink()
+    {
+        Debug.Log(linkedPlayingCard.GetName());
+    }
+    public bool IsLinked()
+    {
+        return linkedPlayingCard != null;
+    }
+
+    public string Name()
+    {
+        return linkedPlayingCard.GetName();
+    }
+
+    public string Health()
+    {
+        return linkedPlayingCard.GetHealth().ToString();
+    }
+    public string MaxHealth()
+    {
+        return linkedPlayingCard.GetMaxHealth().ToString();
+    }
+
+    public Texture Image()
+    {
+        string texture = "Assets/Card_Images/" + linkedPlayingCard.GetImage();
+        Debug.Log("image is found at " + texture);
+        return (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(texture, typeof(Texture2D));
     }
 }
