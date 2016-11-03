@@ -14,6 +14,9 @@ public class Board : MonoBehaviour
     [SerializeField]
     private RightPanel rightPanelScript;
 
+    [SerializeField]
+    private Text WhoTurnDebug;
+
     private static int _row = Globals.numRows;
     private static int _col = Globals.numCols;
     public static Board Instance { set; get; }
@@ -48,7 +51,7 @@ public class Board : MonoBehaviour
         Instance = this;
         activeCard = new List<GameObject>();
         cards = new Card[_col, _row];
-        //SpawnDebug();
+        UpdateWhoTurnDebug();
     }
 
     // Update is called once per frame
@@ -113,7 +116,7 @@ public class Board : MonoBehaviour
                 {
                     //Debug.Log("move");
                     MoveCard(selectionX, selectionY);
-                    SelectCard(selectionX, selectionY);
+                    //SelectCard(selectionX, selectionY);
                 }
             }
         }
@@ -134,7 +137,7 @@ public class Board : MonoBehaviour
     }
     private void SelectCard(int x, int y)
     {
-        //Debug.Log("In Select Card " + selectionX + "  " + selectionY);
+        Debug.Log("In Select Card " + selectionX + "  " + selectionY);
         //Debug.Log("Does card exist: " + (cards[x, y] != null).ToString());
         if (cards[x, y] == null)
         {
@@ -184,14 +187,14 @@ public class Board : MonoBehaviour
                 }
 
             }
-            else
+            else if (cards[x, y] == null)
             {
                 Debug.Log("move is allowed");
                 cards[selectedCard.CurrentX, selectedCard.CurrentY] = null;
                 selectedCard.transform.position = GetTileCenter(x, y);
                 selectedCard.SetPosition(x, y);
                 cards[x, y] = selectedCard;
-                isWhiteTurn = !isWhiteTurn;
+                //isWhiteTurn = !isWhiteTurn;
             }
         }
         BoardHighlights.Instance.HideHighlights();
@@ -243,10 +246,7 @@ public class Board : MonoBehaviour
             leftPanelScriptEnemy.CreateHPBar(cards[x, y]);
         }
     }
-    private void SpawnDebug()
-    {
-        Spawn(11, 3, 3);
-    }
+
 
     private Vector3 GetTileCenter(int x, int y)
     {
@@ -280,6 +280,32 @@ public class Board : MonoBehaviour
                 Vector3.forward * (selectionY + 1) + Vector3.right * (selectionX + 1));
             Debug.DrawLine(Vector3.forward * (selectionY + 1) + Vector3.right * selectionX,
                 Vector3.forward * selectionY + Vector3.right * (selectionX + 1));
+        }
+    }
+    public void EndTurn()
+    {
+        isWhiteTurn = !isWhiteTurn;
+        UpdateWhoTurnDebug();
+    }
+    public void UpdateWhoTurnDebug()
+    {
+        // In case a card is select and the player decides to end his/her turn
+        // This will unselect that card
+        if (selectedCard != null)
+        {
+            selectedCard = null;
+            BoardHighlights.Instance.HideHighlights();
+        }
+        // Change what is display on the text to indicate whos turn it is
+        if (isWhiteTurn)
+        {
+            WhoTurnDebug.text = "Your Turn.";
+            WhoTurnDebug.color = Color.blue;
+        }
+        else if (!isWhiteTurn)
+        {
+            WhoTurnDebug.text = "Enemy Turn.";
+            WhoTurnDebug.color = Color.red;
         }
     }
 }
