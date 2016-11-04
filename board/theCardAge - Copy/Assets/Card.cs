@@ -77,7 +77,7 @@ public class Card : MonoBehaviour {
     }
     public string Description()
     {
-        return linkedPlayingCard.getDescription();
+        return linkedPlayingCard.GetDescription();
     }
     public bool[,] PossibleMove()
     {

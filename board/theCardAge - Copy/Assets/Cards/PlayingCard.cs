@@ -76,11 +76,13 @@ public class PlayingCard : BaseCard
             damage = Mathf.CeilToInt(attackToMultiply * (attack / 10));
         }
         else {
-            int changeBy = Random.Range(-2, 3);
-            if (attack + changeBy > enemyDefense)
-            {
-                damage = attack + changeBy;
-            }
+            damage = attack;
+            //int changeBy = Random.Range(-2, 3);
+            //if (attack + changeBy > enemyDefense)
+            //{
+            //    damage = attack + changeBy;
+            //}
+            
         }
         return damage;
     }
@@ -131,28 +133,19 @@ public class PlayingCard : BaseCard
     }
     public override void AttackEnemy(BaseCard enemy, int attackToMultiply = 0)
     {
-        int damage = CalculateDamage(enemy.GetDefense(), attackToMultiply);
-        if (enemy.GetHealth() < damage) { DiscardCard(); }
-        else { enemy.SubHealth(damage); }
+        enemy.SubHealth(CalculateDamage(enemy.GetDefense(), attackToMultiply));
     }
 
 
     public override string GetName() { return cardName; }
-    public override string GetImage()
-    {
-        Debug.Log(image);
-        return image;
-    }
-    public override string getDescription() { return description; }
+    public override string GetImage() { return image; }
+    public override string GetDescription() { return description; }
     public override int GetHealth() { return health; }
     public override int GetDefense() { return defense; }
     public override int GetAttack() { return attack; }
-    public override int GetMaxHealth()
-    {
-        return baseHealth;
-    }
+    public override int GetMaxHealth() { return baseHealth; }
 
-    public override void SubHealth(int damage) { health -= damage; }
+    public override void SubHealth(int damage) { health = Mathf.Max(0, health-damage); }
 
 
     // Get functions - possibly put into BaseCard?
