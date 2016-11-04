@@ -9,7 +9,7 @@ public class LeftPanel : MonoBehaviour {
     public GameObject itemPrefab;
     //private int itemCount = 1;
     public Board boardScript;
-    [SerializeField]
+    //[SerializeField]
     private float height;
     //private List<GameObject> itemPrefabList;
     void Start()
@@ -18,7 +18,7 @@ public class LeftPanel : MonoBehaviour {
         //itemCount = boardScript.activeCard.Count;
         RectTransform rowRectTransform = itemPrefab.GetComponent<RectTransform>();
         height = rowRectTransform.rect.height;
-
+        Debug.Log("height: " + height);
 
     }
 
