@@ -18,12 +18,17 @@ public class PlayingCard : BaseCard
     int move;
 
     protected int attack, baseAttack;
+    public int attackMultiplier = 2;
     protected int health, baseHealth;
+    public int healthMultiplier = 2;
     protected int defense, baseDefense;
+    public int increaseDefense = 2;
     protected string status;
+    public int sacrificeAmt = 5;
 
     protected List<string> actions;
 
+ 
     // Initialization
     public PlayingCard(string[] initInfo, CardType type)
     {
@@ -159,15 +164,35 @@ public class PlayingCard : BaseCard
     public List<string> GetActions() { return actions; }
 
     // Skill card skills - template class T is either PlayingCard or BossCard
-    void Heal<T>(T target) { }
-    void Fortify<T>(T target) { }
-    void Sacrifice<T>(T target) { }
-    void SurroundDamage<T> (T[] targets) { }
+    void Heal(PlayingCard target) 
+    {
+        target.health *= healthMultiplier;
+    }
+    void increaseDamage(PlayingCard target)
+    {
+        target.attack *= attackMultiplier;
+    }
+    void Fortify(PlayingCard target)
+    {
+        target.defense += increaseDefense;
+    }
+    void Sacrifice(PlayingCard target)
+    {
+        health -= sacrificeAmt;
+        target.health += sacrificeAmt;
+    }
+    void SurroundDamage(PlayingCard[] targets,int damage)
+    {
+        foreach(PlayingCard card in targets)
+        {
+            card.health -= damage;
+        }
+    }
     void Summon() { }
 }
 
 // Skill cards -> would have to be connected to the boss card somehow
 // Effect: have a target, sometimes a status condition
-//  D = damange multiplier -> take the hero's attack and multiply it by the attack value
+//  D = damage multiplier -> take the hero's attack and multiply it by the attack value
 //  H = healing -> take selected card and add a multiplier to health
 //  Def = "permanently" add number of points to defense
