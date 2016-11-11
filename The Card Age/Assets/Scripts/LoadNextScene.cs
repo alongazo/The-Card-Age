@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 public class LoadNextScene : MonoBehaviour {
-    public string sceneName;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -14,6 +14,6 @@ public class LoadNextScene : MonoBehaviour {
 	}
     public void LoadLevel()
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene("Shop");
     }
 }

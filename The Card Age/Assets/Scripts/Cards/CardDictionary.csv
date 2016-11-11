@@ -1,0 +1,41 @@
+Name,Affiliation,:,Type,:,Rank,Cost to Use,Cost to Move,Attack,Health,Defense,:,Status
+Troll,Enemy,:,Boss,:,1,30,1,5,50,3,:,None
+Knight,Hero,:,Boss,:,1,30,1,8,30,1,:,None
+Brag,Enemy,:,Minion,:,1,1,1,2,10,0,:,None
+Div,Enemy,:,Minion,:,1,1,1,3,10,0,:,None
+Leshak,Enemy,:,Minion,:,1,1,1,2,10,0,:,None
+Slime,Enemy,:,Minion,:,1,1,1,1,25,0,:,None
+Angel,Hero,:,Minion,:,1,1,1,3,15,0,:,None
+Dwarf,Hero,:,Minion,:,1,1,1,1,15,0,:,None
+Metsik,Hero,:,Minion,:,1,1,1,2,25,0,:,None
+Unicorn,Hero,:,Minion,:,1,1,1,2,20,0,:,None
+Žaltys,Hero,:,Minion,:,1,1,1,1,10,0,:,None
+Griffin,Neutral,:,Minion,:,1,1,1,2,25,0,:,None
+Lamia,Neutral,:,Minion,:,1,1,1,2,10,0,:,None
+Pixie,Neutral,:,Minion,:,1,1,1,1,10,0,:,None
+Undine,Neutral,:,Minion,:,1,1,1,1,15,0,:,None
+Wyvern,Neutral,:,Minion,:,1,1,1,3,25,0,:,None
+Clobber,Enemy,:,Skill,:,1,1,0,30,0,0,:,Attack
+Demonic Flame,Enemy,:,Skill,:,1,1,0,15,0,0,:,Attack
+Glob Throw,Enemy,:,Skill,:,1,1,0,15,0,0,:,Attack
+Lure,Enemy,:,Skill,:,1,1,0,0,0,0,:,Each Turn -2
+Nightmare,Enemy,:,Skill,:,1,1,0,0,0,0,:,Paralysis
+Shadow Slash,Enemy,:,Skill,:,1,1,0,20,0,0,:,Attack
+Slime Shield,Enemy,:,Skill,:,1,1,0,0,0,3,:,Fortify
+Sneak Attack,Enemy,:,Skill,:,1,1,0,0,0,0,:,"Multiple 2, 50-65"
+Blessed Blade,Hero,:,Skill,:,1,1,0,30,0,0,:,Attack
+Brave,Hero,:,Skill,:,1,1,0,20,0,0,:,Attack
+Esuna,Hero,:,Skill,:,1,1,0,0,0,0,:,Esuna
+Fortify,Hero,:,Skill,:,1,1,0,0,0,5,:,Fortify
+Heart of the Cards,Hero,:,Skill,:,1,1,0,0,0,0,:,Card Damage 10
+Holy Strike,Hero,:,Skill,:,1,1,0,25,0,0,:,Attack
+Light's Glory,Hero,:,Skill,:,1,1,0,0,75,0,:,Heal
+Sacrifice,Hero,:,Skill,:,1,1,0,0,0,0,:,Sacrifice 5
+Bide,Neutral,:,Skill,:,1,1,0,20,0,0,:,Retaliate
+Cancel,Neutral,:,Skill,:,1,1,0,0,0,0,:,Cancel
+Dash,Neutral,:,Skill,:,1,1,0,15,0,0,:,Attack
+Defend,Neutral,:,Skill,:,1,1,0,0,0,3,:,Fortify
+Double Summon,Neutral,:,Skill,:,1,1,0,0,0,0,:,Summon
+Heal,Neutral,:,Skill,:,1,1,0,0,40,0,:,Heal
+Wind Slice,Neutral,:,Skill,:,1,1,0,0,0,0,:,"Multiple 3, 40-50"
+Alp,Enemy,:,Minion,:,1,1,1,1,20,0,:,None
