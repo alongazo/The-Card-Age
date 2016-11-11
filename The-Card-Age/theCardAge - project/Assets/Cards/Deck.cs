@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class Deck
+public class Deck : MonoBehaviour
 {
     BossCard heroCard;
     List<PlayingCard> playableDeck;

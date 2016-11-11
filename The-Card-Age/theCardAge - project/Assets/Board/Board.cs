@@ -29,7 +29,7 @@ public class Board : MonoBehaviour
     public int selectionX = -1;
     public int selectionY = -1;
 
-    private Quaternion orientation = Quaternion.Euler(-90, 180, 0);
+    private Quaternion orientation = Quaternion.Euler(0, 180, 0);
 
     public List<GameObject> chessmanPrefabs;
     public List<GameObject> activeCard = new List<GameObject>();
@@ -230,6 +230,7 @@ public class Board : MonoBehaviour
         cards[x, y] = go.GetComponent<Card>();
         //Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
         cards[x, y].SetPosition(x, y);
+        cards[x, y].isWhite = isWhiteTurn;
         if (cards[x, y].isWhite)
             cards[x, y].Link(Globals.cardDatabase["Angel"]);
         else
