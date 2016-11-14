@@ -9,8 +9,14 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public enum slot{ Weapon, Head, Chest, Legs, Feet, Inventory};
     public slot typeOfItem = slot.Weapon;
     GameObject placeholder;
-    public int itemIndex;
+    //public int itemIndex;
     public Board boardScript;
+
+
+    int itemIndex = 5;
+    public void setItemIndex(int index) { itemIndex = index; }
+
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         placeholder = new GameObject();
@@ -71,7 +77,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 boardScript.Spawn(itemIndex, boardScript.selectionX, boardScript.selectionY);
             }
         }
-
+        Destroy(this.gameObject);
     }
     
 

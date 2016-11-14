@@ -1,1 +1,1 @@
-Knight:Angel,Angel,Angel
+Knight:Angel,Angel,Angel,Unicorn,Dwarf,Heal,Bide,Sacrifice

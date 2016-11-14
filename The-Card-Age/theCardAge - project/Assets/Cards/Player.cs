@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEditor;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class Player : MonoBehaviour
@@ -7,7 +9,8 @@ public class Player : MonoBehaviour
     //  if we keep hand here, then maybe we have its transform?
     //  We'd have to initialize it to something, perhaps make this public?
     //  What about the enemy's?
-    public hand handPlace;
+    public dropzone handPlace;
+    public Board board;
 
 
     public string bossName;
@@ -65,7 +68,8 @@ public class Player : MonoBehaviour
                         return;
                     }
                     handDeck.Add(card);
-                }
+                    SetCardToHand(card);
+                }   
             }
             else {
                 PlayingCard card = wholeDeck.DrawCard();
@@ -75,6 +79,7 @@ public class Player : MonoBehaviour
                     return;
                 }
                 handDeck.Add(card);
+                SetCardToHand(card);
                 if (again)
                 {
                     turnIsDone = true;
@@ -97,4 +102,37 @@ public class Player : MonoBehaviour
     }
 
     public string getAction() { return selectedAction; }
+
+
+    void SetCardToHand(PlayingCard card)
+    {
+        // Trying to add this to a drag object?
+        string prefabName = card.GetName().Replace(" ", "") + "Prefab";
+        int prefabIndex = board.FindPrefabIndex(prefabName);
+        // want to add the required components to here:
+        //  Drag (script) with TypeOfItem = Weapon and ItemIndex = prefabIndex
+        //      maybe should make a prefab? :/
+        //  Layout Element (preferred: 70,110)
+        //  Canvas Group (alpha = 1, check everything except Ignore Parent Group)
+
+        GameObject newDrag = new GameObject("Card " + handDeck.Count.ToString());
+        newDrag.AddComponent<Image>();
+        newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + card.GetImage());
+        newDrag.GetComponent<Image>().preserveAspect = true;
+        newDrag.AddComponent<LayoutElement>();
+        newDrag.GetComponent<LayoutElement>().preferredWidth = 70;
+        newDrag.GetComponent<LayoutElement>().preferredHeight = 110;
+        newDrag.GetComponent<LayoutElement>().flexibleWidth = 0;
+        newDrag.GetComponent<LayoutElement>().flexibleHeight = 0;
+        newDrag.AddComponent<CanvasGroup>();
+        newDrag.GetComponent<CanvasGroup>().alpha = 1;
+        newDrag.GetComponent<CanvasGroup>().interactable = true;
+        newDrag.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+        newDrag.AddComponent<drag>();
+        newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
+        newDrag.GetComponent<drag>().boardScript = board;
+
+        newDrag.transform.parent = handPlace.transform;
+    }
 }

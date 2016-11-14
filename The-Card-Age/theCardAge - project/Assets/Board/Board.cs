@@ -309,4 +309,23 @@ public class Board : MonoBehaviour
             WhoTurnDebug.color = Color.red;
         }
     }
+
+
+
+
+
+
+
+
+    public int FindPrefabIndex(string name)
+    {
+        for (int i=0; i<chessmanPrefabs.Count; i++)
+        {
+            if (chessmanPrefabs[i].name == name)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
 }
