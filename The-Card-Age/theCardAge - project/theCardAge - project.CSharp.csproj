@@ -144,6 +144,7 @@
     <Compile Include="Assets\Scripts\CardCenterScreen.cs" />
     <Compile Include="Assets\Scripts\CollectionManager.cs" />
     <Compile Include="Assets\Scripts\DimLight.cs" />
+    <Compile Include="Assets\Scripts\DrawCard.cs" />
     <Compile Include="Assets\Scripts\LoadNextScene.cs" />
     <Compile Include="Assets\Scripts\MainMenuCamControl.cs" />
     <Compile Include="Assets\Scripts\MenuCamControl.cs" />
