@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class BaseCard
+public abstract class BaseCard : MonoBehaviour
 {
     public bool discard;
     public void DiscardCard() { discard = true; }

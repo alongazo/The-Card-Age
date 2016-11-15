@@ -142,6 +142,7 @@
     <Compile Include="Assets\Realistic Terrain Collection\Other\Effects\ImageEffects\Scripts\VignetteAndChromaticAberration.cs" />
     <Compile Include="Assets\Realistic Terrain Collection\Other\Effects\ImageEffects\Scripts\Vortex.cs" />
     <Compile Include="Assets\Scripts\CardCenterScreen.cs" />
+    <Compile Include="Assets\Scripts\CollectionManager.cs" />
     <Compile Include="Assets\Scripts\DimLight.cs" />
     <Compile Include="Assets\Scripts\LoadNextScene.cs" />
     <Compile Include="Assets\Scripts\MainMenuCamControl.cs" />
@@ -154,9 +155,12 @@
     <Compile Include="Assets\Scripts\PlayVideo.cs" />
     <Compile Include="Assets\Scripts\RawImageFader.cs" />
     <Compile Include="Assets\Scripts\TextBlink.cs" />
+    <Compile Include="Assets\Scripts\TextChanger.cs" />
     <Compile Include="Assets\Scripts\TextFader.cs" />
     <Compile Include="Assets\Scripts\TitleScreenButton.cs" />
     <Compile Include="Assets\Scripts\TitleScreenFadeIn.cs" />
+    <Compile Include="Assets\Scripts\VillageDeck.cs" />
+    <Compile Include="Assets\Scripts\VillageDrag.cs" />
     <Compile Include="Assets\Scripts\clickSound.cs" />
   </ItemGroup>
   <ItemGroup>

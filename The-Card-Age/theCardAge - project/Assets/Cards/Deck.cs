@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public class Deck : MonoBehaviour
 {
-    BossCard heroCard;
-    List<PlayingCard> playableDeck;
-    List<PlayingCard> discardDeck;
+    public BossCard heroCard;
+    public List<PlayingCard> playableDeck;
+    public List<PlayingCard> discardDeck;
+    
 
     System.Random RNG;
 

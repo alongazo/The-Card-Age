@@ -26,6 +26,8 @@ public class PlayingCard : BaseCard
     protected string status;
     public int sacrificeAmt = 5;
 
+    public int amountOwned = 1;
+
     protected List<string> actions;
 
  
