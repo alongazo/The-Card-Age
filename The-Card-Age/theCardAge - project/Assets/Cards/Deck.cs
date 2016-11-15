@@ -52,4 +52,8 @@ public class Deck : MonoBehaviour
         }
         return saveString;
     }
+
+
+
+    public int SizeOFDeck() { return playableDeck.Count; }
 }

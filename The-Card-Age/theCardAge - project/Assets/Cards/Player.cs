@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     //  What about the enemy's?
     public dropzone handPlace;
     public Board board;
-
+    public Text deckCount;
 
     public string bossName;
     public TextAsset deckInfo;
@@ -35,7 +35,6 @@ public class Player : MonoBehaviour
         selectedAction = "";
 
         DrawCard(false);
-
     }
 
     void Update()
@@ -85,6 +84,7 @@ public class Player : MonoBehaviour
                     turnIsDone = true;
                 }
             }
+            deckCount.text = wholeDeck.SizeOFDeck().ToString();
         }
     }
 
