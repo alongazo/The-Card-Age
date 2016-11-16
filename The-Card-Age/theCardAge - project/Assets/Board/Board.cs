@@ -212,7 +212,7 @@ public class Board : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f,LayerMask.GetMask("ChessPlane")))
         {
-            //Debug.Log(hit.point.x + " " + hit.point.z);
+            Debug.Log(hit.point.x + " " + hit.point.z);
             selectionX = (int) hit.point.x;
             selectionY = (int) hit.point.z;
         }
@@ -227,24 +227,24 @@ public class Board : MonoBehaviour
     {
         GameObject go = Instantiate(chessmanPrefabs[index], GetTileCenter(x,y), orientation) as GameObject;
         go.transform.SetParent(transform);
-        cards[x, y] = go.GetComponent<Card>();
+        cards[x, y - 7] = go.GetComponent<Card>();
         //Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
-        cards[x, y].SetPosition(x, y);
-        cards[x, y].isWhite = isWhiteTurn;
-        if (cards[x, y].isWhite)
-            cards[x, y].Link(Globals.cardDatabase["Angel"]);
+        cards[x, y - 7].SetPosition(x, y);
+        cards[x, y - 7].isWhite = isWhiteTurn;
+        if (cards[x, y - 7].isWhite)
+            cards[x, y - 7].Link(Globals.cardDatabase["Angel"]);
         else
-            cards[x, y].Link(Globals.cardDatabase["Pixie"]);
+            cards[x, y - 7].Link(Globals.cardDatabase["Pixie"]);
         //Debug.Log(cards[x, y].IsLinked());
         activeCard.Add(go);
         
-        if (cards[x, y].isWhite)
+        if (cards[x, y - 7].isWhite)
         {
-            leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
+            leftPanelScriptPlayer.CreateHPBar(cards[x, y - 7]);
         }
-        else if (!cards[x,y].isWhite)
+        else if (!cards[x,y - 7].isWhite)
         {
-            leftPanelScriptEnemy.CreateHPBar(cards[x, y]);
+            leftPanelScriptEnemy.CreateHPBar(cards[x, y - 7]);
         }
     }
 
@@ -261,14 +261,14 @@ public class Board : MonoBehaviour
         Vector3 widthLine = Vector3.right * _col;
         Vector3 heightLine = Vector3.forward * _row;
 
-        for (int i = 0; i <= _row; i++)
+        for (int i = 7; i <= _row+7; i++)
         {
-            Vector3 start = Vector3.forward * i;
+            Vector3 start = Vector3.forward * (i);
             Debug.DrawLine(start, start + widthLine);
 
             for (int j = 0; j <= _col; j++)
             {
-                start = Vector3.right * j;
+                start = Vector3.right * j + Vector3.forward*7;
                 Debug.DrawLine(start, start + heightLine);
             }
 

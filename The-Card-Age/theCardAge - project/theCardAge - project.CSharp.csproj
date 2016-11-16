@@ -141,6 +141,7 @@
     <Compile Include="Assets\Realistic Terrain Collection\Other\Effects\ImageEffects\Scripts\Twirl.cs" />
     <Compile Include="Assets\Realistic Terrain Collection\Other\Effects\ImageEffects\Scripts\VignetteAndChromaticAberration.cs" />
     <Compile Include="Assets\Realistic Terrain Collection\Other\Effects\ImageEffects\Scripts\Vortex.cs" />
+    <Compile Include="Assets\Scripts\AspectUtility.cs" />
     <Compile Include="Assets\Scripts\CardCenterScreen.cs" />
     <Compile Include="Assets\Scripts\DimLight.cs" />
     <Compile Include="Assets\Scripts\LoadNextScene.cs" />

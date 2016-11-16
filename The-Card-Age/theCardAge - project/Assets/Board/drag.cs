@@ -72,7 +72,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
         {
             // check if no card is on the tile
-            if (boardScript.cards[boardScript.selectionX, boardScript.selectionY] == null)
+            if (boardScript.cards[boardScript.selectionX, boardScript.selectionY - 7] == null)
             {
                 boardScript.Spawn(itemIndex, boardScript.selectionX, boardScript.selectionY);
             }

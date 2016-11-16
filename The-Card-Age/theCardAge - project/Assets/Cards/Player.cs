@@ -120,10 +120,10 @@ public class Player : MonoBehaviour
         newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + card.GetImage());
         newDrag.GetComponent<Image>().preserveAspect = true;
         newDrag.AddComponent<LayoutElement>();
-        newDrag.GetComponent<LayoutElement>().preferredWidth = 70;
-        newDrag.GetComponent<LayoutElement>().preferredHeight = 110;
-        newDrag.GetComponent<LayoutElement>().flexibleWidth = 0;
-        newDrag.GetComponent<LayoutElement>().flexibleHeight = 0;
+        //newDrag.GetComponent<LayoutElement>().preferredWidth = (handPlace.transform as RectTransform).rect.width;
+        //newDrag.GetComponent<LayoutElement>().preferredHeight = (handPlace.transform as RectTransform).rect.height;
+        //newDrag.GetComponent<LayoutElement>().flexibleWidth = 0;
+        //newDrag.GetComponent<LayoutElement>().flexibleHeight = 0;
         newDrag.AddComponent<CanvasGroup>();
         newDrag.GetComponent<CanvasGroup>().alpha = 1;
         newDrag.GetComponent<CanvasGroup>().interactable = true;
