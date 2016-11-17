@@ -100,7 +100,7 @@ public class Board : MonoBehaviour
         else if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Left click pressed");
-            Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
+            //Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
             //Debug.Log("hello");
             if (selectionX > -1 && selectionY > -1)
             {
@@ -137,7 +137,7 @@ public class Board : MonoBehaviour
     }
     private void SelectCard(int x, int y)
     {
-        Debug.Log("In Select Card " + selectionX + "  " + selectionY);
+        //Debug.Log("In Select Card " + selectionX + "  " + selectionY);
         //Debug.Log("Does card exist: " + (cards[x, y] != null).ToString());
         if (cards[x, y] == null)
         {
@@ -212,7 +212,6 @@ public class Board : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f,LayerMask.GetMask("ChessPlane")))
         {
-            Debug.Log(hit.point.x + " " + hit.point.z);
             selectionX = (int) hit.point.x;
             selectionY = (int) hit.point.z;
         }
@@ -223,28 +222,28 @@ public class Board : MonoBehaviour
             selectionY = -1;
         }
     }
-    public void Spawn(int index, int x, int y)
+    public void Spawn(int index, string name, int x, int y)
     {
         GameObject go = Instantiate(chessmanPrefabs[index], GetTileCenter(x,y), orientation) as GameObject;
         go.transform.SetParent(transform);
-        cards[x, y - 7] = go.GetComponent<Card>();
+        cards[x, y] = go.GetComponent<Card>();
         //Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
-        cards[x, y - 7].SetPosition(x, y);
-        cards[x, y - 7].isWhite = isWhiteTurn;
-        if (cards[x, y - 7].isWhite)
-            cards[x, y - 7].Link(Globals.cardDatabase["Angel"]);
+        cards[x, y].SetPosition(x, y);
+        cards[x, y].isWhite = isWhiteTurn;
+        if (cards[x, y].isWhite)
+            cards[x, y].Link(Globals.cardDatabase[name]);
         else
-            cards[x, y - 7].Link(Globals.cardDatabase["Pixie"]);
+            cards[x, y].Link(Globals.cardDatabase[name]);
         //Debug.Log(cards[x, y].IsLinked());
         activeCard.Add(go);
         
-        if (cards[x, y - 7].isWhite)
+        if (cards[x, y].isWhite)
         {
-            leftPanelScriptPlayer.CreateHPBar(cards[x, y - 7]);
+            leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
         }
-        else if (!cards[x,y - 7].isWhite)
+        else if (!cards[x,y].isWhite)
         {
-            leftPanelScriptEnemy.CreateHPBar(cards[x, y - 7]);
+            leftPanelScriptEnemy.CreateHPBar(cards[x, y]);
         }
     }
 
@@ -261,14 +260,14 @@ public class Board : MonoBehaviour
         Vector3 widthLine = Vector3.right * _col;
         Vector3 heightLine = Vector3.forward * _row;
 
-        for (int i = 7; i <= _row+7; i++)
+        for (int i = 0; i <= _row; i++)
         {
-            Vector3 start = Vector3.forward * (i);
+            Vector3 start = Vector3.forward * i;
             Debug.DrawLine(start, start + widthLine);
 
             for (int j = 0; j <= _col; j++)
             {
-                start = Vector3.right * j + Vector3.forward*7;
+                start = Vector3.right * j;
                 Debug.DrawLine(start, start + heightLine);
             }
 

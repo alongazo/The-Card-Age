@@ -77,7 +77,7 @@ public class Card : MonoBehaviour {
     }
     public string Description()
     {
-        return linkedPlayingCard.getDescription();
+        return linkedPlayingCard.GetDescription();
     }
     public bool[,] PossibleMove()
     {
@@ -113,7 +113,6 @@ public class Card : MonoBehaviour {
     {
         return linkedPlayingCard.GetName();
     }
-
     public string Health()
     {
         return linkedPlayingCard.GetHealth().ToString();
@@ -121,6 +120,14 @@ public class Card : MonoBehaviour {
     public string MaxHealth()
     {
         return linkedPlayingCard.GetMaxHealth().ToString();
+    }
+    public string Movement()
+    {
+        return linkedPlayingCard.GetMovement().ToString();
+    }
+    public string Status()
+    {
+        return linkedPlayingCard.GetStatus();
     }
 
     public Texture Image()

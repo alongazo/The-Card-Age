@@ -35,7 +35,7 @@ public class PlayingCard : BaseCard
         cardName = initInfo[0];
         affiliation = initInfo[1];
         image = initInfo[2];
-        Debug.Log("Image for " + cardName + " is " + image);
+        //Debug.Log("Image for " + cardName + " is " + image);
         description = initInfo[3];
 
         cardType = type;
@@ -56,7 +56,7 @@ public class PlayingCard : BaseCard
         discard = toCopy.discard;
         status = toCopy.status;
     }
-    public void LoadCard(int[] info, string status = "none")
+    public void LoadCard(int[] info, string status = "None")
     {
         rank = info[0]; cost = info[1]; move = info[2];
         attack = baseAttack = info[3];
@@ -94,7 +94,7 @@ public class PlayingCard : BaseCard
     // Overwrite the functions in BaseCard
     public override bool[,] PossibleMove()
     {
-        Debug.Log("Is calling the PossibleMove function of PlayingCard");
+        //Debug.Log("Is calling the PossibleMove function of PlayingCard");
         bool[,] moves = new bool[Globals.numCols, Globals.numRows];
         int x = linkedBoardCard.CurrentX, y = linkedBoardCard.CurrentY;
         for (int spread = 1; spread-1 < move; spread++)
@@ -131,7 +131,7 @@ public class PlayingCard : BaseCard
         defense = baseDefense;
         if (cardType != CardType.Skill)
         {
-            status = "none";
+            status = "None";
         }
     }
     public override void AttackEnemy(BaseCard enemy, int attackToMultiply = 0)
@@ -143,19 +143,14 @@ public class PlayingCard : BaseCard
 
 
     public override string GetName() { return cardName; }
-    public override string GetImage()
-    {
-        Debug.Log(image);
-        return image;
-    }
-    public override string getDescription() { return description; }
+    public override string GetImage() { return image; }
+    public override string GetDescription() { return description; }
     public override int GetHealth() { return health; }
     public override int GetDefense() { return defense; }
     public override int GetAttack() { return attack; }
-    public override int GetMaxHealth()
-    {
-        return baseHealth;
-    }
+    public override int GetMaxHealth() { return baseHealth;  }
+    public override int GetMovement() { return move; }
+    public override string GetStatus() { return (status == "None") ? " " : status ; }
 
     public override void SubHealth(int damage) { health -= damage; }
 

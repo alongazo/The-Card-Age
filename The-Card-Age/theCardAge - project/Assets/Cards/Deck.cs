@@ -28,6 +28,7 @@ public class Deck : MonoBehaviour
     public PlayingCard DrawCard()
     {
         PlayingCard cardToGive = null;
+        Debug.Log(playableDeck.Count);
         if (playableDeck.Count > 0)
         {
             int index = RNG.Next() % playableDeck.Count;

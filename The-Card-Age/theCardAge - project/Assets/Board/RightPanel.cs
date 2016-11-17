@@ -4,8 +4,7 @@ using UnityEngine.UI;
 
 
 public class RightPanel : MonoBehaviour {
-    [SerializeField]
-    private Text cardNameTextBox1;
+
     [SerializeField]
     private RawImage cardImage1;
     [SerializeField]
@@ -13,13 +12,15 @@ public class RightPanel : MonoBehaviour {
     [SerializeField]
     private Text cardDefenseTextBox1;
     [SerializeField]
-    private Text cardDescriptionTextBox1;
+    private Text cardMoveTextBox1;
+    [SerializeField]
+    private Text cardStatusTextBox1;
     [SerializeField]
     private Text cardHPBox1;
-
-
     [SerializeField]
-    private Text cardNameTextBox2;
+    private Text cardMaxHPBox1;
+
+
     [SerializeField]
     private RawImage cardImage2;
     [SerializeField]
@@ -27,11 +28,15 @@ public class RightPanel : MonoBehaviour {
     [SerializeField]
     private Text cardDefenseTextBox2;
     [SerializeField]
-    private Text cardDescriptionTextBox2;
+    private Text cardMoveTextBox2;
+    [SerializeField]
+    private Text cardStatusTextBox2;
     [SerializeField]
     private Text cardHPBox2;
+    [SerializeField]
+    private Text cardMaxHPBox2;
 
-  
+
     [SerializeField]
     private RectTransform rightPanel1;
     [SerializeField]
@@ -80,23 +85,25 @@ public class RightPanel : MonoBehaviour {
                 if (rightPanel1On == false)
                 {
                     rightPanel1On = true;
-                    // Display name on right panel
-                    cardNameTextBox1.text = card.Name();
 
                     // Display image
                     cardImage1.texture = card.Image();
 
                     // Display HP on right panel
-                    cardHPBox1.text = card.Health() + "/" + card.MaxHealth();
+                    cardHPBox1.text = card.Health();
+                    cardMaxHPBox1.text = "/" + card.MaxHealth();
 
                     // Display strength on right panel
-                    string[] temp = cardStrengthTextBox1.text.Split(':');  
-                    cardStrengthTextBox1.text = temp[0] +": " + card.Strength();
-                    // Display defense on right panel
-                    temp = cardDefenseTextBox1.text.Split(':');
-                    cardDefenseTextBox1.text = temp[0] + ": " + card.Defense();
+                    cardStrengthTextBox1.text = card.Strength().ToString();
 
-                    cardDescriptionTextBox1.text = card.Description();
+                    // Display defense on right panel
+                    cardDefenseTextBox1.text = card.Defense().ToString();
+
+                    // Display move cost on right panel
+                    cardMoveTextBox1.text = card.Movement();
+                    
+                    // Display status on right panel
+                    cardStatusTextBox1.text = card.Status();
 
                     // play right panel slide in/out animation
                     anim1.SetBool(slideIn1, true);
@@ -106,25 +113,26 @@ public class RightPanel : MonoBehaviour {
                 {
                     rightPanel1On = false;
 
-                    //cardNameTextBox2.text = card.name;
-
                     // Display image
                     cardImage2.texture = card.Image();
 
-                    // Display name on right panel
-                    cardNameTextBox2.text = card.Name();
-
                     // Display HP on right panel
-                    cardHPBox2.text = card.Health() + "/" + card.MaxHealth();
+                    cardHPBox2.text = card.Health();
+                    cardMaxHPBox2.text = "/" + card.MaxHealth();
 
                     // Display strength on right panel
-                    string[] temp = cardStrengthTextBox2.text.Split(':');
-                    cardStrengthTextBox2.text = temp[0] + ": " + card.Strength();
-                    // Display defense on right panel
-                    temp = cardDefenseTextBox2.text.Split(':');
-                    cardDefenseTextBox2.text = temp[0] + ": " + card.Defense();
+                    cardStrengthTextBox2.text = card.Strength().ToString();
 
-                    cardDescriptionTextBox2.text = card.Description();
+                    // Display defense on right panel
+                    cardDefenseTextBox2.text = card.Defense().ToString();
+
+                    // Display move cost on right panel
+                    cardMoveTextBox2.text = card.Movement();
+
+                    // Display status on right panel
+                    cardStatusTextBox2.text = card.Status();
+
+
                     anim2.SetBool(slideIn2, true);
                     anim1.SetBool(slideIn1, false);
 

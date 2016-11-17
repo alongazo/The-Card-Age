@@ -27,9 +27,9 @@ public class Player : MonoBehaviour
         string[] boss_suboordinates = deckInfo.text.Split(':');
         bossName = boss_suboordinates[0];
         string[] cardNames = boss_suboordinates[1].Split(',');
-        Debug.Log(bossName);
+        //Debug.Log(bossName);
         wholeDeck = new Deck(bossName, cardNames);
-        Debug.Log(cardNames[0]);
+        //Debug.Log(cardNames[0]);
         handDeck = new List<PlayingCard>();
         turnIsDone = false;
         selectedAction = "";
@@ -39,15 +39,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-
     }
 
     public Player(string bossName, string deckInfo)
     {
         string[] cardNames = deckInfo.Split(',');
-        Debug.Log(bossName);
+        //Debug.Log(bossName);
         wholeDeck = new Deck(bossName, cardNames);
-        Debug.Log(deckInfo[0]);
+        //Debug.Log(deckInfo[0]);
         handDeck = new List<PlayingCard>();
         turnIsDone = false;
         selectedAction = "";
@@ -131,8 +130,10 @@ public class Player : MonoBehaviour
 
         newDrag.AddComponent<drag>();
         newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
+        newDrag.GetComponent<drag>().setCardName(card.GetName());
+        newDrag.GetComponent<drag>().setOriginator(ref handDeck);
         newDrag.GetComponent<drag>().boardScript = board;
 
-        newDrag.transform.parent = handPlace.transform;
+        newDrag.transform.SetParent(handPlace.transform);
     }
 }

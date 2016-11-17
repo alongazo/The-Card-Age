@@ -11,10 +11,7 @@ public class Globals : MonoBehaviour
     static public int numCols = 6;
 
     public TextAsset textfile;
-
-
-    // Going to try to connect this to a Card class
-    static public PlayingCard testCard;
+    
 
     void Awake()
     {
@@ -42,7 +39,5 @@ public class Globals : MonoBehaviour
                 cardDatabase[initInfo[0]] = newCard;
             }
         }
-        testCard = cardDatabase["Angel"];
-        Debug.Log(testCard.GetName() + " is initialized");
     }
 }

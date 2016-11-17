@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -13,8 +13,12 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public Board boardScript;
 
 
-    int itemIndex = 5;
+    int itemIndex;
+    string cardName;
+    List<PlayingCard> originated;
     public void setItemIndex(int index) { itemIndex = index; }
+    public void setCardName(string name) { cardName = name; }
+    public void setOriginator(ref List<PlayingCard> originator) { originated = originator; }
 
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -72,12 +76,21 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
         {
             // check if no card is on the tile
-            if (boardScript.cards[boardScript.selectionX, boardScript.selectionY - 7] == null)
+            if (boardScript.cards[boardScript.selectionX, boardScript.selectionY] == null)
             {
-                boardScript.Spawn(itemIndex, boardScript.selectionX, boardScript.selectionY);
+                boardScript.Spawn(itemIndex, cardName, boardScript.selectionX, boardScript.selectionY);
+                
+                for (int i=0; i<originated.Count; i++)
+                {
+                    if (originated[i].GetName() == cardName)
+                    {
+                        originated.RemoveAt(i);
+                        break;
+                    }
+                }
+                Destroy(this.gameObject);
             }
         }
-        Destroy(this.gameObject);
     }
     
 
