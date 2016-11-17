@@ -10,6 +10,8 @@ public class BoardHighlights : MonoBehaviour
     public GameObject highlightPrefab;
     private List<GameObject> highlights;
 
+    private Quaternion orientation = Quaternion.Euler(90, 0, 0);
+
     private void Start()
     {
         Instance = this;
@@ -40,7 +42,8 @@ public class BoardHighlights : MonoBehaviour
                 {
                     GameObject go = GetHighlightObject();
                     go.SetActive(true);
-                    go.transform.position = new Vector3(i + 0.5f, 0, j + 0.5f);
+                    go.transform.position = new Vector3(i + 0.5f, j + 0.5f, 0);
+           
                 }
             }
         }

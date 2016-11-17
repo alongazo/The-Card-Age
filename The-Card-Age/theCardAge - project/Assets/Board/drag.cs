@@ -19,12 +19,18 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     public void setItemIndex(int index) { itemIndex = index; }
     public void setCardName(string name) { cardName = name; }
     public void setOriginator(ref List<PlayingCard> originator) { originated = originator; }
-
+    Vector3 dist;
+    float posX;
+    float posY;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        dist = Camera.main.WorldToScreenPoint(transform.position);
+        posX = Input.mousePosition.x - dist.x;
+        posY = Input.mousePosition.y - dist.y;
+
         placeholder = new GameObject();
-        placeholder.transform.SetParent(this.transform.parent);
+        placeholder.transform.SetParent(this.transform.parent, false);
         LayoutElement le = placeholder.AddComponent<LayoutElement>();
         le.preferredWidth = this.GetComponent<LayoutElement>().preferredWidth;
         le.preferredHeight = this.GetComponent<LayoutElement>().preferredHeight;
@@ -43,10 +49,12 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     }
     public void OnDrag(PointerEventData eventData)
     {
-        this.transform.position = eventData.position;
+        Vector3 curPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dist.z);
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(curPos);
+        transform.position = worldPos;
 
         if (placeholder.transform.parent != placeholderParent)
-            placeholder.transform.SetParent(placeholderParent);
+            placeholder.transform.SetParent(placeholderParent, false);
 
         int newSiblingIndex = placeholderParent.childCount;
 
@@ -66,7 +74,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        this.transform.SetParent(hand);
+        this.transform.SetParent(hand, false);
         this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         //EventSystem.current.RaycastAll(eventData) // get a list of things underneath

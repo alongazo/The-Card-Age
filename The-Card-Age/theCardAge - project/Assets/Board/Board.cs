@@ -29,12 +29,13 @@ public class Board : MonoBehaviour
     public int selectionX = -1;
     public int selectionY = -1;
 
-    private Quaternion orientation = Quaternion.Euler(0, 180, 0);
+    private Quaternion orientation = Quaternion.Euler(90, 180, 0);
 
     public List<GameObject> chessmanPrefabs;
     public List<GameObject> activeCard = new List<GameObject>();
+    private int playerCardOnField = 0;
+    private int enemyCardOnField = 0;
 
-    
     private bool isAttacking = false;
     private bool doneAttacking = false;
     private float startAttackTime;
@@ -44,6 +45,18 @@ public class Board : MonoBehaviour
     
     //[SerializeField]
     private bool isWhiteTurn = true;
+    public bool IsWhiteTurn()
+    {
+        return isWhiteTurn;
+    }
+    public int GetEnemyCardOnField()
+    {
+        return enemyCardOnField;
+    }
+    public int GetPlayerCardOnField()
+    {
+        return playerCardOnField;
+    }
     // Use this for initialization
     void Start()
     {
@@ -181,6 +194,14 @@ public class Board : MonoBehaviour
                 if (c.GetHPVal() <= 0)
                 // destroy object and the health bar at the left side if the card health goes down to 0
                 {
+                    if (c.isWhite)
+                    {
+                        playerCardOnField--;
+                    }
+                    else if (!c.isWhite)
+                    {
+                        enemyCardOnField--;
+                    }
                     activeCard.Remove(c.gameObject);
                     Destroy(c.GetHPBar());
                     Destroy(c.gameObject);
@@ -213,7 +234,7 @@ public class Board : MonoBehaviour
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f,LayerMask.GetMask("ChessPlane")))
         {
             selectionX = (int) hit.point.x;
-            selectionY = (int) hit.point.z;
+            selectionY = (int) hit.point.y;
         }
         else
         {
@@ -239,10 +260,12 @@ public class Board : MonoBehaviour
         
         if (cards[x, y].isWhite)
         {
+            ++playerCardOnField;
             leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
         }
         else if (!cards[x,y].isWhite)
         {
+            ++enemyCardOnField;
             leftPanelScriptEnemy.CreateHPBar(cards[x, y]);
         }
     }
@@ -252,17 +275,17 @@ public class Board : MonoBehaviour
     {
         Vector3 origin = Vector3.zero;
         origin.x += (TILE_SIZE * x) + TILE_OFFSET;
-        origin.z += (TILE_SIZE * y) + TILE_OFFSET;
+        origin.y += (TILE_SIZE * y) + TILE_OFFSET;
         return origin;
     }
     private void _DrawDebug()
     {
         Vector3 widthLine = Vector3.right * _col;
-        Vector3 heightLine = Vector3.forward * _row;
+        Vector3 heightLine = Vector3.up * _row;
 
         for (int i = 0; i <= _row; i++)
         {
-            Vector3 start = Vector3.forward * i;
+            Vector3 start = Vector3.up * i;
             Debug.DrawLine(start, start + widthLine);
 
             for (int j = 0; j <= _col; j++)
@@ -276,10 +299,10 @@ public class Board : MonoBehaviour
         // Draw selection on board
         if (selectionX > -1 && selectionY > -1)
         {
-            Debug.DrawLine(Vector3.forward * selectionY + Vector3.right * selectionX,
-                Vector3.forward * (selectionY + 1) + Vector3.right * (selectionX + 1));
-            Debug.DrawLine(Vector3.forward * (selectionY + 1) + Vector3.right * selectionX,
-                Vector3.forward * selectionY + Vector3.right * (selectionX + 1));
+            Debug.DrawLine(Vector3.up * selectionY + Vector3.right * selectionX,
+                Vector3.up * (selectionY + 1) + Vector3.right * (selectionX + 1));
+            Debug.DrawLine(Vector3.up * (selectionY + 1) + Vector3.right * selectionX,
+                Vector3.up * selectionY + Vector3.right * (selectionX + 1));
         }
     }
     public void EndTurn()

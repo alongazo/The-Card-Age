@@ -134,6 +134,6 @@ public class Player : MonoBehaviour
         newDrag.GetComponent<drag>().setOriginator(ref handDeck);
         newDrag.GetComponent<drag>().boardScript = board;
 
-        newDrag.transform.SetParent(handPlace.transform);
+        newDrag.transform.SetParent(handPlace.transform, false);
     }
 }
