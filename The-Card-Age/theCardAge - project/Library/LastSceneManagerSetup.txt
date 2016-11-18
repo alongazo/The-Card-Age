@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Board Scene/leftpanel.unity
+- path: Assets/Board Scene/GameBoard.unity
   isLoaded: 1
   isActive: 1
