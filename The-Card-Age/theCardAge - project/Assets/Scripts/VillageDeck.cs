@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class VillageDeck : MonoBehaviour {
 
+    public int currentIndex = 0;
     public List<GameObject> playableDeck;
 	// Use this for initialization
 	void Start () {

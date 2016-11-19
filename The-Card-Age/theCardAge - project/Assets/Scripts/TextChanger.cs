@@ -14,23 +14,23 @@ public class TextChanger : MonoBehaviour {
 	void Update ()
     {
         int deckSize = 0;
-        /*if (deck.GetComponent<Deck>().playableDeck != null)
+        if (deck.GetComponent<VillageDeck>().playableDeck != null)
         {
-            foreach (PlayingCard card in deck.GetComponent<Deck>().playableDeck)
+            foreach (GameObject card in deck.GetComponent<VillageDeck>().playableDeck)
             {
                 if (card != null)
                     deckSize++;
             }
-        }*/
-        deckAmount.text = deckSize.ToString() + "/30";
+        }
+        deckAmount.text = deckSize.ToString() + "/31";
     }
     public void ChangeText()
     {
         int deckSize = 0;
-        /*foreach(PlayingCard card in deck.GetComponent<Deck>().playableDeck)
+        foreach(GameObject card in deck.GetComponent<VillageDeck>().playableDeck)
         {
             deckSize++;
-        }*/
-        deckAmount.text = deckSize.ToString() + "/30";
+        }
+        deckAmount.text = deckSize.ToString() + "/31";
     }
 }

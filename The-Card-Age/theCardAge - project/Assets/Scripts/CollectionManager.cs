@@ -21,9 +21,8 @@ public class CollectionManager : MonoBehaviour {
             if (i < cardCollection.Count)
             {
                 GameObject newCard = Instantiate(cardCollection[i], cardPosition, rotateCard, blacksmith) as GameObject;
-                /*Sprite newCard =*/
-                //Sprite newCard = Instantiate(cardCollection[i], cardPosition, rotateCard, blacksmith) as Sprite;
                 newCard.transform.localScale = new Vector3(.06f, .06f, 2f);
+                newCard.name = cardCollection[i].name;
                 spawnedCards[spawnedIndex] = newCard;
                 spawnedIndex++;
                 cardPosition.z -= .45f;
