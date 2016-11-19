@@ -6,34 +6,40 @@ public class CollectionManager : MonoBehaviour {
  
     public List<GameObject> cardCollection;
     public List<GameObject> spawnedCards;
-    public Transform blacksmith;
+    public Transform parent;
+    public Vector3 rotateAngles;
+    public Vector3 scaleVector;
     public Vector3 baseCollectionCoords;
+    public float zSpacing;
+    public float xSpacing;
     public int collectionIndex = 0;
     public int spawnedIndex = 0;
+    public int cardsInRow;
+    public int totalSpawnedCards;
     // Use this for initialization
     void Start () {
         int count = 1;
         Vector3 cardPosition = baseCollectionCoords;
         Quaternion rotateCard = Quaternion.identity;
-        rotateCard.eulerAngles = new Vector3(90, 90, 0);
-        for (int i = collectionIndex; i < collectionIndex + 6; i++)
+        rotateCard.eulerAngles = rotateAngles;
+        for (int i = collectionIndex; i < collectionIndex + totalSpawnedCards; i++)
         {
             if (i < cardCollection.Count)
             {
-                GameObject newCard = Instantiate(cardCollection[i], cardPosition, rotateCard, blacksmith) as GameObject;
-                newCard.transform.localScale = new Vector3(.06f, .06f, 2f);
+                GameObject newCard = Instantiate(cardCollection[i], cardPosition, rotateCard, parent) as GameObject;
+                newCard.transform.localScale = scaleVector;
                 newCard.name = cardCollection[i].name;
                 spawnedCards[spawnedIndex] = newCard;
                 spawnedIndex++;
-                cardPosition.z -= .45f;
-                if (count == 3)
+                cardPosition.z -= zSpacing;
+                if (count == cardsInRow)
                 {
 
-                    cardPosition.x -= .7f;
+                    cardPosition.x -= xSpacing;
                     cardPosition.z = baseCollectionCoords.z;
                 }
                 count++;
-                if (count == 6)
+                if (count == totalSpawnedCards)
                     count = 1;
             }
             //Debug.Log(count);
@@ -52,7 +58,7 @@ public class CollectionManager : MonoBehaviour {
         //cardPosition.z -= 2;
         Vector3 moveCardPosition = new Vector3(cardPosition.x, cardPosition.y, cardPosition.z + 2);
         Quaternion rotateCard = Quaternion.identity;
-        rotateCard.eulerAngles = new Vector3(90, 90, 0);
+        rotateCard.eulerAngles = rotateAngles;
 
         //foreach (GameObject card in spawnedCards)
         //card.transform.position = Vector3.Lerp(card.transform.position, moveCardPosition, 1);
@@ -61,24 +67,25 @@ public class CollectionManager : MonoBehaviour {
             Destroy(card);
         }
         spawnedIndex = 0;
-        for (int i = collectionIndex; i < collectionIndex + 6; i++)
+        for (int i = collectionIndex; i < collectionIndex + totalSpawnedCards; i++)
         {
             if (i < cardCollection.Count)
             {
                 /*Sprite newCard =*/
-                GameObject newCard = Instantiate(cardCollection[i], cardPosition, rotateCard, blacksmith) as GameObject;// as Sprite;
-                newCard.transform.localScale = new Vector3(.06f, .06f, 2f);
+                GameObject newCard = Instantiate(cardCollection[i], cardPosition, rotateCard, parent) as GameObject;// as Sprite;
+                newCard.name = cardCollection[i].name;
+                newCard.transform.localScale = scaleVector;
                 spawnedCards[spawnedIndex] = newCard;
                 spawnedIndex++;
-                cardPosition.z -= .45f;
-                if (count == 3)
+                cardPosition.z -= zSpacing;
+                if (count == cardsInRow)
                 {
 
-                    cardPosition.x -= .7f;
+                    cardPosition.x -= xSpacing;
                     cardPosition.z = baseCollectionCoords.z;
                 }
                 count++;
-                if (count == 6)
+                if (count == totalSpawnedCards)
                     count = 1;
             }
         }
@@ -86,13 +93,13 @@ public class CollectionManager : MonoBehaviour {
     }
     public void nextButton()
     {
-        if(collectionIndex+6<=cardCollection.Count)
-            collectionIndex += 6;
+        if(collectionIndex+totalSpawnedCards<=cardCollection.Count)
+            collectionIndex += totalSpawnedCards;
     }
     public void backButton()
     {
-        if(collectionIndex>=6)
-            collectionIndex -= 6;
+        if(collectionIndex>=totalSpawnedCards)
+            collectionIndex -= totalSpawnedCards;
     }
     
 }
