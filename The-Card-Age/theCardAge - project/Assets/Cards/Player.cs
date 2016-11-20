@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public string bossName;
     public TextAsset deckInfo;
 
+    private bool firstTurn;
 
     Deck wholeDeck;
     List<PlayingCard> handDeck;
@@ -33,7 +34,7 @@ public class Player : MonoBehaviour
         handDeck = new List<PlayingCard>();
         turnIsDone = false;
         selectedAction = "";
-
+        firstTurn = true;
         DrawCard(false);
     }
 
@@ -56,8 +57,9 @@ public class Player : MonoBehaviour
     {
         if (handDeck.Count < 7)
         {
-            if (handDeck.Count == 0)
+            if (firstTurn)
             {
+                Debug.Log("first Turn");
                 for (int i=0; i<4; i++)
                 {
                     PlayingCard card = wholeDeck.DrawCard();
@@ -67,7 +69,8 @@ public class Player : MonoBehaviour
                     }
                     handDeck.Add(card);
                     SetCardToHand(card);
-                }   
+                }
+                firstTurn = false;
             }
             else {
                 PlayingCard card = wholeDeck.DrawCard();
