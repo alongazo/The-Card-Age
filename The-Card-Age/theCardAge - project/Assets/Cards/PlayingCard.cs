@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum CardType { Boss, Minion, Skill };
+public enum CardType { Fake = -1, Boss = 0, Minion = 1, Skill = 2 };
 
 public class PlayingCard : BaseCard
 {
@@ -28,14 +28,15 @@ public class PlayingCard : BaseCard
 
     protected List<string> actions;
 
- 
+    public int idNumber;
+
     // Initialization
     public PlayingCard(string[] initInfo, CardType type)
     {
         cardName = initInfo[0];
         affiliation = initInfo[1];
         image = initInfo[2];
-        //Debug.Log("Image for " + cardName + " is " + image);
+        ////Debug.Log("Image for " + cardName + " is " + image);
         description = initInfo[3];
 
         cardType = type;
@@ -45,6 +46,7 @@ public class PlayingCard : BaseCard
     }
     public PlayingCard(PlayingCard toCopy)
     {
+        //Debug.Log("Called copy constructor");
         cardName = toCopy.cardName; affiliation = toCopy.affiliation;
         image = toCopy.image; description = toCopy.description;
         cardType = toCopy.cardType; rank = toCopy.rank; cost = toCopy.cost;
@@ -55,7 +57,62 @@ public class PlayingCard : BaseCard
         actions = toCopy.actions;
         discard = toCopy.discard;
         status = toCopy.status;
+        idNumber = toCopy.idNumber;
     }
+    public PlayingCard()
+    {
+        cardName = "!";
+    }
+
+    public static bool operator ==(PlayingCard right, PlayingCard left)
+    {
+        //bool isEqual = right.cardName == left.cardName;
+        //// Can do deeper checks
+        //isEqual = isEqual && (right.attack == left.attack);
+        //isEqual = isEqual && (right.health == left.health);
+        //isEqual = isEqual && (right.status == left.status);
+        //isEqual = isEqual && (right.defense == left.defense);
+        //isEqual = isEqual && (right.discard == left.discard);
+        //return isEqual;
+
+        // above should be replaceable with this:
+        if (object.ReferenceEquals(right, null))
+        {
+            return object.ReferenceEquals(left, null);
+        }
+
+        if (object.ReferenceEquals(left, null))
+        {
+            return object.ReferenceEquals(right, null);
+        }
+
+        return (right.idNumber == left.idNumber) && (right.cardName == left.cardName);
+    }
+
+    public static bool operator !=(PlayingCard right, PlayingCard left)
+    {
+        //bool isEqual = right.cardName == left.cardName;
+        //// Can do deeper checks
+        //isEqual = isEqual && (right.attack == left.attack);
+        //isEqual = isEqual && (right.health == left.health);
+        //isEqual = isEqual && (right.status == left.status);
+        //isEqual = isEqual && (right.defense == left.defense);
+        //isEqual = isEqual && (right.discard == left.discard);
+        //return !isEqual;
+
+        // above should be replaceable with this:
+        if (object.ReferenceEquals(right, null))
+        {
+            return !object.ReferenceEquals(left, null);
+        }
+        if (object.ReferenceEquals(left, null))
+        {
+            return !object.ReferenceEquals(right, null);
+        }
+        return !(right.idNumber == left.idNumber) || !(right.cardName == left.cardName);
+    }
+
+
     public void LoadCard(int[] info, string status = "None")
     {
         rank = info[0]; cost = info[1]; move = info[2];
@@ -94,7 +151,7 @@ public class PlayingCard : BaseCard
     // Overwrite the functions in BaseCard
     public override bool[,] PossibleMove()
     {
-        //Debug.Log("Is calling the PossibleMove function of PlayingCard");
+        ////Debug.Log("Is calling the PossibleMove function of PlayingCard");
         bool[,] moves = new bool[Globals.numCols, Globals.numRows];
         int x = linkedBoardCard.CurrentX, y = linkedBoardCard.CurrentY;
         for (int spread = 1; spread-1 < move; spread++)
@@ -131,7 +188,7 @@ public class PlayingCard : BaseCard
         defense = baseDefense;
         if (cardType != CardType.Skill)
         {
-            status = "None";
+            status = "";
         }
     }
     public override void AttackEnemy(BaseCard enemy, int attackToMultiply = 0)
@@ -145,12 +202,13 @@ public class PlayingCard : BaseCard
     public override string GetName() { return cardName; }
     public override string GetImage() { return image; }
     public override string GetDescription() { return description; }
+    public override CardType GetCardType() { return cardType; }
     public override int GetHealth() { return health; }
     public override int GetDefense() { return defense; }
     public override int GetAttack() { return attack; }
     public override int GetMaxHealth() { return baseHealth;  }
     public override int GetMovement() { return move; }
-    public override string GetStatus() { return (status == "None") ? " " : status ; }
+    public override string GetStatus() { return (status == "") ? "" : status ; }
 
     public override void SubHealth(int damage) { health -= damage; }
 

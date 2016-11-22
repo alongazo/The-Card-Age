@@ -41,7 +41,7 @@ public class Card : MonoBehaviour {
     }
     public void Attack(Card attackingCard)
     {
-        Debug.Log(attackingCard.linkedPlayingCard.GetName() + " is attacking");
+        //Debug.Log(attackingCard.linkedPlayingCard.GetName() + " is attacking");
         attackingCard.linkedPlayingCard.AttackEnemy(linkedPlayingCard);
         health.CurrentVal = linkedPlayingCard.GetHealth();
     }
@@ -56,9 +56,9 @@ public class Card : MonoBehaviour {
 
 
         // add the card's name
-        foreach (UnityEngine.UI.Text textItem in rightHPBar.GetComponents<UnityEngine.UI.Text>())
+        foreach (UnityEngine.UI.Text textItem in rightHPBar.GetComponentsInChildren<UnityEngine.UI.Text>())
         {
-            Debug.Log(textItem.name);
+            //Debug.Log(textItem.name);
             if (textItem.name == "Name")
             {
                 textItem.text = linkedPlayingCard.GetName();
@@ -81,7 +81,7 @@ public class Card : MonoBehaviour {
     }
     public bool[,] PossibleMove()
     {
-        Debug.Log("In Possible Move, is linked? " + IsLinked().ToString());
+        //Debug.Log("In Possible Move, is linked? " + IsLinked().ToString());
         return linkedPlayingCard.PossibleMove();
     }
 
@@ -102,7 +102,7 @@ public class Card : MonoBehaviour {
     }
     public void CheckLink()
     {
-        Debug.Log(linkedPlayingCard.GetName());
+        //Debug.Log(linkedPlayingCard.GetName());
     }
     public bool IsLinked()
     {
@@ -129,11 +129,15 @@ public class Card : MonoBehaviour {
     {
         return linkedPlayingCard.GetStatus();
     }
+    public CardType CardType()
+    {
+        return linkedPlayingCard.GetCardType();
+    }
 
     public Texture Image()
     {
         string texture = "Assets/Card_Images/" + linkedPlayingCard.GetImage();
-        Debug.Log("image is found at " + texture);
+        ////Debug.Log("image is found at " + texture);
         return (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(texture, typeof(Texture2D));
     }
 }

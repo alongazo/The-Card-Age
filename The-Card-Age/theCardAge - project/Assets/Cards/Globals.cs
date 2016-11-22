@@ -29,6 +29,7 @@ public class Globals : MonoBehaviour
 
             if (newType == CardType.Boss)
             {
+                //Debug.Log(initInfo[0] + " " + splitInfo[1]);
                 newBossCard = new BossCard(initInfo, newType, stats);
                 bossDatabase[initInfo[0]] = newBossCard;
             }

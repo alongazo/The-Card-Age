@@ -68,6 +68,12 @@ public class BossCard : PlayingCard
         ap = baseAP;
     }
 
+    public override CardType GetCardType()
+    {
+        return CardType.Boss;
+    }
+
+
     // Not really important
     public void Equip(bool forAttack, int changeby)
     {
