@@ -75,10 +75,10 @@ public class Board : MonoBehaviour
         
         if (isAttacking == true && doneAttacking == false)
         {
-            //Debug.Log("Hello we are attacking");
+            ////Debug.Log("Hello we are attacking");
             float currentTime = (Time.time - startAttackTime);
             float journeyFraction = currentTime / totalDistance;
-            //Debug.Log(currentTime + " " + totalDistance + " " + journeyFraction);
+            ////Debug.Log(currentTime + " " + totalDistance + " " + journeyFraction);
             int speed = 8;
             if (journeyFraction*speed > 0.6f)
             {
@@ -112,22 +112,22 @@ public class Board : MonoBehaviour
         // left click
         else if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Left click pressed");
-            //Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
-            //Debug.Log("hello");
+            //Debug.Log("Left click pressed");
+            ////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
+            ////Debug.Log("hello");
             if (selectionX > -1 && selectionY > -1)
             {
                 //Vector3 temp = GetTileCenter(selectionX, selectionY);
-                //Debug.Log(selectionX + " " + selectionY);
+                ////Debug.Log(selectionX + " " + selectionY);
                 if (selectedCard == null)
                 {
-                    //Debug.Log("null");
-                    //Debug.Log(selectionX + "  " + selectionY);
+                    ////Debug.Log("null");
+                    ////Debug.Log(selectionX + "  " + selectionY);
                     SelectCard(selectionX, selectionY);
                 }
                 else
                 {
-                    //Debug.Log("move");
+                    ////Debug.Log("move");
                     MoveCard(selectionX, selectionY);
                     //SelectCard(selectionX, selectionY);
                 }
@@ -137,11 +137,11 @@ public class Board : MonoBehaviour
         // right click (show card information)
         else if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log("Right click pressed");
-            //Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
+            //Debug.Log("Right click pressed");
+            ////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
             if (selectionX > -1 && selectionY > -1)
             {
-                //Debug.Log("x, y: " + selectionX.ToString() + " " + selectionY.ToString());
+                ////Debug.Log("x, y: " + selectionX.ToString() + " " + selectionY.ToString());
 
                 RightSelectCard(selectionX, selectionY);
 
@@ -150,8 +150,8 @@ public class Board : MonoBehaviour
     }
     private void SelectCard(int x, int y)
     {
-        //Debug.Log("In Select Card " + selectionX + "  " + selectionY);
-        //Debug.Log("Does card exist: " + (cards[x, y] != null).ToString());
+        ////Debug.Log("In Select Card " + selectionX + "  " + selectionY);
+        ////Debug.Log("Does card exist: " + (cards[x, y] != null).ToString());
         if (cards[x, y] == null)
         {
             return;
@@ -167,25 +167,25 @@ public class Board : MonoBehaviour
     private void RightSelectCard(int x, int y)
         // opens left panel
     {
-        Debug.Log("In RightSelectCard function");
+        //Debug.Log("In RightSelectCard function");
         rightPanelScript.ViewCardStat(cards[x, y]);
     }
 
     private void MoveCard(int x, int y)
     {
-        //Debug.Log(x + " " + y);
+        ////Debug.Log(x + " " + y);
         if (allowedMoves[x,y])
         {
             Card c = cards[x, y];
             if (c != null && c.isWhite != isWhiteTurn)
             {
-                Debug.Log("attack");
+                //Debug.Log("attack");
                 // set variable for card attack animation
                 attackCardPosition = selectedCard.transform.position;
                 targetCardPosition = GetTileCenter(x,y);
                 startAttackTime = Time.time;
                 totalDistance = Vector3.Distance(attackCardPosition, targetCardPosition);
-                //Debug.Log(totalDistance);
+                ////Debug.Log(totalDistance);
                 isAttacking = true;
 
                 // destroy card "not done yet" currently card get destroyed before attack. 
@@ -210,7 +210,7 @@ public class Board : MonoBehaviour
             }
             else if (cards[x, y] == null)
             {
-                Debug.Log("move is allowed");
+                //Debug.Log("move is allowed");
                 cards[selectedCard.CurrentX, selectedCard.CurrentY] = null;
                 selectedCard.transform.position = GetTileCenter(x, y);
                 selectedCard.SetPosition(x, y);
@@ -238,24 +238,23 @@ public class Board : MonoBehaviour
         }
         else
         {
-            //Debug.Log(hit.point.x+ " " +hit.point.z);
+            ////Debug.Log(hit.point.x+ " " +hit.point.z);
             selectionX = -1;
             selectionY = -1;
         }
     }
-    public void Spawn(int index, string name, int x, int y)
+    public void Spawn(int index, PlayingCard card, int x, int y)
     {
         GameObject go = Instantiate(chessmanPrefabs[index], GetTileCenter(x,y), orientation) as GameObject;
         go.transform.SetParent(transform);
         cards[x, y] = go.GetComponent<Card>();
-        //Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
+        ////Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
         cards[x, y].SetPosition(x, y);
         cards[x, y].isWhite = isWhiteTurn;
-        if (cards[x, y].isWhite)
-            cards[x, y].Link(Globals.cardDatabase[name]);
-        else
-            cards[x, y].Link(Globals.cardDatabase[name]);
-        //Debug.Log(cards[x, y].IsLinked());
+
+        cards[x, y].Link(card);
+
+        ////Debug.Log(cards[x, y].IsLinked());
         activeCard.Add(go);
         
         if (cards[x, y].isWhite)

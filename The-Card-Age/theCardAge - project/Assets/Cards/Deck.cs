@@ -10,25 +10,59 @@ public class Deck : MonoBehaviour
 
     System.Random RNG;
 
+    bool firstDraw;
+
     public Deck(string bossName, string[]cardNames)
     {
         playableDeck = new List<PlayingCard>();
-        Debug.Log("Inside Deck constructor for this bosscard: " + bossName);
+        //Debug.Log("Inside Deck constructor for this bosscard: " + bossName);
         heroCard = Globals.bossDatabase[bossName];
-        Debug.Log(Globals.bossDatabase.ContainsKey(bossName));
+        //Debug.Log(Globals.bossDatabase.ContainsKey(bossName));
+
+        int index = 0;
         foreach (string name in cardNames)
         {
-            Debug.Log("is " + name + " in the dictionary? " + Globals.cardDatabase.ContainsKey(name).ToString());
+            //Debug.Log("is " + name + " in the dictionary? " + Globals.cardDatabase.ContainsKey(name).ToString());
             playableDeck.Add(Globals.cardDatabase[name]);
+            playableDeck[index].idNumber = index;
+            index++;
         }
         discardDeck = new List<PlayingCard>();
         RNG = new System.Random();
+
+        firstDraw = true;
+    }
+
+    public void Initialize(string bossName, string[] cardNames)
+    {
+        playableDeck = new List<PlayingCard>();
+        //Debug.Log("Inside Deck constructor for this bosscard: " + bossName);
+        heroCard = Globals.bossDatabase[bossName];
+        //Debug.Log(Globals.bossDatabase.ContainsKey(bossName));
+
+        int index = 0;
+        foreach (string name in cardNames)
+        {
+            //Debug.Log("is " + name + " in the dictionary? " + Globals.cardDatabase.ContainsKey(name).ToString());
+            playableDeck.Add(Globals.cardDatabase[name]);
+            playableDeck[index].idNumber = index;
+            index++;
+        }
+        discardDeck = new List<PlayingCard>();
+        RNG = new System.Random();
+
+        firstDraw = true;
     }
 
     public PlayingCard DrawCard()
     {
         PlayingCard cardToGive = null;
-        Debug.Log(playableDeck.Count);
+        //Debug.Log(playableDeck.Count);
+        if (firstDraw)
+        {
+            firstDraw = false;
+            return heroCard;
+        }
         if (playableDeck.Count > 0)
         {
             int index = RNG.Next() % playableDeck.Count;
@@ -54,7 +88,5 @@ public class Deck : MonoBehaviour
         return saveString;
     }
 
-
-
-    public int SizeOFDeck() { return playableDeck.Count; }
+    public int SizeOFDeck() { return playableDeck.Count + ((heroCard == null)? 0 : 1); }
 }

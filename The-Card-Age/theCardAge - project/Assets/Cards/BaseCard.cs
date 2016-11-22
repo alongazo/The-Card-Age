@@ -36,12 +36,13 @@ public abstract class BaseCard
     public virtual string GetName() { return "Name"; }
     public virtual string GetImage() { return "Image"; }
     public virtual string GetDescription() { return "Description"; }
+    public virtual CardType GetCardType() { return CardType.Fake; }
     public virtual int GetHealth() { return 0; }
     public virtual int GetDefense() { return 0; }
     public virtual int GetAttack() { return 0; }
     public virtual int GetMaxHealth() { return 0; }
     public virtual int GetMovement() { return 0; }
-    public virtual string GetStatus() { return " "; }
+    public virtual string GetStatus() { return ""; }
 
     public virtual void SubHealth(int damage) { }
 }

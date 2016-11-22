@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
+public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+{
     public Transform hand = null;
     public Transform placeholderParent = null;
-    public enum slot{ Weapon, Head, Chest, Legs, Feet, Inventory};
+    public enum slot { Weapon, Head, Chest, Legs, Feet, Inventory };
     public slot typeOfItem = slot.Weapon;
     GameObject placeholder;
     //public int itemIndex;
@@ -14,10 +15,10 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
 
     int itemIndex;
-    string cardName;
+    PlayingCard card;
     List<PlayingCard> originated;
     public void setItemIndex(int index) { itemIndex = index; }
-    public void setCardName(string name) { cardName = name; }
+    public void setCard(PlayingCard card) { this.card = card; }
     public void setOriginator(ref List<PlayingCard> originator) { originated = originator; }
     Vector3 dist;
     float posX;
@@ -65,7 +66,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 newSiblingIndex = i;
                 if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
                     newSiblingIndex--;
-                
+
                 break;
             }
         }
@@ -86,20 +87,42 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             // check if no card is on the tile
             if (boardScript.cards[boardScript.selectionX, boardScript.selectionY] == null)
             {
-                boardScript.Spawn(itemIndex, cardName, boardScript.selectionX, boardScript.selectionY);
-                
-                for (int i=0; i<originated.Count; i++)
-                {
-                    if (originated[i].GetName() == cardName)
-                    {
-                        originated.RemoveAt(i);
-                        break;
-                    }
-                }
+                // boardScript.Spawn(itemIndex, cardName, boardScript.selectionX, boardScript.selectionY);
+                boardScript.Spawn(itemIndex, card, boardScript.selectionX, boardScript.selectionY);
+
+                originated.Remove(card);
+
+                //for (int i=0; i<originated.Count; i++)
+                //{
+                //    if (originated[i] == card)
+                //    {
+                //        originated.RemoveAt(i);
+                //        break;
+                //    }
+                //}
                 Destroy(this.gameObject);
             }
         }
     }
-    
 
+
+    public bool OnEndDrag(int x, int y)
+    {
+        //this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
+        //GetComponent<CanvasGroup>().blocksRaycasts = true;
+        //EventSystem.current.RaycastAll(eventData) // get a list of things underneath
+        Destroy(placeholder);
+
+        // check if no card is on the tile
+        if (boardScript.cards[x, y] == null)
+        {
+            // boardScript.Spawn(itemIndex, cardName, boardScript.selectionX, boardScript.selectionY);
+            boardScript.Spawn(itemIndex, card, x, y);
+
+            originated.Remove(card);
+            Destroy(this.gameObject);
+            return true;
+        }
+        return false;
+    }
 }
