@@ -1,2 +1,5 @@
-alp:2
-angel:2
+bide:1
+angel:1
+cancel:1
+brave:1
+lure:1
