@@ -1,4 +1,7 @@
-*.csproj
 "The-Card-Age/theCardAge - project/ProjectSettings/ProjectVersion.txt"
-"The-Card-Age/theCardAge - project/Library"
+"The-Card-Age/theCardAge - project/Library/metadata/"
+"The-Card-Age/theCardAge - project/Library/ScriptAssemblies/"
+"The-Card-Age/theCardAge - project/Library/ShaderCache/"
+"The-Card-Age/theCardAge - project/Library/UnityAssemblies/"
 *.dll
+*.csproj
