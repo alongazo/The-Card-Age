@@ -1,5 +1,4 @@
 *.csproj
 The-Card-Age/theCardAge - project/ProjectSettings/ProjectVersion.txt
-The-Card-Age/theCardAge - project/Library/metadata
-The-Card-Age/theCardAge - project/ScriptAssemblies
-The-Card-Age/theCardAge - project/UnityAssemblies
+The-Card-Age/theCardAge - project/Library
+*.dll
