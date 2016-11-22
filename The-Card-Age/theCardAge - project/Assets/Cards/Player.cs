@@ -18,19 +18,21 @@ public class Player : MonoBehaviour
 
     private bool firstTurn;
 
-    Deck wholeDeck;
+    GameObject wholeDeck;
     List<PlayingCard> handDeck;
     bool turnIsDone;
     string selectedAction;
 
     void Start()
     {
+        wholeDeck = new GameObject();
         string[] boss_suboordinates = deckInfo.text.Split(':');
         bossName = boss_suboordinates[0];
         string[] cardNames = boss_suboordinates[1].Split(',');
-        //Debug.Log(bossName);
-        wholeDeck = new Deck(bossName, cardNames);
-        //Debug.Log(cardNames[0]);
+        ////Debug.Log(bossName);
+        wholeDeck.AddComponent<Deck>();
+        wholeDeck.GetComponent<Deck>().Initialize(bossName, cardNames);
+        ////Debug.Log(cardNames[0]);
         handDeck = new List<PlayingCard>();
         turnIsDone = false;
         selectedAction = "";
@@ -45,9 +47,10 @@ public class Player : MonoBehaviour
     public Player(string bossName, string deckInfo)
     {
         string[] cardNames = deckInfo.Split(',');
-        //Debug.Log(bossName);
-        wholeDeck = new Deck(bossName, cardNames);
-        //Debug.Log(deckInfo[0]);
+        ////Debug.Log(bossName);
+        wholeDeck.AddComponent<Deck>();
+        wholeDeck.GetComponent<Deck>().Initialize(bossName, cardNames);
+        ////Debug.Log(deckInfo[0]);
         handDeck = new List<PlayingCard>();
         turnIsDone = false;
         selectedAction = "";
@@ -59,12 +62,12 @@ public class Player : MonoBehaviour
         {
             if (firstTurn)
             {
-                Debug.Log("first Turn");
+                //Debug.Log("first Turn");
                 for (int i=0; i<4; i++)
                 {
-                    PlayingCard card = wholeDeck.DrawCard();
+                    PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard();
                     if (card == null) {
-                        Debug.Log("Deck is empty!!!");
+                        //Debug.Log("Deck is empty!!!");
                         return;
                     }
                     handDeck.Add(card);
@@ -73,10 +76,10 @@ public class Player : MonoBehaviour
                 firstTurn = false;
             }
             else {
-                PlayingCard card = wholeDeck.DrawCard();
+                PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard();
                 if (card == null)
                 {
-                    Debug.Log("Deck is empty!!!");
+                    //Debug.Log("Deck is empty!!!");
                     return;
                 }
                 handDeck.Add(card);
@@ -86,7 +89,7 @@ public class Player : MonoBehaviour
                     turnIsDone = true;
                 }
             }
-            deckCount.text = wholeDeck.SizeOFDeck().ToString();
+            deckCount.text = wholeDeck.GetComponent<Deck>().SizeOFDeck().ToString();
         }
     }
 
@@ -133,10 +136,22 @@ public class Player : MonoBehaviour
 
         newDrag.AddComponent<drag>();
         newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
-        newDrag.GetComponent<drag>().setCardName(card.GetName());
+        newDrag.GetComponent<drag>().setCard(card);
         newDrag.GetComponent<drag>().setOriginator(ref handDeck);
         newDrag.GetComponent<drag>().boardScript = board;
 
         newDrag.transform.SetParent(handPlace.transform, false);
+    }
+
+        PlayingCard GetCardOfType(CardType cardtype)
+    {
+        foreach (PlayingCard card in handDeck)
+        {
+            if (card.GetCardType() == cardtype)
+            {
+                return card;
+            }
+        }
+        return new PlayingCard();
     }
 }
