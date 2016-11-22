@@ -53,13 +53,31 @@ public class VillageDrag : MonoBehaviour
                 Vector3 imagePos;
                 Transform newParent = GameObject.Find("CardList").transform;
                 GameObject deck = GameObject.Find("PlayerDeck");
-                int deckIndex = deck.GetComponent<VillageDeck>().currentIndex;
-                if (deckIndex < deck.GetComponent<VillageDeck>().playableDeck.Count)
+                int deckSize = deck.GetComponent<VillageDeck>().currentSize;
+                if (deckSize < deck.GetComponent<VillageDeck>().maxSize)
                 {
-                    deck.GetComponent<VillageDeck>().playableDeck[deckIndex] = gameObject;
-                    deckIndex++;
-                    deck.GetComponent<VillageDeck>().currentIndex = deckIndex;
-                    newPos.y += 500;
+                    if (deck.GetComponent<VillageDeck>().playableDeck.ContainsKey(gameObject.name))
+                    {
+                        if (deck.GetComponent<VillageDeck>().playableDeck[gameObject.name] < deck.GetComponent<VillageDeck>().allowableCopies)
+                        {
+                            deck.GetComponent<VillageDeck>().playableDeck[gameObject.name] += 1;
+                        }
+                        else
+                        {
+                            Destroy(gameObject);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        deck.GetComponent<VillageDeck>().playableDeck.Add(gameObject.name, 1);
+                    }
+                    Debug.Log(deck.GetComponent<VillageDeck>().currentSize);
+                    Debug.Log(gameObject.name);
+                    Debug.Log(deck.GetComponent<VillageDeck>().playableDeck[gameObject.name]);
+                    //deck.GetComponent<VillageDeck>().currentSize = deckIndex;
+                    deck.GetComponent<VillageDeck>().currentSize += 1;
+                    //newPos.y += 500;
                     transform.position = newPos;
                     RawImage deckImage = Instantiate(imageInDeck) as RawImage;
                     imagePos = deckImage.rectTransform.localPosition;
@@ -68,7 +86,7 @@ public class VillageDrag : MonoBehaviour
                     deckImage.transform.localEulerAngles = new Vector3(0, 0, 0);
                     imagePos.z = 0;
                     deckImage.rectTransform.localPosition = imagePos;
-                    //Destroy(gameObject);
+                    Destroy(gameObject);
                 }
                 else
                 {

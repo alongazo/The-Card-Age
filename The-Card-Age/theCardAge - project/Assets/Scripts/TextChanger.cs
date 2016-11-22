@@ -16,9 +16,9 @@ public class TextChanger : MonoBehaviour {
         int deckSize = 0;
         if (deck.GetComponent<VillageDeck>().playableDeck != null)
         {
-            foreach (GameObject card in deck.GetComponent<VillageDeck>().playableDeck)
+            foreach (var card in deck.GetComponent<VillageDeck>().playableDeck)
             {
-                if (card != null)
+                if (card.Value != 0)
                     deckSize++;
             }
         }
@@ -27,7 +27,7 @@ public class TextChanger : MonoBehaviour {
     public void ChangeText()
     {
         int deckSize = 0;
-        foreach(GameObject card in deck.GetComponent<VillageDeck>().playableDeck)
+        foreach(var card in deck.GetComponent<VillageDeck>().playableDeck)
         {
             deckSize++;
         }
