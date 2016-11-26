@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 
 public enum CardType { Fake = -1, Boss = 0, Minion = 1, Skill = 2 };
@@ -16,6 +16,7 @@ public class PlayingCard : BaseCard
     int rank;
     int cost;
     int move;
+    bool isPlayer;
 
     protected int attack, baseAttack;
     public int attackMultiplier = 2;
@@ -23,6 +24,7 @@ public class PlayingCard : BaseCard
     public int healthMultiplier = 2;
     protected int defense, baseDefense;
     public int increaseDefense = 2;
+    protected string skill;
     protected string status;
     public int sacrificeAmt = 5;
 
@@ -56,8 +58,10 @@ public class PlayingCard : BaseCard
         defense = toCopy.defense; baseDefense = toCopy.baseDefense;
         actions = toCopy.actions;
         discard = toCopy.discard;
+        skill = toCopy.skill;
         status = toCopy.status;
         idNumber = toCopy.idNumber;
+        isPlayer = toCopy.isPlayer;
     }
     public PlayingCard()
     {
@@ -124,6 +128,8 @@ public class PlayingCard : BaseCard
         {
             actions.Add("Attack"); actions.Add("Move");
         }
+        this.skill = status.Split(' ')[0].Replace("\r",""); // need tp figure out how to separate the status -> how does the status store things?
+
         this.status = status;
         actions.Add("Discard");
     }
@@ -135,18 +141,14 @@ public class PlayingCard : BaseCard
         int damage = 0;
         if (cardType == CardType.Skill)
         {
-            damage = Mathf.CeilToInt(attackToMultiply * (attack / 10));
+            Debug.Log("Base Attack: " + attackToMultiply.ToString() + ", Multiplier: " + (((float)attack / (float)10.0)).ToString());
+            damage = Mathf.CeilToInt(attackToMultiply * ((float)attack / (float)10.0));
         }
         else {
-            int changeBy = Random.Range(-2, 3);
-            if (attack + changeBy > enemyDefense)
-            {
-                damage = attack + changeBy;
-            }
+            damage = Mathf.Min(0, attack - enemyDefense);
         }
         return damage;
     }
-    protected void ModifyAttack(int changeby) { attack += changeby; }
 
     // Overwrite the functions in BaseCard
     public override bool[,] PossibleMove()
@@ -173,6 +175,8 @@ public class PlayingCard : BaseCard
         return moves;
     }
 
+    public void SetIsPlayer(bool truth) { isPlayer = truth; }
+
 
     public override string SaveCard()
     {
@@ -194,7 +198,7 @@ public class PlayingCard : BaseCard
     public override void AttackEnemy(BaseCard enemy, int attackToMultiply = 0)
     {
         int damage = CalculateDamage(enemy.GetDefense(), attackToMultiply);
-        if (enemy.GetHealth() < damage) { DiscardCard(); }
+        if (enemy.GetHealth() < damage) { enemy.SubHealth(enemy.GetHealth()); }
         else { enemy.SubHealth(damage); }
     }
 
@@ -209,9 +213,9 @@ public class PlayingCard : BaseCard
     public override int GetMaxHealth() { return baseHealth;  }
     public override int GetMovement() { return move; }
     public override string GetStatus() { return (status == "") ? "" : status ; }
+    public override bool IsPlayer() { return isPlayer; }
 
     public override void SubHealth(int damage) { health -= damage; }
-
 
     // Get functions - possibly put into BaseCard?
     public List<string> GetActions() { return actions; }
@@ -219,7 +223,8 @@ public class PlayingCard : BaseCard
     // Skill card skills - template class T is either PlayingCard or BossCard
     void Heal(PlayingCard target) 
     {
-        target.health *= healthMultiplier;
+        int restorePoints = Mathf.CeilToInt((float)target.baseHealth/(float)health);
+        target.health = Mathf.Min(target.baseHealth, target.health+restorePoints);
     }
     void increaseDamage(PlayingCard target)
     {
@@ -227,7 +232,7 @@ public class PlayingCard : BaseCard
     }
     void Fortify(PlayingCard target)
     {
-        target.defense += increaseDefense;
+        target.defense += defense;
     }
     void Sacrifice(PlayingCard target)
     {
@@ -241,7 +246,66 @@ public class PlayingCard : BaseCard
             card.health -= damage;
         }
     }
-    void Summon() { }
+    void MultiAttack(PlayingCard target, int bossAttack)
+    {
+        int numAttacks, damage = 0;
+        int minMultiplier,maxMultiplier;
+
+        string[] attackinfo = status.Split(' ')[1].Split(',');
+        numAttacks = Convert.ToInt32(attackinfo[0]);
+        minMultiplier = Convert.ToInt32(attackinfo[1]);
+        maxMultiplier = Convert.ToInt32(attackinfo[2]);
+        
+        for (int i=0; i<numAttacks; i++)
+        {
+            damage += Mathf.CeilToInt((float)bossAttack * (float)(UnityEngine.Random.Range(minMultiplier, maxMultiplier)) / (float)10);
+        }
+        damage = Mathf.Max(0, damage - target.defense);
+        damage = Mathf.Max(0, target.health - damage);
+        target.SubHealth(damage);
+    }
+    //void Summon() { }
+
+
+    public void DetermineSkill(int bossAttack, ref Card target, Card[] targets)
+    {
+        Debug.Log("Skill = " + status.Split(' ')[0] + " (" + (skill == "Attack") + ")");
+        
+        switch(skill)
+        {
+            case "Attack":
+                Debug.Log("Attacking skill: bossAttack = " + bossAttack.ToString());
+                target.Attack(this, bossAttack);
+                break;
+            case "Cancel":
+                Player.SetCanSkill(isPlayer);
+                Enemy.SetCanSkill(!isPlayer);
+                break;
+            case "Fortify":
+                Fortify(target.linkedPlayingCard);
+                break;
+            case "Summon":
+                Player.doubleSummon = isPlayer;
+                Enemy.doubleSummon = !isPlayer;
+                break;
+            case "Esuna":
+                target.linkedPlayingCard.status = "None";
+                break;
+            case "Paralysis":
+                target.linkedPlayingCard.status = "Paralysis";
+                break;
+            case "Heal":
+                Heal(target.linkedPlayingCard);
+                break;
+            case "Card_Damage":
+                
+                break;
+            case "Surround":
+                break;
+            case "Multiple":
+                break;
+        }
+    }
 }
 
 // Skill cards -> would have to be connected to the boss card somehow

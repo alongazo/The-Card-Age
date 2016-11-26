@@ -11,42 +11,27 @@ public class Deck : MonoBehaviour
     System.Random RNG;
 
     bool firstDraw;
+    int removedCardIndex;
 
-    public Deck(string bossName, string[]cardNames)
+    public void Initialize(string[] cardNames, bool isPlayer)
     {
         playableDeck = new List<PlayingCard>();
         //Debug.Log("Inside Deck constructor for this bosscard: " + bossName);
-        heroCard = Globals.bossDatabase[bossName];
-        //Debug.Log(Globals.bossDatabase.ContainsKey(bossName));
 
+        heroCard = Globals.bossDatabase[cardNames[0].Split(':')[0]];
+        heroCard.SetIsPlayer(isPlayer);
         int index = 0;
-        foreach (string name in cardNames)
+        cardNames[0] = "Heal:1";
+        foreach (string card in cardNames)
         {
-            //Debug.Log("is " + name + " in the dictionary? " + Globals.cardDatabase.ContainsKey(name).ToString());
-            playableDeck.Add(Globals.cardDatabase[name]);
-            playableDeck[index].idNumber = index;
-            index++;
-        }
-        discardDeck = new List<PlayingCard>();
-        RNG = new System.Random();
-
-        firstDraw = true;
-    }
-
-    public void Initialize(string bossName, string[] cardNames)
-    {
-        playableDeck = new List<PlayingCard>();
-        //Debug.Log("Inside Deck constructor for this bosscard: " + bossName);
-        heroCard = Globals.bossDatabase[bossName];
-        //Debug.Log(Globals.bossDatabase.ContainsKey(bossName));
-
-        int index = 0;
-        foreach (string name in cardNames)
-        {
-            //Debug.Log("is " + name + " in the dictionary? " + Globals.cardDatabase.ContainsKey(name).ToString());
-            playableDeck.Add(Globals.cardDatabase[name]);
-            playableDeck[index].idNumber = index;
-            index++;
+            string[] info = card.Split(':');
+            for (int i = 0; i < Convert.ToInt32(info[1]); i++)
+            {
+                playableDeck.Add(Globals.cardDatabase[info[0]]);
+                playableDeck[index].idNumber = index;
+                playableDeck[index].SetIsPlayer(isPlayer);
+                index++;
+            }
         }
         discardDeck = new List<PlayingCard>();
         RNG = new System.Random();
@@ -57,19 +42,24 @@ public class Deck : MonoBehaviour
     public PlayingCard DrawCard()
     {
         PlayingCard cardToGive = null;
-        //Debug.Log(playableDeck.Count);
         if (firstDraw)
         {
             firstDraw = false;
+            removedCardIndex = 0;
             return heroCard;
         }
         if (playableDeck.Count > 0)
         {
-            int index = RNG.Next() % playableDeck.Count;
-            cardToGive = playableDeck[index];
-            playableDeck.RemoveAt(index);
+            removedCardIndex = RNG.Next() % playableDeck.Count;
+            cardToGive = playableDeck[removedCardIndex];
+            playableDeck.RemoveAt(removedCardIndex);
         }
         return cardToGive;
+    }
+
+    public int RemovedCardIndex() // this is just the index of the latest card drawn
+    {
+        return removedCardIndex;
     }
 
     public void DiscardCard(PlayingCard cardToDelete)
@@ -88,5 +78,5 @@ public class Deck : MonoBehaviour
         return saveString;
     }
 
-    public int SizeOFDeck() { return playableDeck.Count + ((heroCard == null)? 0 : 1); }
+    public int SizeOFDeck() { return playableDeck.Count; }
 }

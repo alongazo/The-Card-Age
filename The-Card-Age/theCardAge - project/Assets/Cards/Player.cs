@@ -16,91 +16,75 @@ public class Player : MonoBehaviour
     public string bossName;
     public TextAsset deckInfo;
 
-    private bool firstTurn;
-
     GameObject wholeDeck;
     List<PlayingCard> handDeck;
     bool turnIsDone;
     string selectedAction;
 
+    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
+    public static bool doubleSummon;
+
     void Start()
     {
         wholeDeck = new GameObject();
-        string[] boss_suboordinates = deckInfo.text.Split(':');
-        bossName = boss_suboordinates[0];
-        string[] cardNames = boss_suboordinates[1].Split(',');
+        string[] deck_text = deckInfo.text.Split('\n');
         ////Debug.Log(bossName);
         wholeDeck.AddComponent<Deck>();
-        wholeDeck.GetComponent<Deck>().Initialize(bossName, cardNames);
+        wholeDeck.GetComponent<Deck>().Initialize(deck_text, true);
         ////Debug.Log(cardNames[0]);
         handDeck = new List<PlayingCard>();
         turnIsDone = false;
         selectedAction = "";
-        firstTurn = true;
-        DrawCard(false);
+        Initialize();
+        board.EndTurn();
+
+        canSkill = true;
+        doubleSummon = false;
+    }
+
+    void Initialize()
+    {
+        FirstDraw();
+        PlaceFirstCard();
     }
 
     void Update()
     {
     }
 
-    public Player(string bossName, string deckInfo)
+    void FirstDraw()
     {
-        string[] cardNames = deckInfo.Split(',');
-        ////Debug.Log(bossName);
-        wholeDeck.AddComponent<Deck>();
-        wholeDeck.GetComponent<Deck>().Initialize(bossName, cardNames);
-        ////Debug.Log(deckInfo[0]);
-        handDeck = new List<PlayingCard>();
-        turnIsDone = false;
-        selectedAction = "";
+        for (int i = 0; i < 5; i++)
+        {
+            PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard();
+            if (card == null) { return; }
+            handDeck.Add(card);
+            SetCardToHand(card);
+        }
+        deckCount.text = wholeDeck.GetComponent<Deck>().SizeOFDeck().ToString();
     }
-    
+
     public void DrawCard(bool again)
     {
         if (handDeck.Count < 7)
         {
-            if (firstTurn)
-            {
-                //Debug.Log("first Turn");
-                for (int i=0; i<4; i++)
-                {
-                    PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard();
-                    if (card == null) {
-                        //Debug.Log("Deck is empty!!!");
-                        return;
-                    }
-                    handDeck.Add(card);
-                    SetCardToHand(card);
-                }
-                firstTurn = false;
-            }
-            else {
-                PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard();
-                if (card == null)
-                {
-                    //Debug.Log("Deck is empty!!!");
-                    return;
-                }
-                handDeck.Add(card);
-                SetCardToHand(card);
-                if (again)
-                {
-                    turnIsDone = true;
-                }
-            }
-            deckCount.text = wholeDeck.GetComponent<Deck>().SizeOFDeck().ToString();
+            PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard();
+            if (card == null) { return; }
+            handDeck.Add(card);
+            SetCardToHand(card);
+            if (again) { turnIsDone = true; }
         }
+        deckCount.text = wholeDeck.GetComponent<Deck>().SizeOFDeck().ToString();
     }
 
-    public bool getTurnIsDone() {
-        bool toReturn = turnIsDone;
-        if (turnIsDone)
-        {
-            turnIsDone = false;
-        }
-        return toReturn;
+    void PlaceFirstCard()
+    {
+        GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
+        newDrag.GetComponent<drag>().OnEndDrag(3, 1);
+        board.playerBoss = new Coordinate(3, 1);
     }
+
+
     public void selectACard(PlayingCard card)
     {
         selectedAction = card.GetActions()[0];
@@ -125,10 +109,6 @@ public class Player : MonoBehaviour
         newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + card.GetImage());
         newDrag.GetComponent<Image>().preserveAspect = true;
         newDrag.AddComponent<LayoutElement>();
-        //newDrag.GetComponent<LayoutElement>().preferredWidth = (handPlace.transform as RectTransform).rect.width;
-        //newDrag.GetComponent<LayoutElement>().preferredHeight = (handPlace.transform as RectTransform).rect.height;
-        //newDrag.GetComponent<LayoutElement>().flexibleWidth = 0;
-        //newDrag.GetComponent<LayoutElement>().flexibleHeight = 0;
         newDrag.AddComponent<CanvasGroup>();
         newDrag.GetComponent<CanvasGroup>().alpha = 1;
         newDrag.GetComponent<CanvasGroup>().interactable = true;
@@ -143,7 +123,24 @@ public class Player : MonoBehaviour
         newDrag.transform.SetParent(handPlace.transform, false);
     }
 
-        PlayingCard GetCardOfType(CardType cardtype)
+    void RandomSummon()
+    {
+        int prefabIndex = board.FindPrefabIndex("WyvernPrefab");
+        GameObject newDrag = new GameObject("Card " + handDeck.Count.ToString());
+        newDrag.AddComponent<drag>();
+        newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
+        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["Wyvern"]);
+        newDrag.GetComponent<drag>().setOriginator(ref handDeck);
+        newDrag.GetComponent<drag>().boardScript = board;
+        int col, row;
+        do
+        {
+            col = Random.Range(0, Globals.numCols);
+            row = Random.Range(0, 3);
+        } while (!newDrag.GetComponent<drag>().OnEndDrag(col, row));
+    }
+
+    PlayingCard GetCardOfType(CardType cardtype)
     {
         foreach (PlayingCard card in handDeck)
         {

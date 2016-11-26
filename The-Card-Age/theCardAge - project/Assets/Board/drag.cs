@@ -85,21 +85,26 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
         {
             // check if no card is on the tile
-            if (boardScript.cards[boardScript.selectionX, boardScript.selectionY] == null)
+            if(card.GetCardType() == CardType.Skill && boardScript.cards[boardScript.selectionX, boardScript.selectionY] != null)
+            { //TRYING TO IMPLEMENT SKILL CARDS!
+                Debug.Log("Using skill on a card");
+                int bossAttack = boardScript.GetAttackOfBoss(card.IsPlayer());
+                List<Card> targets = new List<Card>();
+                if (boardScript.selectionX + 1 < Globals.numCols) { targets.Add(boardScript.cards[boardScript.selectionX+1, boardScript.selectionY]); }
+                if (boardScript.selectionX - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX-1, boardScript.selectionY]); }
+                if (boardScript.selectionY + 1 < Globals.numRows) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY+1]); }
+                if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
+                card.DetermineSkill(bossAttack, ref boardScript.cards[boardScript.selectionX, boardScript.selectionY], targets.ToArray());
+
+                originated.Remove(card);
+                Destroy(this.gameObject);
+            }
+            else if (boardScript.cards[boardScript.selectionX, boardScript.selectionY] == null)
             {
-                // boardScript.Spawn(itemIndex, cardName, boardScript.selectionX, boardScript.selectionY);
+
                 boardScript.Spawn(itemIndex, card, boardScript.selectionX, boardScript.selectionY);
 
                 originated.Remove(card);
-
-                //for (int i=0; i<originated.Count; i++)
-                //{
-                //    if (originated[i] == card)
-                //    {
-                //        originated.RemoveAt(i);
-                //        break;
-                //    }
-                //}
                 Destroy(this.gameObject);
             }
         }
@@ -108,8 +113,8 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public bool OnEndDrag(int x, int y)
     {
+        this.transform.SetParent(hand, false);
         //this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
-        //GetComponent<CanvasGroup>().blocksRaycasts = true;
         //EventSystem.current.RaycastAll(eventData) // get a list of things underneath
         Destroy(placeholder);
 
@@ -120,6 +125,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             boardScript.Spawn(itemIndex, card, x, y);
 
             originated.Remove(card);
+            //Debug.Log("Hand is " + originated.Count.ToString() + " cards big");
             Destroy(this.gameObject);
             return true;
         }
