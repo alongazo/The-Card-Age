@@ -101,7 +101,6 @@
     <Compile Include="Assets\Cards\Globals.cs" />
     <Compile Include="Assets\Cards\Player.cs" />
     <Compile Include="Assets\Cards\PlayingCard.cs" />
-    <Compile Include="Assets\Cards\TestCardThing.cs" />
     <Compile Include="Assets\MedievalTownExteriors\Scripts\ProtectCameraFromWallClip.cs" />
     <Compile Include="Assets\Pawn.cs" />
     <Compile Include="Assets\Scripts\AspectUtility.cs" />
@@ -146,8 +145,11 @@
   <ItemGroup>
     <None Include="Assets\3DForge\Fantasy_Interiors\Villages_&amp;_Towns\Documents\Village Interiors User Guid v1.3.txt" />
     <None Include="Assets\Cards\enemyInfo.txt" />
+    <None Include="Assets\Cards\enemydeck.txt" />
     <None Include="Assets\Cards\playerInfo.txt" />
+    <None Include="Assets\Cards\playerdeck.txt" />
     <None Include="Assets\MedievalTownExteriors\Readme.txt" />
+    <None Include="Assets\ProjectSettings\ProjectVersion.txt" />
     <None Include="Assets\Rocklynn Productions - Water Splash Pack\Read me.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
