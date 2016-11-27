@@ -11,7 +11,7 @@ public class Card : MonoBehaviour {
     public int CurrentY { get; set; }
 
     // Attaching BaseCard to this card
-    BaseCard linkedPlayingCard;
+    protected internal PlayingCard linkedPlayingCard;
 
     public bool isWhite;
 
@@ -33,18 +33,29 @@ public class Card : MonoBehaviour {
             linkedPlayingCard.RestoreCard();
             health.CurrentVal = linkedPlayingCard.GetHealth();
         }
+        if (linkedPlayingCard.GetHealth() == 0)
+        {
+            // probably need to be destroyed?
+        }
     }
     public void LinkBarToObject(GameObject card)
     {
         health.LinkBarToObject(card);
         health.Initialize(linkedPlayingCard.GetHealth());
     }
-    public void Attack(Card attackingCard)
+    public void Attack(Card attackingCard, int multiplier = 0)
     {
         //Debug.Log(attackingCard.linkedPlayingCard.GetName() + " is attacking");
-        attackingCard.linkedPlayingCard.AttackEnemy(linkedPlayingCard);
+        attackingCard.linkedPlayingCard.AttackEnemy(linkedPlayingCard, multiplier);
         health.CurrentVal = linkedPlayingCard.GetHealth();
     }
+
+    public void Attack(PlayingCard attackingCard, int multiplier = 0)
+    {
+        attackingCard.AttackEnemy(linkedPlayingCard, multiplier);
+        health.CurrentVal = linkedPlayingCard.GetHealth();
+    }
+
     public float GetHPVal()
     {
         return health.CurrentVal;

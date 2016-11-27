@@ -3,6 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+
+
+// Trying to add the other info the Enemy might need to do random things
+public struct Coordinate
+{
+    public int col;
+    public int row;
+
+    public Coordinate(int x, int y) { col = x; row = y; }
+}
+
 public class Board : MonoBehaviour
 {
 
@@ -23,6 +34,9 @@ public class Board : MonoBehaviour
     private bool[,] allowedMoves { set; get; }
     public Card[,] cards { set; get; }
     private Card selectedCard;
+
+    public Coordinate playerBoss;
+    public Coordinate enemyBoss;
 
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = TILE_SIZE / 2;
@@ -60,7 +74,7 @@ public class Board : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        //Debug.Log("Called Board Start");
         Instance = this;
         activeCard = new List<GameObject>();
         cards = new Card[_col, _row];
@@ -348,5 +362,14 @@ public class Board : MonoBehaviour
             }
         }
         return 0;
+    }
+
+    public int GetAttackOfBoss(bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            return cards[playerBoss.col, playerBoss.row].Strength();
+        }
+        return cards[enemyBoss.col, enemyBoss.row].Strength();
     }
 }
