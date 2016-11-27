@@ -70,15 +70,6 @@ public class PlayingCard : BaseCard
 
     public static bool operator ==(PlayingCard right, PlayingCard left)
     {
-        //bool isEqual = right.cardName == left.cardName;
-        //// Can do deeper checks
-        //isEqual = isEqual && (right.attack == left.attack);
-        //isEqual = isEqual && (right.health == left.health);
-        //isEqual = isEqual && (right.status == left.status);
-        //isEqual = isEqual && (right.defense == left.defense);
-        //isEqual = isEqual && (right.discard == left.discard);
-        //return isEqual;
-
         // above should be replaceable with this:
         if (object.ReferenceEquals(right, null))
         {
@@ -92,19 +83,8 @@ public class PlayingCard : BaseCard
 
         return (right.idNumber == left.idNumber) && (right.cardName == left.cardName);
     }
-
     public static bool operator !=(PlayingCard right, PlayingCard left)
     {
-        //bool isEqual = right.cardName == left.cardName;
-        //// Can do deeper checks
-        //isEqual = isEqual && (right.attack == left.attack);
-        //isEqual = isEqual && (right.health == left.health);
-        //isEqual = isEqual && (right.status == left.status);
-        //isEqual = isEqual && (right.defense == left.defense);
-        //isEqual = isEqual && (right.discard == left.discard);
-        //return !isEqual;
-
-        // above should be replaceable with this:
         if (object.ReferenceEquals(right, null))
         {
             return !object.ReferenceEquals(left, null);
@@ -145,7 +125,8 @@ public class PlayingCard : BaseCard
             damage = Mathf.CeilToInt(attackToMultiply * ((float)attack / (float)10.0));
         }
         else {
-            damage = Mathf.Min(0, attack - enemyDefense);
+            damage = Mathf.Max(0, attack - enemyDefense);
+            Debug.Log("Attack = " + attack.ToString() + ", Enemy Defense = " + enemyDefense.ToString());
         }
         return damage;
     }
@@ -201,7 +182,7 @@ public class PlayingCard : BaseCard
         if (enemy.GetHealth() < damage) { enemy.SubHealth(enemy.GetHealth()); }
         else { enemy.SubHealth(damage); }
     }
-
+    protected void ModifyAttack(int changeby) { }
 
     public override string GetName() { return cardName; }
     public override string GetImage() { return image; }
@@ -264,6 +245,11 @@ public class PlayingCard : BaseCard
         damage = Mathf.Max(0, target.health - damage);
         target.SubHealth(damage);
     }
+
+    void Card_Damage(PlayingCard target, int bossAttack)
+    {
+
+    }
     //void Summon() { }
 
 
@@ -303,6 +289,7 @@ public class PlayingCard : BaseCard
             case "Surround":
                 break;
             case "Multiple":
+                MultiAttack(target.linkedPlayingCard, bossAttack);
                 break;
         }
     }

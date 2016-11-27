@@ -22,50 +22,61 @@ public class Enemy : MonoBehaviour
     static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
     public static bool doubleSummon;
 
-    Dictionary<Coordinate, int> cardsOnBoard; // 0 means player, 1 means enemy
+    int numMoves;
+
+    List<Coordinate> cardsOnBoard = new List<Coordinate>();
+    List<Coordinate> myCardPositions;
 
     void Start()
     {
+        Debug.Log("Enemy start is first");
         string[] deck_text = deckInfo.text.Split('\n');
         wholeDeck = new GameObject();
         wholeDeck.AddComponent<Deck>();
         wholeDeck.GetComponent<Deck>().Initialize(deck_text, false);
         handDeck = new List<PlayingCard>();
         isMovingCard = false;
-        cardsOnBoard = new Dictionary<Coordinate, int>();
         selectedAction = "";
         Initialize();
         board.EndTurn(); // required because for some reason, board.IsWhiteTurn() returns false right after initiation...
         canSkill = true;
         doubleSummon = false;
+        numMoves = 0;
     }
 
     void Initialize()
     {
         FirstDraw();
         PlaceFirstCard();
-        isMovingCard = false;
+        isMovingCard = true;
     }
 
     void Update()
     {
         if (isMovingCard && !board.IsWhiteTurn())
         {
+            Debug.Log("Not going to the actual placement stuff");
             // animation in here
-            isMovingCard = false; // will change to not be immediate later on
-            board.EndTurn();
+            isMovingCard = board.CardIsAttacking(); // will change to not be immediate later on
+            Debug.Log("isMovingCard = " + isMovingCard);
+            if (!isMovingCard)
+            {
+                numMoves = 1;
+                board.EndTurn();
+            }
         }
         else if (!board.IsWhiteTurn())
         {
+            Debug.Log("Not doing the right thing >o<");
+            if (numMoves == 0)
+            {
+                // time for the enemy to make a move
+                DrawCard(false);
 
-            // time for the enemy to make a move
-            DrawCard(false);
-
-            // decide how many actions to do
-            int numMoves = Random.Range(2, 6);
-
-            Debug.Log(numMoves);
-            while (numMoves > 0)
+                // decide how many actions to do
+                numMoves = Random.Range(2, 6);
+            }
+            else
             {
                 numMoves--;
                 Debug.Log(numMoves);
@@ -79,6 +90,20 @@ public class Enemy : MonoBehaviour
                         if (Random.Range(0, 5) < 5) // has a 2/3rds chance to move over playing a skill card
                         {
                             //Debug.Log("Going to move a card");
+                            List<Coordinate> attackers = new List<Coordinate>();
+                            List<Coordinate> targets = new List<Coordinate>();
+                            FindPositionOfTargets(ref attackers, ref targets);
+                            if (attackers.Count > 0)
+                            {
+                                int i = Random.Range(0, attackers.Count);
+                                board.SelectCard(attackers[i]);
+                                board.MoveCard(targets[i].col, targets[i].row);
+                                Debug.Log("Attacker at (" + attackers[i].col + "," + attackers[i].row + ")");
+                                Debug.Log("Target at (" + targets[i].col + "," + targets[i].row + ")");
+                                isMovingCard = true;
+                                attackers.RemoveAt(i);
+                                targets.RemoveAt(i);
+                            }
                         }
                         else
                         {
@@ -101,10 +126,10 @@ public class Enemy : MonoBehaviour
                 else
                 {
                     DrawCard(true);
-                    break;
                 }
+
+                if (!isMovingCard && numMoves == 0) { board.EndTurn(); }
             }
-            isMovingCard = true;
         }
     }
 
@@ -112,7 +137,7 @@ public class Enemy : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard(); 
+            PlayingCard card = wholeDeck.GetComponent<Deck>().DrawCard();
             if (card == null) { return; }
             handDeck.Add(card);
             SetCardToHand(card);
@@ -155,7 +180,7 @@ public class Enemy : MonoBehaviour
 
         GameObject newDrag = new GameObject("Enemy Card " + handDeck.Count.ToString());
         newDrag.AddComponent<Image>();
-        newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/aback.png");
+        newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + card.GetImage());//"Assets/Card_Images/aback.png");
         newDrag.GetComponent<Image>().preserveAspect = true;
 
         newDrag.AddComponent<LayoutElement>();
@@ -179,6 +204,7 @@ public class Enemy : MonoBehaviour
         GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
         newDrag.GetComponent<drag>().OnEndDrag(2, 4);
         board.enemyBoss = new Coordinate(2, 4);
+        cardsOnBoard.Add(new Coordinate(2, 4));
     }
 
     void PlaceCard(int index)
@@ -190,14 +216,14 @@ public class Enemy : MonoBehaviour
             col = Random.Range(0, Globals.numCols);
             row = Random.Range(Globals.numRows - 2, Globals.numRows);
         } while (!newDrag.GetComponent<drag>().OnEndDrag(col, row));
-        cardsOnBoard.Add(new Coordinate(col,row),1);
+        cardsOnBoard.Add(new Coordinate(col, row));
     }
 
 
     int GetCardOfType(CardType cardtype)
     {
         List<int> indexes = new List<int>();
-        for (int i=0; i<handDeck.Count; i++)
+        for (int i = 0; i < handDeck.Count; i++)
         {
             if (handDeck[i].GetCardType() == cardtype)
             {
@@ -210,5 +236,56 @@ public class Enemy : MonoBehaviour
             return indexes[Random.Range(0, indexes.Count)];
         }
         return -1;
+    }
+
+
+    void FindPositionOfTargets(ref List<Coordinate> attackers, ref List<Coordinate> targets)
+    {
+        
+        foreach (Coordinate point in cardsOnBoard)
+        {
+            if (!board.cards[point.col, point.row].HasTakenAction())
+            {
+                if (point.row + 1 < Globals.numRows && board.cards[point.col, point.row + 1] != null && board.cards[point.col, point.row + 1].isWhite)
+                {
+                    attackers.Add(point);
+                    targets.Add(new Coordinate(point.col, point.row + 1));
+                }
+                if (point.row - 1 >= 0 && board.cards[point.col, point.row - 1] != null && board.cards[point.col, point.row - 1].isWhite)
+                {
+                    attackers.Add(point);
+                    targets.Add(new Coordinate(point.col, point.row - 1));
+                }
+                if (point.col + 1 < Globals.numCols && board.cards[point.col + 1, point.row] != null && board.cards[point.col + 1, point.row].isWhite)
+                {
+                    attackers.Add(point);
+                    targets.Add(new Coordinate(point.col + 1, point.row));
+                }
+                if (point.col - 1 >= 0 && board.cards[point.col - 1, point.row] != null && board.cards[point.col - 1, point.row].isWhite)
+                {
+                    attackers.Add(point);
+                    targets.Add(new Coordinate(point.col - 1, point.row));
+                }
+            }
+        }
+    }
+
+
+    public void ResetTurn()
+    {
+        foreach (Coordinate card in cardsOnBoard)
+        {
+            board.cards[card.col, card.row].ResetTurn();
+        }
+    }
+
+    public void RemoveCardAt(int x, int y)
+    {
+        cardsOnBoard.Remove(new Coordinate(x, y));
+    }
+    public void UpdateCardAt(Coordinate prev, Coordinate next)
+    {
+        cardsOnBoard.Remove(prev);
+        cardsOnBoard.Add(next);
     }
 }

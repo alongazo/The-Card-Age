@@ -12,6 +12,11 @@ public struct Coordinate
     public int row;
 
     public Coordinate(int x, int y) { col = x; row = y; }
+
+    public static Coordinate operator +(Coordinate first, Coordinate second)
+    {
+        return new Coordinate(first.col + second.col, first.row + second.row);
+    }
 }
 
 public class Board : MonoBehaviour
@@ -27,6 +32,9 @@ public class Board : MonoBehaviour
 
     [SerializeField]
     private Text WhoTurnDebug;
+
+    public Player player;
+    public Enemy enemy;
 
     private static int _row = Globals.numRows;
     private static int _col = Globals.numCols;
@@ -81,10 +89,11 @@ public class Board : MonoBehaviour
         UpdateWhoTurnDebug();
     }
 
+    public bool CardIsAttacking() { return isAttacking; }
+
     // Update is called once per frame
     void Update () {
         updateSelection();
-        _DrawDebug();
         // card attack animation / card move toward target
         
         if (isAttacking == true && doneAttacking == false)
@@ -106,6 +115,7 @@ public class Board : MonoBehaviour
             }
             else
             {
+                Debug.Log("selectedCard == null: " + (selectedCard == null));
                 selectedCard.transform.position = Vector3.Lerp(attackCardPosition, targetCardPosition, journeyFraction*speed);
             }
 
@@ -120,6 +130,8 @@ public class Board : MonoBehaviour
             {
                 doneAttacking = false;
                 isAttacking = false;
+
+                selectedCard.TookAction();
             }
         }
 
@@ -162,6 +174,12 @@ public class Board : MonoBehaviour
             }
         }
     }
+
+    public void SelectCard(Coordinate atPosition)
+    {
+        SelectCard(atPosition.col, atPosition.row);
+    }
+
     private void SelectCard(int x, int y)
     {
         ////Debug.Log("In Select Card " + selectionX + "  " + selectionY);
@@ -174,9 +192,14 @@ public class Board : MonoBehaviour
         {
             return;
         }
+        if (cards[x,y].HasTakenAction())
+        {
+            Debug.Log("Selected card is not there for some reason (" + x + "," + y + ")");
+            return;
+        }
         allowedMoves = cards[x, y].PossibleMove();
         selectedCard = cards[x, y];
-        BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
+        BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves, isWhiteTurn);
     }
     private void RightSelectCard(int x, int y)
         // opens left panel
@@ -185,13 +208,13 @@ public class Board : MonoBehaviour
         rightPanelScript.ViewCardStat(cards[x, y]);
     }
 
-    private void MoveCard(int x, int y)
+    public void MoveCard(int x, int y)
     {
-        ////Debug.Log(x + " " + y);
+        Debug.Log(x + " " + y);
         if (allowedMoves[x,y])
         {
             Card c = cards[x, y];
-            if (c != null && c.isWhite != isWhiteTurn)
+            if (c != null && c.isWhite != selectedCard.isWhite && !selectedCard.HasTakenAction())
             {
                 //Debug.Log("attack");
                 // set variable for card attack animation
@@ -211,10 +234,12 @@ public class Board : MonoBehaviour
                     if (c.isWhite)
                     {
                         playerCardOnField--;
+                        player.RemoveCardAt(x, y);
                     }
                     else if (!c.isWhite)
                     {
                         enemyCardOnField--;
+                        enemy.RemoveCardAt(x, y);
                     }
                     activeCard.Remove(c.gameObject);
                     Destroy(c.GetHPBar());
@@ -222,14 +247,21 @@ public class Board : MonoBehaviour
                 }
 
             }
-            else if (cards[x, y] == null)
+            else if (cards[x, y] == null && !selectedCard.HasTakenAction())
             {
+
+                if (isWhiteTurn) { player.UpdateCardAt(new Coordinate(selectedCard.CurrentX, selectedCard.CurrentY), new Coordinate(x, y)); }
+                else { enemy.UpdateCardAt(new Coordinate(selectedCard.CurrentX, selectedCard.CurrentY), new Coordinate(x, y)); }
+
                 //Debug.Log("move is allowed");
                 cards[selectedCard.CurrentX, selectedCard.CurrentY] = null;
                 selectedCard.transform.position = GetTileCenter(x, y);
                 selectedCard.SetPosition(x, y);
                 cards[x, y] = selectedCard;
                 //isWhiteTurn = !isWhiteTurn;
+
+                selectedCard.TookAction();
+
             }
         }
         BoardHighlights.Instance.HideHighlights();
@@ -240,21 +272,24 @@ public class Board : MonoBehaviour
     }
     private void updateSelection()
     {
-        if (!Camera.main)
+        if (!isAttacking)
         {
-            return;
-        }
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f,LayerMask.GetMask("ChessPlane")))
-        {
-            selectionX = (int) hit.point.x;
-            selectionY = (int) hit.point.y;
-        }
-        else
-        {
-            ////Debug.Log(hit.point.x+ " " +hit.point.z);
-            selectionX = -1;
-            selectionY = -1;
+            if (!Camera.main)
+            {
+                return;
+            }
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
+            {
+                selectionX = (int)hit.point.x;
+                selectionY = (int)hit.point.y;
+            }
+            else
+            {
+                ////Debug.Log(hit.point.x+ " " +hit.point.z);
+                selectionX = -1;
+                selectionY = -1;
+            }
         }
     }
     public void Spawn(int index, PlayingCard card, int x, int y)
@@ -320,6 +355,7 @@ public class Board : MonoBehaviour
     }
     public void EndTurn()
     {
+        if (isWhiteTurn) { enemy.ResetTurn(); } else { player.ResetTurn(); }
         isWhiteTurn = !isWhiteTurn;
         UpdateWhoTurnDebug();
     }
@@ -329,6 +365,7 @@ public class Board : MonoBehaviour
         // This will unselect that card
         if (selectedCard != null)
         {
+            Debug.Log("Selected card is being changed to null");
             selectedCard = null;
             BoardHighlights.Instance.HideHighlights();
         }

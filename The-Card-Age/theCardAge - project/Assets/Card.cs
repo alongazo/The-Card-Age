@@ -15,11 +15,23 @@ public class Card : MonoBehaviour {
 
     public bool isWhite;
 
-    //code for AP bar (delete when finish)
-    //private void Awake()
-    //{
-    //    //health.Initialize(linkedPlayingCard.GetHealth());
-    //}
+    bool actionTaken;
+
+    public void ResetTurn() {
+        actionTaken = false;
+
+        GetComponent<Renderer>().material.SetFloat("_Metallic", 0);
+        GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+    }
+
+    public bool HasTakenAction() { return actionTaken; }
+
+    public void TookAction() {
+        GetComponent<Renderer>().material.SetFloat("_Metallic", 1);
+        GetComponent<Renderer>().material.SetColor("_Color", Color.gray);
+        actionTaken = true;
+    }
+    
     void Update()
     {
         // debugging
@@ -33,10 +45,10 @@ public class Card : MonoBehaviour {
             linkedPlayingCard.RestoreCard();
             health.CurrentVal = linkedPlayingCard.GetHealth();
         }
-        if (linkedPlayingCard.GetHealth() == 0)
-        {
-            // probably need to be destroyed?
-        }
+        //if (linkedPlayingCard.GetHealth() == 0)
+        //{
+        //    // probably need to be destroyed?
+        //}
     }
     public void LinkBarToObject(GameObject card)
     {
@@ -63,9 +75,7 @@ public class Card : MonoBehaviour {
     public void SetHPBar(GameObject HPBar)
     {
         rightHPBar = HPBar;
-
-
-
+        
         // add the card's name
         foreach (UnityEngine.UI.Text textItem in rightHPBar.GetComponentsInChildren<UnityEngine.UI.Text>())
         {

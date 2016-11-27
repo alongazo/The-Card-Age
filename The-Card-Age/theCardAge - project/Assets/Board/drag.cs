@@ -52,7 +52,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         Vector3 curPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dist.z);
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(curPos);
-        transform.position = worldPos;
+        transform.position = worldPos - new Vector3(0,0,(float)0.1);
 
         if (placeholder.transform.parent != placeholderParent)
             placeholder.transform.SetParent(placeholderParent, false);
@@ -108,6 +108,11 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 Destroy(this.gameObject);
             }
         }
+        else
+        {
+
+            this.transform.position += new Vector3(0, 0, (float)0.1);
+        }
     }
 
 
@@ -125,6 +130,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             boardScript.Spawn(itemIndex, card, x, y);
 
             originated.Remove(card);
+            
             //Debug.Log("Hand is " + originated.Count.ToString() + " cards big");
             Destroy(this.gameObject);
             return true;

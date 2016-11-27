@@ -2,8 +2,9 @@
 using UnityEditor;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IEndDragHandler
 {
     // Trying to connect the hand with Player
     //  if we keep hand here, then maybe we have its transform?
@@ -24,11 +25,15 @@ public class Player : MonoBehaviour
     static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
     public static bool doubleSummon;
 
+
+
+    List<Coordinate> cardsOnBoard = new List<Coordinate>();
+
     void Start()
     {
         wholeDeck = new GameObject();
         string[] deck_text = deckInfo.text.Split('\n');
-        ////Debug.Log(bossName);
+        Debug.Log(bossName);
         wholeDeck.AddComponent<Deck>();
         wholeDeck.GetComponent<Deck>().Initialize(deck_text, true);
         ////Debug.Log(cardNames[0]);
@@ -82,6 +87,7 @@ public class Player : MonoBehaviour
         GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
         newDrag.GetComponent<drag>().OnEndDrag(3, 1);
         board.playerBoss = new Coordinate(3, 1);
+        cardsOnBoard.Add(new Coordinate(3, 1));
     }
 
 
@@ -150,5 +156,35 @@ public class Player : MonoBehaviour
             }
         }
         return new PlayingCard();
+    }
+
+
+    public void SetCardAt(Coordinate place)
+    {
+        cardsOnBoard.Add(place);
+    }
+
+    public void ResetTurn()
+    {
+        foreach (Coordinate card in cardsOnBoard)
+        {
+            board.cards[card.col, card.row].ResetTurn();
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        SetCardAt(new Coordinate(board.selectionX, board.selectionY));
+    }
+
+    public void RemoveCardAt(int x, int y)
+    {
+        cardsOnBoard.Remove(new Coordinate(x, y));
+    }
+
+    public void UpdateCardAt(Coordinate prev, Coordinate next)
+    {
+        cardsOnBoard.Remove(prev);
+        cardsOnBoard.Add(next);
     }
 }
