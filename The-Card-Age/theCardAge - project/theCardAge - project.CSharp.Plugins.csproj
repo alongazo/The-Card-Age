@@ -125,6 +125,7 @@
     <None Include="Assets\Cards\enemyInfo.txt" />
     <None Include="Assets\Cards\playerInfo.txt" />
     <None Include="Assets\MedievalTownExteriors\Readme.txt" />
+    <None Include="Assets\Rocklynn Productions - Water Splash Pack\Read me.txt" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
     <None Include="Assets\Standard Assets\ParticleSystems\ParticleSystemsGuidelines.txt" />
