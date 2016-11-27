@@ -66,6 +66,7 @@ public class CollectionManager : MonoBehaviour {
         {
             Destroy(card);
         }
+        //spawnedCards = new List<GameObject>(spawnedCards.Count);
         spawnedIndex = 0;
         for (int i = collectionIndex; i < collectionIndex + totalSpawnedCards; i++)
         {

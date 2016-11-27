@@ -1,2 +1,1 @@
-alp:2
-angel:2
+Knight:alp,alp,angel,angel
