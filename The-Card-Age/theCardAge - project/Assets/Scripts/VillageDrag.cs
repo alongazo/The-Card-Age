@@ -13,7 +13,25 @@ public class VillageDrag : MonoBehaviour
     float posX;
     float posY;
     public SpriteRenderer sprite;
-   
+    
+    
+    public void OnMouseEnter()
+    {
+        if (GameObject.Find("SettingTracker").GetComponent<TrackSetting>().currentSetting == "blacksmith")
+        {
+            origPos = transform.position;
+            origPos.y += .3f;
+            transform.position = origPos;
+            origPos.y -= .3f;
+        }
+    }
+    public void OnMouseExit()
+    {
+        if (GameObject.Find("SettingTracker").GetComponent<TrackSetting>().currentSetting == "blacksmith")
+        {
+            transform.position = origPos;
+        }
+    }   
     public void OnMouseDown()
     {
         if (GameObject.Find("SettingTracker").GetComponent<TrackSetting>().currentSetting == "blacksmith")
@@ -21,9 +39,17 @@ public class VillageDrag : MonoBehaviour
             Quaternion rotateCard = Quaternion.identity;
             GameObject parent = GameObject.Find("Blacksmith");
             rotateCard.eulerAngles = new Vector3(90, 90, 0);
-            GameObject newCard = Instantiate(cardCopy, transform.position, rotateCard, parent.transform) as GameObject;
+            GameObject newCard = Instantiate(cardCopy, origPos, rotateCard, parent.transform) as GameObject;
             newCard.name = gameObject.name;
-            origPos = transform.position;
+            newCard.transform.parent = GameObject.Find("TemporaryCardHolder").transform;
+            //GameObject cardsSpawned = GameObject.Find("CardGarbage");
+            //cardsSpawned.GetComponent<CardDestroyer>().addCard(newCard);
+            //spawnIndex++;
+            //cardsSpawned.GetComponent<CollectionManager>().spawnedIndex = spawnIndex;
+            //origPos = transform.position;
+            /*Vector3 temp = transform.position;
+            temp.y += .3f;
+            transform.position = temp;*/
             dist = Camera.main.WorldToScreenPoint(transform.position);
             posX = Input.mousePosition.x - dist.x;
             posY = Input.mousePosition.y - dist.y;
@@ -47,7 +73,7 @@ public class VillageDrag : MonoBehaviour
     {
         if (GameObject.Find("SettingTracker").GetComponent<TrackSetting>().currentSetting == "blacksmith")
         {
-            if (transform.position.z < GameObject.Find("Deck Window").transform.position.z + .1)
+            if (transform.position.z < GameObject.Find("Deck Window").transform.position.z+.4)
             {
                 Vector3 newPos = transform.position;
                 Vector3 imagePos;
