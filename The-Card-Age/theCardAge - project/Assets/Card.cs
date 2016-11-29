@@ -161,4 +161,11 @@ public class Card : MonoBehaviour {
         ////Debug.Log("image is found at " + texture);
         return (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(texture, typeof(Texture2D));
     }
+    public Sprite Icon()
+    {
+        //Debug.Log("This is my name " + this.Name());
+        string icon = "Assets/Playing_Cards/MonsterIcon/" + this.Name() + "Icon.psd";
+        //Debug.Log("icon is found at " + icon);
+        return (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(icon, typeof(Sprite));
+    }
 }
