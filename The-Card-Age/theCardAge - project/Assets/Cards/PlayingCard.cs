@@ -264,10 +264,31 @@ public class PlayingCard : BaseCard
         target.SubHealth(damage);
         target.linkedBoardCard.UpdateHealth();
     }
-    //void Summon() { }
 
 
-    public void DetermineSkill(int bossAttack, ref Card target, Card[] targets)
+    void Surround(Card target)
+    {
+        // for now, just going to hard code in the thing... cause we've only got one card like this
+        Board temp = GameObject.Find("BoardManager").GetComponent<Board>();
+        if (target.isWhite)
+        {
+            temp.enemyDamage = 5;
+            temp.enemyDamagePoint = new Coordinate(target.CurrentX, target.CurrentY);
+        }
+        else
+        {
+            temp.playerDamage = 5;
+            temp.playerDamagePoint = new Coordinate(target.CurrentX, target.CurrentY);
+        }
+    }
+
+    public void Damage(int damage)
+    {
+        SubHealth(Mathf.Min(health, damage));
+        linkedBoardCard.UpdateHealth();
+    }
+
+    public void DetermineSkill(int bossAttack, ref Card target)//, Card[] targets)
     {
         Debug.Log("Skill = " + status.Split(' ')[0] + " (" + (skill == "Card_Damage") + ")");
 
@@ -292,7 +313,7 @@ public class PlayingCard : BaseCard
                 target.linkedPlayingCard.status = "None";
                 break;
             case "Paralysis":
-                target.linkedPlayingCard.status = "Paralysis";
+                target.linkedPlayingCard.status = "Prlyze";
                 break;
             case "Heal":
                 Heal(target.linkedPlayingCard);
@@ -301,6 +322,7 @@ public class PlayingCard : BaseCard
                 Card_Damage(target.linkedPlayingCard, bossAttack);
                 break;
             case "Surround":
+                Surround(target);
                 break;
             case "Multiple":
                 MultiAttack(target.linkedPlayingCard, bossAttack);

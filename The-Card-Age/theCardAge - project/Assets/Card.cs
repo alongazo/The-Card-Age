@@ -178,4 +178,5 @@ public class Card : MonoBehaviour {
         //Debug.Log("icon is found at " + icon);
         return (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(icon, typeof(Sprite));
     }
+    public void Damage(int damage) { linkedPlayingCard.Damage(damage); }
 }

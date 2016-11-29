@@ -19,8 +19,10 @@ public class Enemy : MonoBehaviour
     string selectedAction;
 
     bool isMovingCard;
-    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
+    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; } public static bool CanSkill() { return canSkill; }
     public static bool doubleSummon;
+    public static bool surroundDamage;
+    int surroundTurnCount;
 
     int numMoves;
 

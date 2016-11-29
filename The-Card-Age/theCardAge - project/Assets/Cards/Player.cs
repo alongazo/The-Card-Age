@@ -23,7 +23,11 @@ public class Player : MonoBehaviour, IEndDragHandler
     string selectedAction;
 
     static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
+    public static bool CanSkill() { return canSkill; }
     public static bool doubleSummon;
+    public static bool surroundDamage;
+    int surroundTurnCount;
+    int surroundDamageAmount; public void SetSurroundDamage(int damage) { surroundDamage = true; surroundDamageAmount = damage; surroundTurnCount = 5; }
 
 
 
@@ -45,6 +49,9 @@ public class Player : MonoBehaviour, IEndDragHandler
 
         canSkill = true;
         doubleSummon = false;
+        surroundDamage = false;
+        surroundTurnCount = 0;
+        surroundDamageAmount = 0;
     }
 
     void Initialize()
