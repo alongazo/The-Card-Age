@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-
-
 // Trying to add the other info the Enemy might need to do random things
 public struct Coordinate
 {
@@ -261,7 +259,19 @@ public class Board : MonoBehaviour
                 //isWhiteTurn = !isWhiteTurn;
 
                 selectedCard.TookAction();
-
+                if (selectedCard.CardType() == CardType.Boss)
+                {
+                    if (selectedCard.isWhite)
+                    {
+                        playerBoss.col = x;
+                        playerBoss.row = y;
+                    }
+                    else
+                    {
+                        enemyBoss.col = x;
+                        enemyBoss.row = y;
+                    }
+                }
             }
         }
         BoardHighlights.Instance.HideHighlights();
@@ -408,5 +418,17 @@ public class Board : MonoBehaviour
             return cards[playerBoss.col, playerBoss.row].Strength();
         }
         return cards[enemyBoss.col, enemyBoss.row].Strength();
+    }
+
+    public void SetBossCardLocation(Coordinate location, bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            playerBoss = location;
+        }
+        else
+        {
+            enemyBoss = location;
+        }
     }
 }

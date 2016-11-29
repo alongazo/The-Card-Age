@@ -67,7 +67,25 @@ public class PlayingCard : BaseCard
     {
         cardName = "!";
     }
+    public void LoadCard(int[] info, string status = "None")
+    {
+        rank = info[0]; cost = info[1]; move = info[2];
+        attack = baseAttack = info[3];
+        health = baseHealth = info[4];
+        defense = baseDefense = info[5];
 
+        if (cardType == CardType.Minion || cardType == CardType.Boss)
+        {
+            actions.Add("Attack"); actions.Add("Move");
+        }
+        this.skill = status.Split(' ')[0].Replace("\r", ""); // need tp figure out how to separate the status -> how does the status store things?
+
+        this.status = status;
+        actions.Add("Discard");
+    }
+
+
+    // Overloading functions relating to equality
     public static bool operator ==(PlayingCard right, PlayingCard left)
     {
         // above should be replaceable with this:
@@ -95,24 +113,15 @@ public class PlayingCard : BaseCard
         }
         return !(right.idNumber == left.idNumber) || !(right.cardName == left.cardName);
     }
-
-
-    public void LoadCard(int[] info, string status = "None")
+    public override bool Equals(object obj)
     {
-        rank = info[0]; cost = info[1]; move = info[2];
-        attack = baseAttack = info[3];
-        health = baseHealth = info[4];
-        defense = baseDefense = info[5];
-
-        if (cardType == CardType.Minion || cardType == CardType.Boss)
-        {
-            actions.Add("Attack"); actions.Add("Move");
-        }
-        this.skill = status.Split(' ')[0].Replace("\r",""); // need tp figure out how to separate the status -> how does the status store things?
-
-        this.status = status;
-        actions.Add("Discard");
+        return base.Equals(obj);
     }
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
 
 
     // Helper functions 
@@ -137,15 +146,15 @@ public class PlayingCard : BaseCard
         ////Debug.Log("Is calling the PossibleMove function of PlayingCard");
         bool[,] moves = new bool[Globals.numCols, Globals.numRows];
         int x = linkedBoardCard.CurrentX, y = linkedBoardCard.CurrentY;
-        for (int spread = 1; spread-1 < move; spread++)
+        for (int spread = 1; spread - 1 < move; spread++)
         {
-            if (y+spread < Globals.numRows)
+            if (y + spread < Globals.numRows)
                 moves[x, y + spread] = true;
-            if (y-spread > -1)
+            if (y - spread > -1)
                 moves[x, y - spread] = true;
-            if (x+spread < Globals.numCols)
+            if (x + spread < Globals.numCols)
                 moves[x + spread, y] = true;
-            if (x-spread > -1)
+            if (x - spread > -1)
                 moves[x - spread, y] = true;
 
             // For right now, we're going to assume that everyone moves 1 tile at a time,
@@ -158,13 +167,6 @@ public class PlayingCard : BaseCard
 
     public void SetIsPlayer(bool truth) { isPlayer = truth; }
 
-
-    public override string SaveCard()
-    {
-        string toSave = cardName;
-        int[] info = { rank, cost, move, baseAttack, baseHealth, baseDefense };
-        return toSave + ":" + info.ToString() + ":" + status;
-    }
     public override void RestoreCard()
     {
         discard = false;
@@ -175,12 +177,14 @@ public class PlayingCard : BaseCard
         {
             status = "";
         }
+        linkedBoardCard.UpdateHealth();
     }
     public override void AttackEnemy(BaseCard enemy, int attackToMultiply = 0)
     {
         int damage = CalculateDamage(enemy.GetDefense(), attackToMultiply);
         if (enemy.GetHealth() < damage) { enemy.SubHealth(enemy.GetHealth()); }
         else { enemy.SubHealth(damage); }
+        enemy.linkedBoardCard.UpdateHealth();
     }
     protected void ModifyAttack(int changeby) { }
 
@@ -191,9 +195,9 @@ public class PlayingCard : BaseCard
     public override int GetHealth() { return health; }
     public override int GetDefense() { return defense; }
     public override int GetAttack() { return attack; }
-    public override int GetMaxHealth() { return baseHealth;  }
+    public override int GetMaxHealth() { return baseHealth; }
     public override int GetMovement() { return move; }
-    public override string GetStatus() { return (status == "") ? "" : status ; }
+    public override string GetStatus() { return (status == "") ? "" : status; }
     public override bool IsPlayer() { return isPlayer; }
 
     public override void SubHealth(int damage) { health -= damage; }
@@ -202,10 +206,13 @@ public class PlayingCard : BaseCard
     public List<string> GetActions() { return actions; }
 
     // Skill card skills - template class T is either PlayingCard or BossCard
-    void Heal(PlayingCard target) 
+    void Heal(PlayingCard target)
     {
-        int restorePoints = Mathf.CeilToInt((float)target.baseHealth/(float)health);
-        target.health = Mathf.Min(target.baseHealth, target.health+restorePoints);
+        Debug.Log("health = " + health + ", target.baseHealth = " + target.baseHealth);
+        int restorePoints = Mathf.CeilToInt(((float)target.baseHealth*health)/100f);
+        Debug.Log("Healing " + restorePoints + " points");
+        target.health = Mathf.Min(target.baseHealth, target.health + restorePoints);
+        target.linkedBoardCard.UpdateHealth();
     }
     void increaseDamage(PlayingCard target)
     {
@@ -220,9 +227,9 @@ public class PlayingCard : BaseCard
         health -= sacrificeAmt;
         target.health += sacrificeAmt;
     }
-    void SurroundDamage(PlayingCard[] targets,int damage)
+    void SurroundDamage(PlayingCard[] targets, int damage)
     {
-        foreach(PlayingCard card in targets)
+        foreach (PlayingCard card in targets)
         {
             card.health -= damage;
         }
@@ -230,34 +237,41 @@ public class PlayingCard : BaseCard
     void MultiAttack(PlayingCard target, int bossAttack)
     {
         int numAttacks, damage = 0;
-        int minMultiplier,maxMultiplier;
+        int minMultiplier, maxMultiplier;
 
         string[] attackinfo = status.Split(' ')[1].Split(',');
         numAttacks = Convert.ToInt32(attackinfo[0]);
         minMultiplier = Convert.ToInt32(attackinfo[1]);
         maxMultiplier = Convert.ToInt32(attackinfo[2]);
-        
-        for (int i=0; i<numAttacks; i++)
+
+        for (int i = 0; i < numAttacks; i++)
         {
             damage += Mathf.CeilToInt((float)bossAttack * (float)(UnityEngine.Random.Range(minMultiplier, maxMultiplier)) / (float)10);
         }
         damage = Mathf.Max(0, damage - target.defense);
         damage = Mathf.Max(0, target.health - damage);
         target.SubHealth(damage);
+        target.linkedBoardCard.UpdateHealth();
     }
 
     void Card_Damage(PlayingCard target, int bossAttack)
     {
-
+        int numAttacks = Player.HandSize();
+        int damage = Mathf.CeilToInt((float)bossAttack*.20f*numAttacks);
+        damage = Mathf.Max(0, damage - target.defense);
+        damage = Mathf.Max(0, target.health - damage);
+        Debug.Log("Heart of the Cards is dealing " + damage + " damage");
+        target.SubHealth(damage);
+        target.linkedBoardCard.UpdateHealth();
     }
     //void Summon() { }
 
 
     public void DetermineSkill(int bossAttack, ref Card target, Card[] targets)
     {
-        Debug.Log("Skill = " + status.Split(' ')[0] + " (" + (skill == "Attack") + ")");
-        
-        switch(skill)
+        Debug.Log("Skill = " + status.Split(' ')[0] + " (" + (skill == "Card_Damage") + ")");
+
+        switch (skill)
         {
             case "Attack":
                 Debug.Log("Attacking skill: bossAttack = " + bossAttack.ToString());
@@ -284,7 +298,7 @@ public class PlayingCard : BaseCard
                 Heal(target.linkedPlayingCard);
                 break;
             case "Card_Damage":
-                
+                Card_Damage(target.linkedPlayingCard, bossAttack);
                 break;
             case "Surround":
                 break;

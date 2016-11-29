@@ -203,7 +203,7 @@ public class Enemy : MonoBehaviour
     {
         GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
         newDrag.GetComponent<drag>().OnEndDrag(2, 4);
-        board.enemyBoss = new Coordinate(2, 4);
+        board.SetBossCardLocation(new Coordinate(2, 4), false);
         cardsOnBoard.Add(new Coordinate(2, 4));
     }
 

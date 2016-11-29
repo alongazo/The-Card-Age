@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, IEndDragHandler
     public TextAsset deckInfo;
 
     GameObject wholeDeck;
-    List<PlayingCard> handDeck;
+    static List<PlayingCard> handDeck;
     bool turnIsDone;
     string selectedAction;
 
@@ -86,7 +86,7 @@ public class Player : MonoBehaviour, IEndDragHandler
     {
         GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
         newDrag.GetComponent<drag>().OnEndDrag(3, 1);
-        board.playerBoss = new Coordinate(3, 1);
+        board.SetBossCardLocation(new Coordinate(3, 1), true);
         cardsOnBoard.Add(new Coordinate(3, 1));
     }
 
@@ -187,4 +187,6 @@ public class Player : MonoBehaviour, IEndDragHandler
         cardsOnBoard.Remove(prev);
         cardsOnBoard.Add(next);
     }
+
+    static public int HandSize() { return handDeck.Count; }
 }

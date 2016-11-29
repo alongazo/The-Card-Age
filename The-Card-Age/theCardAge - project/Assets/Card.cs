@@ -59,13 +59,10 @@ public class Card : MonoBehaviour {
     {
         //Debug.Log(attackingCard.linkedPlayingCard.GetName() + " is attacking");
         attackingCard.linkedPlayingCard.AttackEnemy(linkedPlayingCard, multiplier);
-        health.CurrentVal = linkedPlayingCard.GetHealth();
     }
-
     public void Attack(PlayingCard attackingCard, int multiplier = 0)
     {
         attackingCard.AttackEnemy(linkedPlayingCard, multiplier);
-        health.CurrentVal = linkedPlayingCard.GetHealth();
     }
 
     public float GetHPVal()
@@ -90,6 +87,10 @@ public class Card : MonoBehaviour {
     {
         return rightHPBar;
     }
+    public void UpdateHealth()
+    {
+        health.CurrentVal = linkedPlayingCard.GetHealth();
+    }
 
     public void SetPosition(int x, int y)
     {
@@ -106,8 +107,6 @@ public class Card : MonoBehaviour {
         return linkedPlayingCard.PossibleMove();
     }
 
-    public int Defense() { return linkedPlayingCard.GetDefense(); }
-    public int Strength() { return linkedPlayingCard.GetAttack(); }
 
 
     // Attaching BaseCard to this card
@@ -123,13 +122,23 @@ public class Card : MonoBehaviour {
     }
     public void CheckLink()
     {
-        //Debug.Log(linkedPlayingCard.GetName());
+        Debug.Log(linkedPlayingCard.GetName());
     }
     public bool IsLinked()
     {
         return linkedPlayingCard != null;
     }
 
+
+    // Getting information from attached card
+    public int Defense()
+    {
+        return linkedPlayingCard.GetDefense();
+    }
+    public int Strength()
+    {
+        return linkedPlayingCard.GetAttack();
+    }
     public string Name()
     {
         return linkedPlayingCard.GetName();
@@ -161,6 +170,11 @@ public class Card : MonoBehaviour {
         ////Debug.Log("image is found at " + texture);
         return (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(texture, typeof(Texture2D));
     }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
     public Sprite Icon()
     {
         //Debug.Log("This is my name " + this.Name());
