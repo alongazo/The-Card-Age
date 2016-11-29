@@ -19,8 +19,10 @@ public class Enemy : MonoBehaviour
     string selectedAction;
 
     bool isMovingCard;
-    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
+    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; } public static bool CanSkill() { return canSkill; }
     public static bool doubleSummon;
+    public static bool surroundDamage;
+    int surroundTurnCount;
 
     int numMoves;
 
@@ -203,7 +205,7 @@ public class Enemy : MonoBehaviour
     {
         GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
         newDrag.GetComponent<drag>().OnEndDrag(2, 4);
-        board.enemyBoss = new Coordinate(2, 4);
+        board.SetBossCardLocation(new Coordinate(2, 4), false);
         cardsOnBoard.Add(new Coordinate(2, 4));
     }
 
@@ -287,5 +289,23 @@ public class Enemy : MonoBehaviour
     {
         cardsOnBoard.Remove(prev);
         cardsOnBoard.Add(next);
+    }
+
+
+    void RandomSummon()
+    {
+        int prefabIndex = board.FindPrefabIndex("WyvernPrefab");
+        GameObject newDrag = new GameObject("Enemy Card " + handDeck.Count.ToString());
+        newDrag.AddComponent<drag>();
+        newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
+        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["Wyvern"]);
+        newDrag.GetComponent<drag>().setOriginator(ref handDeck);
+        newDrag.GetComponent<drag>().boardScript = board;
+        int col, row;
+        do
+        {
+            col = Random.Range(0, Globals.numCols);
+            row = Random.Range(Globals.numRows - 2, Globals.numRows);
+        } while (!newDrag.GetComponent<drag>().OnEndDrag(col, row));
     }
 }

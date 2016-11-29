@@ -28,7 +28,6 @@ public abstract class BaseCard
 
 
     // Functions we want to be able to use in PlayingCard
-    public virtual string SaveCard() { return "Name"; }
     public virtual void RestoreCard() { discard = false; }
     public virtual void AttackEnemy(BaseCard enemy, int attackToMultiply = 0) { }
 

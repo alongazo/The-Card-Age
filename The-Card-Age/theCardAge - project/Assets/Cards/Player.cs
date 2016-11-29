@@ -18,12 +18,16 @@ public class Player : MonoBehaviour, IEndDragHandler
     public TextAsset deckInfo;
 
     GameObject wholeDeck;
-    List<PlayingCard> handDeck;
+    static List<PlayingCard> handDeck;
     bool turnIsDone;
     string selectedAction;
 
     static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
+    public static bool CanSkill() { return canSkill; }
     public static bool doubleSummon;
+    public static bool surroundDamage;
+    int surroundTurnCount;
+    int surroundDamageAmount; public void SetSurroundDamage(int damage) { surroundDamage = true; surroundDamageAmount = damage; surroundTurnCount = 5; }
 
 
 
@@ -45,6 +49,9 @@ public class Player : MonoBehaviour, IEndDragHandler
 
         canSkill = true;
         doubleSummon = false;
+        surroundDamage = false;
+        surroundTurnCount = 0;
+        surroundDamageAmount = 0;
     }
 
     void Initialize()
@@ -55,6 +62,12 @@ public class Player : MonoBehaviour, IEndDragHandler
 
     void Update()
     {
+        if (doubleSummon)
+        {
+            RandomSummon();
+            RandomSummon();
+            doubleSummon = false;
+        }
     }
 
     void FirstDraw()
@@ -86,7 +99,7 @@ public class Player : MonoBehaviour, IEndDragHandler
     {
         GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
         newDrag.GetComponent<drag>().OnEndDrag(3, 1);
-        board.playerBoss = new Coordinate(3, 1);
+        board.SetBossCardLocation(new Coordinate(3, 1), true);
         cardsOnBoard.Add(new Coordinate(3, 1));
     }
 
@@ -187,4 +200,6 @@ public class Player : MonoBehaviour, IEndDragHandler
         cardsOnBoard.Remove(prev);
         cardsOnBoard.Add(next);
     }
+
+    static public int HandSize() { return handDeck.Count; }
 }

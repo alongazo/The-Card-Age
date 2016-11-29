@@ -87,17 +87,26 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             // check if no card is on the tile
             if(card.GetCardType() == CardType.Skill && boardScript.cards[boardScript.selectionX, boardScript.selectionY] != null)
             { //TRYING TO IMPLEMENT SKILL CARDS!
-                Debug.Log("Using skill on a card");
-                int bossAttack = boardScript.GetAttackOfBoss(card.IsPlayer());
-                List<Card> targets = new List<Card>();
-                if (boardScript.selectionX + 1 < Globals.numCols) { targets.Add(boardScript.cards[boardScript.selectionX+1, boardScript.selectionY]); }
-                if (boardScript.selectionX - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX-1, boardScript.selectionY]); }
-                if (boardScript.selectionY + 1 < Globals.numRows) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY+1]); }
-                if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
-                card.DetermineSkill(bossAttack, ref boardScript.cards[boardScript.selectionX, boardScript.selectionY], targets.ToArray());
+                if (card.IsPlayer() && Player.CanSkill() || !card.IsPlayer() && Enemy.CanSkill())
+                {
+                    Debug.Log("Using skill on a card");
+                    int bossAttack = boardScript.GetAttackOfBoss(card.IsPlayer());
+                    //List<Card> targets = new List<Card>();
+                    //if (boardScript.selectionX + 1 < Globals.numCols) { targets.Add(boardScript.cards[boardScript.selectionX+1, boardScript.selectionY]); }
+                    //if (boardScript.selectionX - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX-1, boardScript.selectionY]); }
+                    //if (boardScript.selectionY + 1 < Globals.numRows) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY+1]); }
+                    //if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
+                    card.DetermineSkill(bossAttack, ref boardScript.cards[boardScript.selectionX, boardScript.selectionY]);//, targets.ToArray());
 
-                originated.Remove(card);
-                Destroy(this.gameObject);
+                    originated.Remove(card);
+                    Destroy(this.gameObject);
+                }
+                else
+                {
+                    Debug.Log("Can't use skill!");
+                    if (card.IsPlayer()) { Player.SetCanSkill(true); }
+                    else { Enemy.SetCanSkill(true); }
+                }
             }
             else if (boardScript.cards[boardScript.selectionX, boardScript.selectionY] == null)
             {

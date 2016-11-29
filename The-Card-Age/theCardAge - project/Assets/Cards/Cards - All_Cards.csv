@@ -31,7 +31,7 @@ Heal,Neutral,heal.png,Restore target's HP by 40%,:,2,:,1,1,0,0,40,0,:,Heal
 Heart of the Cards,Hero,heart_of_the_cards.png,Deal damage proportional to the number of cards in the hand.,:,2,:,1,1,0,0,0,0,:,Card_Damage 10
 Holy Strike,Hero,holy_strike.png,Deal 2.5 times the hero's attack power.,:,2,:,1,1,0,25,0,0,:,Attack
 Light's Glory,Hero,light's_glory.png,Restore target's HP by 75%,:,2,:,1,1,0,0,75,0,:,Heal
-Lure,Enemy,lure.png,Adjacent enemies lose -2 health at the end of the turn for 5 turns. Canceling this card terminates its effects and no loss in health.,:,2,:,1,1,0,0,0,0,:,Surround -2
+Lure,Enemy,lure.png,Adjacent enemies lose -2 health at the end of the turn for 5 turns. Canceling this card terminates its effects and no loss in health.,:,2,:,1,1,0,0,0,0,:,Surround 2
 Nightmare,Enemy,nightmare.png,Target is paralyzed (unable to move) for 1 turn.,:,2,:,1,1,0,0,0,0,:,Paralysis
 Sacrifice,Hero,sacrifice.png,Take damage to heal an ally by 5 HP.,:,2,:,1,1,0,0,0,0,:,Sacrifice 5
 Shadow Slash,Enemy,shadow_slash.png,Deal 2 times the boss's damage.,:,2,:,1,1,0,20,0,0,:,Attack

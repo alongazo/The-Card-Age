@@ -25,7 +25,7 @@ public class LeftPanel : MonoBehaviour {
         ////Debug.Log("panel: " + panelOriginalHeight);
     }
 
-    public void CreateHPBar(Card cardPiece)
+    public void CreateHPBar(Card card)
     {
         int boardCount = 0;
         if (boardScript.IsWhiteTurn())
@@ -37,21 +37,24 @@ public class LeftPanel : MonoBehaviour {
         {
             boardCount = boardScript.GetEnemyCardOnField();
         }
-        
+
         RectTransform containerRectTransform = gameObject.GetComponent<RectTransform>();
-        //Debug.Log("Creating HP Bar");
+        Debug.Log("Creating HP Bar");
 
         // create hp bar game object
         GameObject newItem = Instantiate(itemPrefab) as GameObject;
         // change the name of the game object
         newItem.name = gameObject.name + " item at (" + boardCount + ")";
+        //newItem.GetComponentInChildren<Text>().text = card.Name();
+        newItem.transform.FindChild("Name").GetComponent<Text>().text = card.Name();
+        newItem.transform.FindChild("Icon").GetComponent<Image>().sprite = card.Icon();
         // set the parent
         newItem.transform.SetParent(gameObject.transform, false);
 
         // check if scroll panel need to be resize to fit all items
         //if ((boardCount * height) > containerRectTransform.sizeDelta.y)
         //{
-        //    //Debug.Log("changing: " + containerRectTransform.sizeDelta);
+        //    Debug.Log("changing: " + containerRectTransform.sizeDelta);
         //    containerRectTransform.sizeDelta = new Vector2(containerRectTransform.sizeDelta.x, boardCount * height);
 
         //}
@@ -59,25 +62,25 @@ public class LeftPanel : MonoBehaviour {
         //// set hp bar to card class
         //cardPiece.SetHPBar(newItem);
         //cardPiece.LinkBarToObject(newItem);
-        //Debug.Log((boardCount * height) + " > " + containerRectTransform.sizeDelta.y);
+        Debug.Log((boardCount * height) + " > " + containerRectTransform.sizeDelta.y);
         if ((boardCount * height) > containerRectTransform.sizeDelta.y)
         {
-            //Debug.Log("resize");
+            Debug.Log("resize");
             //float scrollBarSizeRatio = panelOriginalHeight / (boardCount * height);
             scrollBar.GetComponent<Scrollbar>().value = 0.5f;
-            ////Debug.Log("Size: " + scrollBarSizeRatio);
-            ////Debug.Log("changing: " + containerRectTransform.sizeDelta.y +" to "+ (boardCount * height));
+            //Debug.Log("Size: " + scrollBarSizeRatio);
+            //Debug.Log("changing: " + containerRectTransform.sizeDelta.y +" to "+ (boardCount * height));
             containerRectTransform.position = new Vector3(containerRectTransform.position.x, -(boardCount * height) / 2, containerRectTransform.position.z);
             containerRectTransform.sizeDelta = new Vector2(containerRectTransform.sizeDelta.x, boardCount * height);
             //scrollBar.GetComponent<Scrollbar>().value = 0.5f;
 
         }
         scrollBar.GetComponent<Scrollbar>().value = 1.0f;
+
         //scrollBar.GetComponent<Scrollbar>().size = scrollBarSizeRatio;
         // set hp bar to card class
-        cardPiece.SetHPBar(newItem);
-        cardPiece.LinkBarToObject(newItem);
+        card.SetHPBar(newItem);
+        card.LinkBarToObject(newItem);
 
-        //cardPiece.health.bar = newItem.GetComponent(typeof(Bar));
     }
 }

@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-
-
 // Trying to add the other info the Enemy might need to do random things
 public struct Coordinate
 {
@@ -64,6 +62,11 @@ public class Board : MonoBehaviour
     private Vector3 attackCardPosition;
     private Vector3 targetCardPosition;
     private float totalDistance;
+
+    public int playerDamage = 0;
+    public int enemyDamage = 0;
+    public Coordinate playerDamagePoint;
+    public Coordinate enemyDamagePoint;
     
     //[SerializeField]
     private bool isWhiteTurn = true;
@@ -261,7 +264,19 @@ public class Board : MonoBehaviour
                 //isWhiteTurn = !isWhiteTurn;
 
                 selectedCard.TookAction();
-
+                if (selectedCard.CardType() == CardType.Boss)
+                {
+                    if (selectedCard.isWhite)
+                    {
+                        playerBoss.col = x;
+                        playerBoss.row = y;
+                    }
+                    else
+                    {
+                        enemyBoss.col = x;
+                        enemyBoss.row = y;
+                    }
+                }
             }
         }
         BoardHighlights.Instance.HideHighlights();
@@ -358,6 +373,24 @@ public class Board : MonoBehaviour
         if (isWhiteTurn) { enemy.ResetTurn(); } else { player.ResetTurn(); }
         isWhiteTurn = !isWhiteTurn;
         UpdateWhoTurnDebug();
+
+        Debug.Log(enemyDamage + " or " + playerDamage);
+        if (enemyDamage > 0)
+        {
+            if (enemyDamagePoint.col + 1 < Globals.numCols && cards[enemyDamagePoint.col + 1, enemyDamagePoint.row] && !cards[enemyDamagePoint.col + 1, enemyDamagePoint.row].isWhite) { cards[enemyDamagePoint.col + 1, enemyDamagePoint.row].Damage(2); }
+            if (enemyDamagePoint.col + 1 < Globals.numCols && cards[enemyDamagePoint.col - 1, enemyDamagePoint.row] && !cards[enemyDamagePoint.col - 1, enemyDamagePoint.row].isWhite) { cards[enemyDamagePoint.col - 1, enemyDamagePoint.row].Damage(2); }
+            if (enemyDamagePoint.row + 1 < Globals.numRows && cards[enemyDamagePoint.col, enemyDamagePoint.row + 1] && !cards[enemyDamagePoint.col, enemyDamagePoint.row + 1].isWhite) { cards[enemyDamagePoint.col, enemyDamagePoint.row + 1].Damage(2); }
+            if (enemyDamagePoint.row - 1 < Globals.numRows && cards[enemyDamagePoint.col, enemyDamagePoint.row - 1] && !cards[enemyDamagePoint.col, enemyDamagePoint.row - 1].isWhite) { cards[enemyDamagePoint.col, enemyDamagePoint.row - 1].Damage(2); }
+            enemyDamage--;
+        }
+        if (playerDamage > 0)
+        {
+            if (playerDamagePoint.col + 1 < Globals.numCols && cards[playerDamagePoint.col + 1, playerDamagePoint.row] && cards[playerDamagePoint.col + 1, playerDamagePoint.row].isWhite) { cards[playerDamagePoint.col + 1, playerDamagePoint.row].Damage(2); }
+            if (playerDamagePoint.col - 1 < Globals.numCols && cards[playerDamagePoint.col - 1, playerDamagePoint.row] && cards[playerDamagePoint.col - 1, playerDamagePoint.row].isWhite) { cards[playerDamagePoint.col - 1, playerDamagePoint.row].Damage(2); }
+            if (playerDamagePoint.row + 1 < Globals.numRows && cards[playerDamagePoint.col, playerDamagePoint.row + 1] && cards[playerDamagePoint.col, playerDamagePoint.row + 1].isWhite) { cards[playerDamagePoint.col, playerDamagePoint.row + 1].Damage(2); }
+            if (playerDamagePoint.row - 1 < Globals.numRows && cards[playerDamagePoint.col, playerDamagePoint.row - 1] && cards[playerDamagePoint.col, playerDamagePoint.row - 1].isWhite) { cards[playerDamagePoint.col, playerDamagePoint.row - 1].Damage(2); }
+            playerDamage--;
+        }
     }
     public void UpdateWhoTurnDebug()
     {
@@ -408,5 +441,17 @@ public class Board : MonoBehaviour
             return cards[playerBoss.col, playerBoss.row].Strength();
         }
         return cards[enemyBoss.col, enemyBoss.row].Strength();
+    }
+
+    public void SetBossCardLocation(Coordinate location, bool isPlayer)
+    {
+        if (isPlayer)
+        {
+            playerBoss = location;
+        }
+        else
+        {
+            enemyBoss = location;
+        }
     }
 }
