@@ -288,4 +288,22 @@ public class Enemy : MonoBehaviour
         cardsOnBoard.Remove(prev);
         cardsOnBoard.Add(next);
     }
+
+
+    void RandomSummon()
+    {
+        int prefabIndex = board.FindPrefabIndex("WyvernPrefab");
+        GameObject newDrag = new GameObject("Enemy Card " + handDeck.Count.ToString());
+        newDrag.AddComponent<drag>();
+        newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
+        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["Wyvern"]);
+        newDrag.GetComponent<drag>().setOriginator(ref handDeck);
+        newDrag.GetComponent<drag>().boardScript = board;
+        int col, row;
+        do
+        {
+            col = Random.Range(0, Globals.numCols);
+            row = Random.Range(Globals.numRows - 2, Globals.numRows);
+        } while (!newDrag.GetComponent<drag>().OnEndDrag(col, row));
+    }
 }

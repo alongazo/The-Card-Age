@@ -55,6 +55,12 @@ public class Player : MonoBehaviour, IEndDragHandler
 
     void Update()
     {
+        if (doubleSummon)
+        {
+            RandomSummon();
+            RandomSummon();
+            doubleSummon = false;
+        }
     }
 
     void FirstDraw()

@@ -170,11 +170,7 @@ public class Card : MonoBehaviour {
         ////Debug.Log("image is found at " + texture);
         return (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(texture, typeof(Texture2D));
     }
-<<<<<<< Updated upstream
-=======
 
-
->>>>>>> Stashed changes
     public Sprite Icon()
     {
         //Debug.Log("This is my name " + this.Name());
