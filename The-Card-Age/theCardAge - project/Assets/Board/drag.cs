@@ -28,15 +28,17 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 	{
 		if (eventData.button == PointerEventData.InputButton.Right)
 		{
-	/*		Debug.Log("card on had was right clicked");
+			Debug.Log ("Right Click Hand");
+			Debug.Log (this.card.GetName());
+			Debug.Log("card on had was right clicked");
 			GameObject go = Instantiate(boardScript.chessmanPrefabs[itemIndex]) as GameObject;
 			Debug.Log(go.GetComponent<Card>().name);
 			go.GetComponent<MeshRenderer>().enabled = false;
-			go.GetComponent<Card>().Link(Globals.cardDatabase[cardName]);
+			go.GetComponent<Card>().Link(Globals.cardDatabase[this.card.GetName()]);
 			boardScript.ViewHandCard(go.GetComponent<Card>(), gameObject.name);
 			Destroy(go);
 			Debug.Log(this.name);
-			*/
+
 		}
 	}
 

@@ -76,6 +76,9 @@ public class RightPanel : MonoBehaviour {
 
     public void ViewCardStat(Card card)
     {
+		// reset previous selected card from the hand;
+		prevCardTag = "-1";
+
         Debug.Log("is card null: " + (card == null));
         if (card == null)
         {
@@ -92,7 +95,9 @@ public class RightPanel : MonoBehaviour {
         {
             prevRightPanelX = card.CurrentX;
             prevRightPanelY = card.CurrentY;
+			// get pointer to card information so you can update stats on the panel
 			currentCard = card;
+		
             if (rightPanel1On == false)
             {
                 rightPanel1On = true;
