@@ -23,7 +23,7 @@ public class Bar : MonoBehaviour {
         set
         {
             string[] temp = valueText.text.Split(':');
-            valueText.text = temp[0] + ": " + value;
+            valueText.text = temp[0] + ": " + value + "/" + MaxValue;
             fillAmount = Map(value, 0, MaxValue, 0, 1);
         }
     }

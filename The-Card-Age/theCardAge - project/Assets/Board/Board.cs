@@ -19,7 +19,8 @@ public struct Coordinate
 
 public class Board : MonoBehaviour
 {
-
+	[SerializeField]
+	private Stat AP;
     [SerializeField]
     private LeftPanel leftPanelScriptPlayer;
     [SerializeField]
@@ -77,6 +78,12 @@ public class Board : MonoBehaviour
     {
         return playerCardOnField;
     }
+
+	void Awake()
+	{
+		AP.Initialize(50);
+	}
+
     // Use this for initialization
     void Start()
     {
@@ -91,6 +98,18 @@ public class Board : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
+
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+	
+			AP.CurrentVal -= 10;
+		}
+		if (Input.GetKeyDown(KeyCode.S))
+		{
+
+			AP.CurrentVal += 10;
+		}
+
         updateSelection();
         // card attack animation / card move toward target
         
@@ -199,13 +218,22 @@ public class Board : MonoBehaviour
         selectedCard = cards[x, y];
         BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves, isWhiteTurn);
     }
-    private void RightSelectCard(int x, int y)
-        // opens left panel
-    {
-        //Debug.Log("In RightSelectCard function");
-        rightPanelScript.ViewCardStat(cards[x, y]);
-    }
 
+	private void RightSelectCard(int x, int y)
+	// opens left panel
+	{
+		Debug.Log("In RightSelectCard function");
+		ViewCard(cards[x, y]);
+	}
+	public void ViewCard(Card card)
+	{
+		rightPanelScript.ViewCardStat(card);
+	}
+
+	public void ViewHandCard(Card card, string cardTag)
+	{
+		rightPanelScript.ViewCardStatOnHand(card, cardTag);
+	}
     public void MoveCard(int x, int y)
     {
         Debug.Log(x + " " + y);

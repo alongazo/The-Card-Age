@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Transform hand = null;
     public Transform placeholderParent = null;
@@ -13,7 +13,7 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     //public int itemIndex;
     public Board boardScript;
 
-
+	string cardName;
     int itemIndex;
     PlayingCard card;
     List<PlayingCard> originated;
@@ -23,6 +23,22 @@ public class drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     Vector3 dist;
     float posX;
     float posY;
+
+	public void OnPointerClick(PointerEventData eventData)
+	{
+		if (eventData.button == PointerEventData.InputButton.Right)
+		{
+	/*		Debug.Log("card on had was right clicked");
+			GameObject go = Instantiate(boardScript.chessmanPrefabs[itemIndex]) as GameObject;
+			Debug.Log(go.GetComponent<Card>().name);
+			go.GetComponent<MeshRenderer>().enabled = false;
+			go.GetComponent<Card>().Link(Globals.cardDatabase[cardName]);
+			boardScript.ViewHandCard(go.GetComponent<Card>(), gameObject.name);
+			Destroy(go);
+			Debug.Log(this.name);
+			*/
+		}
+	}
 
     public void OnBeginDrag(PointerEventData eventData)
     {
