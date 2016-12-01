@@ -39,7 +39,7 @@ public class LeftPanel : MonoBehaviour {
         }
 
         RectTransform containerRectTransform = gameObject.GetComponent<RectTransform>();
-        Debug.Log("Creating HP Bar");
+        //Debug.Log("Creating HP Bar");
 
         // create hp bar game object
         GameObject newItem = Instantiate(itemPrefab) as GameObject;

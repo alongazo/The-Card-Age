@@ -164,6 +164,11 @@ public class Card : MonoBehaviour {
         return linkedPlayingCard.GetCardType();
     }
 
+	public int Cost()
+	{
+		return linkedPlayingCard.GetCost();
+	}
+
     public Texture Image()
     {
         string texture = "Assets/Card_Images/" + linkedPlayingCard.GetImage();

@@ -79,7 +79,7 @@ public class RightPanel : MonoBehaviour {
 		// reset previous selected card from the hand;
 		prevCardTag = "-1";
 
-        Debug.Log("is card null: " + (card == null));
+        //Debug.Log("is card null: " + (card == null));
         if (card == null)
         {
             prevRightPanelX = -1;
@@ -161,7 +161,7 @@ public class RightPanel : MonoBehaviour {
     }
 	public void ViewCardStatOnHand(Card card, string cardTag)
 	{
-		Debug.Log ("is card null: " + (card == null));
+		//Debug.Log ("is card null: " + (card == null));
 		if (card == null) {
 			prevRightPanelX = -1;
 			prevRightPanelY = -1;

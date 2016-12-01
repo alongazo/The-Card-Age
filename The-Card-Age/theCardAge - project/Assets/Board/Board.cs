@@ -19,6 +19,8 @@ public struct Coordinate
 
 public class Board : MonoBehaviour
 {
+
+	private int turnCounter = 0;
 	[SerializeField]
 	private Stat AP;
     [SerializeField]
@@ -83,10 +85,15 @@ public class Board : MonoBehaviour
     {
         return playerCardOnField;
     }
-
+	public int GetCurrentAP()
+	{
+		return AP.CurrentVal;
+	}
 	void Awake()
 	{
-		AP.Initialize(50);
+		// initialize Action Point Bar
+		AP.Initialize(7);
+		AP.CurrentVal = 1;
 	}
 
     // Use this for initialization
@@ -103,84 +110,76 @@ public class Board : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
-
+		/*
 		if (Input.GetKeyDown(KeyCode.A))
 		{
 	
-			AP.CurrentVal -= 10;
+			AP.CurrentVal -= 1;
 		}
 		if (Input.GetKeyDown(KeyCode.S))
 		{
 
-			AP.CurrentVal += 10;
+			AP.CurrentVal += 1;
 		}
-
+		*/
         updateSelection();
         // card attack animation / card move toward target
         
-        if (isAttacking == true && doneAttacking == false)
-        {
-            ////Debug.Log("Hello we are attacking");
-            float currentTime = (Time.time - startAttackTime);
-            float journeyFraction = currentTime / totalDistance;
-            ////Debug.Log(currentTime + " " + totalDistance + " " + journeyFraction);
-            int speed = 8;
-            if (journeyFraction*speed > 0.6f)
-            {
+		if (isAttacking == true && doneAttacking == false) {
+			////Debug.Log("Hello we are attacking");
+			float currentTime = (Time.time - startAttackTime);
+			float journeyFraction = currentTime / totalDistance;
+			////Debug.Log(currentTime + " " + totalDistance + " " + journeyFraction);
+			int speed = 8;
+			if (journeyFraction * speed > 0.6f) {
                 
-                startAttackTime = Time.time;
-                targetCardPosition = attackCardPosition;
-                attackCardPosition = selectedCard.transform.position;
-                totalDistance =Vector3.Distance(attackCardPosition, targetCardPosition);
-                doneAttacking = true;
+				startAttackTime = Time.time;
+				targetCardPosition = attackCardPosition;
+				attackCardPosition = selectedCard.transform.position;
+				totalDistance = Vector3.Distance (attackCardPosition, targetCardPosition);
+				doneAttacking = true;
 
-            }
-            else
-            {
-                Debug.Log("selectedCard == null: " + (selectedCard == null));
-                selectedCard.transform.position = Vector3.Lerp(attackCardPosition, targetCardPosition, journeyFraction*speed);
-            }
+			} else {
+				Debug.Log ("selectedCard == null: " + (selectedCard == null));
+				selectedCard.transform.position = Vector3.Lerp (attackCardPosition, targetCardPosition, journeyFraction * speed);
+			}
 
-        }
+		}
         // card done attack animation / card return back to original position
-        else if (doneAttacking == true)
-        {
-            float currentTime = (Time.time - startAttackTime);
-            float journeyFraction = currentTime / totalDistance;
-            selectedCard.transform.position = Vector3.Lerp(attackCardPosition, targetCardPosition, journeyFraction*2);
-            if (selectedCard.transform.position == targetCardPosition)
-            {
-                doneAttacking = false;
-                isAttacking = false;
+        else if (doneAttacking == true) {
+			float currentTime = (Time.time - startAttackTime);
+			float journeyFraction = currentTime / totalDistance;
+			selectedCard.transform.position = Vector3.Lerp (attackCardPosition, targetCardPosition, journeyFraction * 2);
+			if (selectedCard.transform.position == targetCardPosition) {
+				doneAttacking = false;
+				isAttacking = false;
 
-                selectedCard.TookAction();
-            }
-        }
+				selectedCard.TookAction ();
+			}
+		}
 
         // left click
-        else if (Input.GetMouseButtonDown(0))
-        {
-            //Debug.Log("Left click pressed");
-            ////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
-            ////Debug.Log("hello");
-            if (selectionX > -1 && selectionY > -1)
-            {
-                //Vector3 temp = GetTileCenter(selectionX, selectionY);
-                ////Debug.Log(selectionX + " " + selectionY);
-                if (selectedCard == null)
-                {
-                    ////Debug.Log("null");
-                    ////Debug.Log(selectionX + "  " + selectionY);
-                    SelectCard(selectionX, selectionY);
-                }
-                else
-                {
-                    ////Debug.Log("move");
-                    MoveCard(selectionX, selectionY);
-                    //SelectCard(selectionX, selectionY);
-                }
-            }
-        }
+        else if (Input.GetMouseButtonDown (0)) {
+			//Debug.Log("Left click pressed");
+			////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
+			////Debug.Log("hello");
+			// Check if player ran out of Action Points
+			if (GetCurrentAP () > 0) {
+				if (selectionX > -1 && selectionY > -1) {
+					//Vector3 temp = GetTileCenter(selectionX, selectionY);
+					////Debug.Log(selectionX + " " + selectionY);
+					if (selectedCard == null) {
+						////Debug.Log("null");
+						////Debug.Log(selectionX + "  " + selectionY);
+						SelectCard (selectionX, selectionY);
+					} else {
+						////Debug.Log("move");
+						MoveCard (selectionX, selectionY);
+						//SelectCard(selectionX, selectionY);
+					}
+				}
+			}
+		}
 
         // right click (show card information)
         else if (Input.GetMouseButtonDown(1))
@@ -247,6 +246,9 @@ public class Board : MonoBehaviour
             Card c = cards[x, y];
             if (c != null && c.isWhite != selectedCard.isWhite && !selectedCard.HasTakenAction())
             {
+				if (isWhiteTurn) {
+					AP.CurrentVal -= 1;
+				}
                 //Debug.Log("attack");
                 // set variable for card attack animation
                 attackCardPosition = selectedCard.transform.position;
@@ -280,7 +282,9 @@ public class Board : MonoBehaviour
             }
             else if (cards[x, y] == null && !selectedCard.HasTakenAction())
             {
-
+				if (isWhiteTurn) {
+					AP.CurrentVal -= 1;
+				}
                 if (isWhiteTurn) { player.UpdateCardAt(new Coordinate(selectedCard.CurrentX, selectedCard.CurrentY), new Coordinate(x, y)); }
                 else { enemy.UpdateCardAt(new Coordinate(selectedCard.CurrentX, selectedCard.CurrentY), new Coordinate(x, y)); }
 
@@ -351,6 +355,7 @@ public class Board : MonoBehaviour
         
         if (cards[x, y].isWhite)
         {
+			AP.CurrentVal -= cards [x, y].Cost ();
             ++playerCardOnField;
             leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
         }
@@ -398,7 +403,19 @@ public class Board : MonoBehaviour
     }
     public void EndTurn()
     {
-        if (isWhiteTurn) { enemy.ResetTurn(); } else { player.ResetTurn(); }
+		//if (isWhiteTurn) { AP.CurrentVal += 2; }
+        if (isWhiteTurn) { 
+			enemy.ResetTurn(); 
+		} 
+		else { 
+			Debug.Log ("Turn: " + turnCounter);
+			player.ResetTurn(); 
+			turnCounter++;
+			if (turnCounter > 1) {
+				AP.CurrentVal += 2;
+			}
+
+		}
         isWhiteTurn = !isWhiteTurn;
         UpdateWhoTurnDebug();
 
