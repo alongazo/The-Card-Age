@@ -89,6 +89,9 @@ public class Board : MonoBehaviour
 	{
 		return AP.CurrentVal;
 	}
+	public void MinusAP(int x) {
+		AP.CurrentVal -= x;
+	}
 	void Awake()
 	{
 		// initialize Action Point Bar
@@ -355,7 +358,7 @@ public class Board : MonoBehaviour
         
         if (cards[x, y].isWhite)
         {
-			AP.CurrentVal -= cards [x, y].Cost ();
+	//		AP.CurrentVal -= cards [x, y].Cost ();
             ++playerCardOnField;
             leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
         }

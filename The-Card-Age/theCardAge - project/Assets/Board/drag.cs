@@ -106,6 +106,7 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 				if (card.GetCardType () == CardType.Skill && boardScript.cards [boardScript.selectionX, boardScript.selectionY] != null) { //TRYING TO IMPLEMENT SKILL CARDS!
 					if (card.IsPlayer () && Player.CanSkill () || !card.IsPlayer () && Enemy.CanSkill ()) {
 						Debug.Log ("Using skill on a card");
+						boardScript.MinusAP (card.GetCost ());
 						int bossAttack = boardScript.GetAttackOfBoss (card.IsPlayer ());
 						//List<Card> targets = new List<Card>();
 						//if (boardScript.selectionX + 1 < Globals.numCols) { targets.Add(boardScript.cards[boardScript.selectionX+1, boardScript.selectionY]); }
@@ -113,9 +114,9 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 						//if (boardScript.selectionY + 1 < Globals.numRows) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY+1]); }
 						//if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
 						card.DetermineSkill (bossAttack, ref boardScript.cards [boardScript.selectionX, boardScript.selectionY]);//, targets.ToArray());
-
 						originated.Remove (card);
 						Destroy (this.gameObject);
+
 					} else {
 						Debug.Log ("Can't use skill!");
 						if (card.IsPlayer ()) {
@@ -125,7 +126,7 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 						}
 					}
 				} else if (boardScript.cards [boardScript.selectionX, boardScript.selectionY] == null) {
-
+					boardScript.MinusAP (card.GetCost ());
 					boardScript.Spawn (itemIndex, card, boardScript.selectionX, boardScript.selectionY);
 
 					originated.Remove (card);
