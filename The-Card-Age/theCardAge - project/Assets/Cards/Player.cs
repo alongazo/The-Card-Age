@@ -202,4 +202,10 @@ public class Player : MonoBehaviour, IEndDragHandler
     }
 
     static public int HandSize() { return handDeck.Count; }
+
+
+    public List<Coordinate> GetPositions()
+    {
+        return cardsOnBoard;
+    }
 }

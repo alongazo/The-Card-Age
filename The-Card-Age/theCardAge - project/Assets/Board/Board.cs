@@ -344,28 +344,31 @@ public class Board : MonoBehaviour
     }
     public void Spawn(int index, PlayingCard card, int x, int y)
     {
-        GameObject go = Instantiate(chessmanPrefabs[index], GetTileCenter(x,y), orientation) as GameObject;
-        go.transform.SetParent(transform);
-        cards[x, y] = go.GetComponent<Card>();
-        ////Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
-        cards[x, y].SetPosition(x, y);
-        cards[x, y].isWhite = isWhiteTurn;
-
-        cards[x, y].Link(card);
-
-        ////Debug.Log(cards[x, y].IsLinked());
-        activeCard.Add(go);
-        
-        if (cards[x, y].isWhite)
+        if (card.GetCardType() != CardType.Skill)
         {
-	//		AP.CurrentVal -= cards [x, y].Cost ();
-            ++playerCardOnField;
-            leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
-        }
-        else if (!cards[x,y].isWhite)
-        {
-            ++enemyCardOnField;
-            leftPanelScriptEnemy.CreateHPBar(cards[x, y]);
+            GameObject go = Instantiate(chessmanPrefabs[index], GetTileCenter(x, y), orientation) as GameObject;
+            go.transform.SetParent(transform);
+            cards[x, y] = go.GetComponent<Card>();
+            ////Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
+            cards[x, y].SetPosition(x, y);
+            cards[x, y].isWhite = isWhiteTurn;
+
+            cards[x, y].Link(card);
+
+            ////Debug.Log(cards[x, y].IsLinked());
+            activeCard.Add(go);
+
+            if (cards[x, y].isWhite)
+            {
+                //		AP.CurrentVal -= cards [x, y].Cost ();
+                ++playerCardOnField;
+                leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
+            }
+            else if (!cards[x, y].isWhite)
+            {
+                ++enemyCardOnField;
+                leftPanelScriptEnemy.CreateHPBar(cards[x, y]);
+            }
         }
     }
 
@@ -501,5 +504,10 @@ public class Board : MonoBehaviour
         {
             enemyBoss = location;
         }
+    }
+
+    public List<Coordinate> GetPlayerPositions()
+    {
+        return player.GetPositions();
     }
 }
