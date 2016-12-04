@@ -1,1 +1,1 @@
-Knight:angel,bide,cancel
+Knight:
