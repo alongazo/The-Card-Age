@@ -28,16 +28,16 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            //Debug.Log ("Right Click Hand");
-            //Debug.Log (this.card.GetName());
-            //Debug.Log("card on had was right clicked");
+            ////Debug.Log ("Right Click Hand");
+            ////Debug.Log (this.card.GetName());
+            ////Debug.Log("card on had was right clicked");
             GameObject go = Instantiate(boardScript.chessmanPrefabs[itemIndex]) as GameObject;
-            //Debug.Log(go.GetComponent<Card>().name);
+            ////Debug.Log(go.GetComponent<Card>().name);
             go.GetComponent<MeshRenderer>().enabled = false;
             go.GetComponent<Card>().Link(Globals.cardDatabase[this.card.GetName()]);
             boardScript.ViewHandCard(go.GetComponent<Card>(), gameObject.name);
             Destroy(go);
-            //Debug.Log(this.name);
+            ////Debug.Log(this.name);
 
         }
     }
@@ -114,7 +114,7 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
                 { //TRYING TO IMPLEMENT SKILL CARDS!
                     if (card.IsPlayer() && Player.CanSkill() || !card.IsPlayer() && Enemy.CanSkill())
                     {
-                        Debug.Log("Using skill on a card");
+                        ////Debug.Log("Using skill on a card");
                         boardScript.MinusAP(card.GetCost());
                         int bossAttack = boardScript.GetAttackOfBoss(card.IsPlayer());
                         //List<Card> targets = new List<Card>();
@@ -134,9 +134,8 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
                         Destroy(this.gameObject);
 
                     }
-                    else
-                    {
-                        Debug.Log("Can't use skill!");
+                    else {
+                        ////Debug.Log("Can't use skill!");
                         if (card.IsPlayer())
                         {
                             Player.SetCanSkill(true);
@@ -185,10 +184,45 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 
             originated.Remove(card);
 
-            //Debug.Log("Hand is " + originated.Count.ToString() + " cards big");
+            //////Debug.Log("Hand is " + originated.Count.ToString() + " cards big");
             Destroy(this.gameObject);
             return true;
         }
         return false;
+    }
+
+
+    public void OnSkillDrag(int x, int y)
+    {
+        if (card.GetCardType() == CardType.Skill && boardScript.cards[x, y] != null)
+        { //TRYING TO IMPLEMENT SKILL CARDS!
+            if (card.IsPlayer() && Player.CanSkill() || !card.IsPlayer() && Enemy.CanSkill())
+            {
+                ////Debug.Log("Using skill on a card");
+                boardScript.MinusAP(card.GetCost());
+                int bossAttack = boardScript.GetAttackOfBoss(card.IsPlayer());
+                //List<Card> targets = new List<Card>();
+                //if (boardScript.selectionX + 1 < Globals.numCols) { targets.Add(boardScript.cards[boardScript.selectionX+1, boardScript.selectionY]); }
+                //if (boardScript.selectionX - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX-1, boardScript.selectionY]); }
+                //if (boardScript.selectionY + 1 < Globals.numRows) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY+1]); }
+                //if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
+
+                // Going to dampen the attack cause it's wayyy too much right now
+                card.DetermineSkill(bossAttack - 3, ref boardScript.cards[x,y]);//, targets.ToArray());
+                originated.Remove(card);
+                Destroy(this.gameObject);
+
+            }
+            else {
+                Debug.Log("Can't use skill!");
+                if (card.IsPlayer())
+                {
+                    Player.SetCanSkill(true);
+                }
+                else {
+                    Enemy.SetCanSkill(true);
+                }
+            }
+        }
     }
 }

@@ -62,10 +62,10 @@ public class LeftPanel : MonoBehaviour {
         //// set hp bar to card class
         //cardPiece.SetHPBar(newItem);
         //cardPiece.LinkBarToObject(newItem);
-        Debug.Log((boardCount * height) + " > " + containerRectTransform.sizeDelta.y);
+        //Debug.Log((boardCount * height) + " > " + containerRectTransform.sizeDelta.y);
         if ((boardCount * height) > containerRectTransform.sizeDelta.y)
         {
-            Debug.Log("resize");
+            //Debug.Log("resize");
             //float scrollBarSizeRatio = panelOriginalHeight / (boardCount * height);
             scrollBar.GetComponent<Scrollbar>().value = 0.5f;
             //Debug.Log("Size: " + scrollBarSizeRatio);

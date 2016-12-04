@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
-public class Player : MonoBehaviour, IEndDragHandler
+public class Player : MonoBehaviour
 {
     // Trying to connect the hand with Player
     //  if we keep hand here, then maybe we have its transform?
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour, IEndDragHandler
     {
         wholeDeck = new GameObject();
         string[] deck_text = deckInfo.text.Split('\n');
-        Debug.Log(bossName);
+        //Debug.Log(bossName);
         wholeDeck.AddComponent<Deck>();
         wholeDeck.GetComponent<Deck>().Initialize(deck_text, true);
         ////Debug.Log(cardNames[0]);
@@ -100,7 +100,7 @@ public class Player : MonoBehaviour, IEndDragHandler
         GameObject newDrag = handPlace.transform.GetChild(0).gameObject;
         newDrag.GetComponent<drag>().OnEndDrag(3, 1);
         board.SetBossCardLocation(new Coordinate(3, 1), true);
-        cardsOnBoard.Add(new Coordinate(3, 1));
+        //cardsOnBoard.Add(new Coordinate(3, 1));
     }
 
 
@@ -185,9 +185,10 @@ public class Player : MonoBehaviour, IEndDragHandler
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag(int x, int y)
     {
-        SetCardAt(new Coordinate(board.selectionX, board.selectionY));
+        Debug.Log("In Player OnEndDrag: " + x + "," + y);
+        SetCardAt(new Coordinate(x, y));
     }
 
     public void RemoveCardAt(int x, int y)

@@ -258,9 +258,13 @@ public class PlayingCard : BaseCard
     void Card_Damage(PlayingCard target, int bossAttack)
     {
         int numAttacks = Player.HandSize();
-        int damage = Mathf.CeilToInt((float)bossAttack*.20f*numAttacks);
+
+        Debug.Log("bossAttack = " + bossAttack + ", numAttacks = " + numAttacks + ", damage = " + bossAttack * 0.2f * numAttacks);
+
+
+        int damage = Mathf.CeilToInt((float)bossAttack*numAttacks);
         damage = Mathf.Max(0, damage - target.defense);
-        damage = Mathf.Max(0, target.health - damage);
+        damage = Mathf.Min(target.health, damage);
         Debug.Log("Heart of the Cards is dealing " + damage + " damage");
         target.SubHealth(damage);
         target.linkedBoardCard.UpdateHealth();
@@ -291,8 +295,6 @@ public class PlayingCard : BaseCard
 
     public void DetermineSkill(int bossAttack, ref Card target)//, Card[] targets)
     {
-        Debug.Log("Skill = " + status.Split(' ')[0] + " (" + (skill == "Card_Damage") + ")");
-
         switch (skill)
         {
             case "Attack":
@@ -327,6 +329,9 @@ public class PlayingCard : BaseCard
                 break;
             case "Multiple":
                 MultiAttack(target.linkedPlayingCard, bossAttack);
+                break;
+            case "Sacrifice":
+                Sacrifice(target.linkedPlayingCard);
                 break;
         }
     }

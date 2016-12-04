@@ -19,7 +19,8 @@ public class Enemy : MonoBehaviour
     string selectedAction;
 
     bool isMovingCard;
-    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; } public static bool CanSkill() { return canSkill; }
+    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
+    public static bool CanSkill() { return canSkill; }
     public static bool doubleSummon;
     public static bool surroundDamage;
     int surroundTurnCount;
@@ -31,7 +32,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Enemy start is first");
+        //Debug.Log("Enemy start is first");
         string[] deck_text = deckInfo.text.Split('\n');
         wholeDeck = new GameObject();
         wholeDeck.AddComponent<Deck>();
@@ -57,21 +58,18 @@ public class Enemy : MonoBehaviour
     {
         if (isMovingCard && !board.IsWhiteTurn())
         {
-            Debug.Log("Not going to the actual placement stuff");
+            //////Debug.Log("Not going to the actual placement stuff");
             // animation in here
             isMovingCard = board.CardIsAttacking(); // will change to not be immediate later on
-            //Debug.Log("isMovingCard = " + isMovingCard);
-            if (!isMovingCard)
+            //////Debug.Log("isMovingCard = " + isMovingCard);
+            if (!isMovingCard && numMoves == 1)
             {
-                if (numMoves == 1)
-                {
-                    board.EndTurn();
-                }
+                board.EndTurn();
             }
         }
         else if (!board.IsWhiteTurn())
         {
-            //Debug.Log("Not doing the right thing >o<");
+            //////Debug.Log("Not doing the right thing >o<");
             if (numMoves == 0)
             {
                 // time for the enemy to make a move
@@ -83,7 +81,7 @@ public class Enemy : MonoBehaviour
             else
             {
                 numMoves--;
-                Debug.Log(numMoves);
+                ////Debug.Log(numMoves);
                 if (handDeck.Count > 0)
                 {
                     // dumb thing: summons all the things it can and then moves them
@@ -93,7 +91,7 @@ public class Enemy : MonoBehaviour
                         // if there's no minion card, then the enemy has two choices: move a card or play a skill card
                         if (Random.Range(0, 5) < 5) // has a 2/3rds chance to move over playing a skill card
                         {
-                            //Debug.Log("Going to move a card");
+                            //////Debug.Log("Going to move a card");
                             List<Coordinate> attackers = new List<Coordinate>();
                             List<Coordinate> targets = new List<Coordinate>();
                             FindPositionOfTargets(ref attackers, ref targets);
@@ -102,22 +100,36 @@ public class Enemy : MonoBehaviour
                                 int i = Random.Range(0, attackers.Count);
                                 board.SelectCard(attackers[i]);
                                 board.MoveCard(targets[i].col, targets[i].row);
-                                Debug.Log("Attacker at (" + attackers[i].col + "," + attackers[i].row + ")");
-                                Debug.Log("Target at (" + targets[i].col + "," + targets[i].row + ")");
+                                ////Debug.Log("Attacker at (" + attackers[i].col + "," + attackers[i].row + ")");
+                                ////Debug.Log("Target at (" + targets[i].col + "," + targets[i].row + ")");
                                 isMovingCard = true;
                                 attackers.RemoveAt(i);
                                 targets.RemoveAt(i);
                             }
                         }
-                        else
-                        {
-                            index = GetCardOfType(CardType.Skill);
-                            if (index > -1) // if there's a skill card, USE IT 
-                            {
-                                //Coordinate targetCoordinate = board.GetPlayerPositions()[Random.Range(0,board.GetPlayerPositions().Count)];
-                                
-                            }
-                        }
+                        // commenting this out so it doesn't break your code!!!
+                        //else
+                        //{
+                        //    index = GetCardOfType(CardType.Skill);
+                        //    Debug.Log("Index of Skill card is " + index);
+                        //    if (index > -1) // if there's a skill card, USE IT 
+                        //    {
+                        //        // Need to get a target
+                        //        List<Coordinate> playerPositions = board.GetPlayerPositions();
+                        //        if (playerPositions != null)
+                        //        {
+                        //            Coordinate targetCoordinate = playerPositions[Random.Range(0, playerPositions.Count)];
+                        //            Debug.Log("Target at (" + targetCoordinate.col + "," + targetCoordinate.row + ") out of " + playerPositions.Count + "targets");
+
+
+
+                        //            // Need to put the card onto the target (remember, it's not on the board...)
+                        //            GameObject newDrag = handPlace.transform.GetChild(index).gameObject;
+                        //            Debug.Log("Using skill " + handDeck[index].GetName());
+                        //            newDrag.GetComponent<drag>().OnSkillDrag(targetCoordinate.col, targetCoordinate.row);
+                        //        }
+                        //    }
+                        //}
                     }
                     else // if there's a minion card, PUT IT DOWN
                     {
@@ -129,6 +141,7 @@ public class Enemy : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("Enemy draws card");
                     DrawCard(true);
                 }
 
@@ -245,7 +258,7 @@ public class Enemy : MonoBehaviour
 
     void FindPositionOfTargets(ref List<Coordinate> attackers, ref List<Coordinate> targets)
     {
-        
+
         foreach (Coordinate point in cardsOnBoard)
         {
             if (!board.cards[point.col, point.row].HasTakenAction())

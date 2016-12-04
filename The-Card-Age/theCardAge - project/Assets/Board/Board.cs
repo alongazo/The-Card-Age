@@ -104,7 +104,7 @@ public class Board : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //Debug.Log("Called Board Start");
+        ////Debug.Log("Called Board Start");
         Instance = this;
         activeCard = new List<GameObject>();
         cards = new Card[_col, _row];
@@ -131,10 +131,10 @@ public class Board : MonoBehaviour
         // card attack animation / card move toward target
         
 		if (isAttacking == true && doneAttacking == false) {
-			////Debug.Log("Hello we are attacking");
+			//////Debug.Log("Hello we are attacking");
 			float currentTime = (Time.time - startAttackTime);
 			float journeyFraction = currentTime / totalDistance;
-			////Debug.Log(currentTime + " " + totalDistance + " " + journeyFraction);
+			//////Debug.Log(currentTime + " " + totalDistance + " " + journeyFraction);
 			int speed = 8;
 			if (journeyFraction * speed > 0.6f) {
                 
@@ -145,7 +145,7 @@ public class Board : MonoBehaviour
 				doneAttacking = true;
 
 			} else {
-				Debug.Log ("selectedCard == null: " + (selectedCard == null));
+				//Debug.Log ("selectedCard == null: " + (selectedCard == null));
 				selectedCard.transform.position = Vector3.Lerp (attackCardPosition, targetCardPosition, journeyFraction * speed);
 			}
 
@@ -165,20 +165,20 @@ public class Board : MonoBehaviour
 
         // left click
         else if (Input.GetMouseButtonDown (0)) {
-			//Debug.Log("Left click pressed");
-			////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
-			////Debug.Log("hello");
+			////Debug.Log("Left click pressed");
+			//////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
+			//////Debug.Log("hello");
 			// Check if player ran out of Action Points
 			if (GetCurrentAP () > 0) {
 				if (selectionX > -1 && selectionY > -1) {
 					//Vector3 temp = GetTileCenter(selectionX, selectionY);
-					////Debug.Log(selectionX + " " + selectionY);
+					//////Debug.Log(selectionX + " " + selectionY);
 					if (selectedCard == null) {
-						////Debug.Log("null");
-						////Debug.Log(selectionX + "  " + selectionY);
+						//////Debug.Log("null");
+						//////Debug.Log(selectionX + "  " + selectionY);
 						SelectCard (selectionX, selectionY);
 					} else {
-						////Debug.Log("move");
+						//////Debug.Log("move");
 						MoveCard (selectionX, selectionY);
 						//SelectCard(selectionX, selectionY);
 					}
@@ -189,11 +189,11 @@ public class Board : MonoBehaviour
         // right click (show card information)
         else if (Input.GetMouseButtonDown(1))
         {
-            //Debug.Log("Right click pressed");
-            ////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
+            ////Debug.Log("Right click pressed");
+            //////Debug.Log("Is my turn: " + isWhiteTurn);//" + cards[x, y].isWhite + " " + isWhiteTurn);
             if (selectionX > -1 && selectionY > -1)
             {
-                ////Debug.Log("x, y: " + selectionX.ToString() + " " + selectionY.ToString());
+                //////Debug.Log("x, y: " + selectionX.ToString() + " " + selectionY.ToString());
 
                 RightSelectCard(selectionX, selectionY);
 
@@ -208,8 +208,8 @@ public class Board : MonoBehaviour
 
     private void SelectCard(int x, int y)
     {
-        ////Debug.Log("In Select Card " + selectionX + "  " + selectionY);
-        ////Debug.Log("Does card exist: " + (cards[x, y] != null).ToString());
+        //////Debug.Log("In Select Card " + selectionX + "  " + selectionY);
+        //////Debug.Log("Does card exist: " + (cards[x, y] != null).ToString());
         if (cards[x, y] == null)
         {
             return;
@@ -220,7 +220,7 @@ public class Board : MonoBehaviour
         }
         if (cards[x,y].HasTakenAction())
         {
-            Debug.Log("Selected card is not there for some reason (" + x + "," + y + ")");
+            //Debug.Log("Selected card is not there for some reason (" + x + "," + y + ")");
             return;
         }
         allowedMoves = cards[x, y].PossibleMove();
@@ -231,7 +231,7 @@ public class Board : MonoBehaviour
 	private void RightSelectCard(int x, int y)
 	// opens left panel
 	{
-		Debug.Log("In RightSelectCard function");
+		//Debug.Log("In RightSelectCard function");
 		ViewCard(cards[x, y]);
 	}
 	public void ViewCard(Card card)
@@ -294,7 +294,7 @@ public class Board : MonoBehaviour
 
     public void MoveCard(int x, int y)
     {
-        Debug.Log(x + " " + y);
+        //Debug.Log(x + " " + y);
         if (allowedMoves[x,y])
         {
             Card c = cards[x, y];
@@ -303,13 +303,13 @@ public class Board : MonoBehaviour
 				if (isWhiteTurn) {
 					AP.CurrentVal -= 1;
 				}
-                //Debug.Log("attack");
+                ////Debug.Log("attack");
                 // set variable for card attack animation
                 attackCardPosition = selectedCard.transform.position;
                 targetCardPosition = GetTileCenter(x,y);
                 startAttackTime = Time.time;
                 totalDistance = Vector3.Distance(attackCardPosition, targetCardPosition);
-                ////Debug.Log(totalDistance);
+                //////Debug.Log(totalDistance);
                 isAttacking = true;
 
                 // destroy card "not done yet" currently card get destroyed before attack. 
@@ -343,7 +343,7 @@ public class Board : MonoBehaviour
                 if (isWhiteTurn) { player.UpdateCardAt(new Coordinate(selectedCard.CurrentX, selectedCard.CurrentY), new Coordinate(x, y)); }
                 else { enemy.UpdateCardAt(new Coordinate(selectedCard.CurrentX, selectedCard.CurrentY), new Coordinate(x, y)); }
 
-                //Debug.Log("move is allowed");
+                ////Debug.Log("move is allowed");
                 cards[selectedCard.CurrentX, selectedCard.CurrentY] = null;
                 selectedCard.transform.position = GetTileCenter(x, y);
                 selectedCard.SetPosition(x, y);
@@ -388,7 +388,7 @@ public class Board : MonoBehaviour
             }
             else
             {
-                ////Debug.Log(hit.point.x+ " " +hit.point.z);
+                //////Debug.Log(hit.point.x+ " " +hit.point.z);
                 selectionX = -1;
                 selectionY = -1;
             }
@@ -401,13 +401,13 @@ public class Board : MonoBehaviour
             GameObject go = Instantiate(chessmanPrefabs[index], GetTileCenter(x, y), orientation) as GameObject;
             go.transform.SetParent(transform);
             cards[x, y] = go.GetComponent<Card>();
-            ////Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
+            //////Debug.Log("Setting card to position (" + x.ToString() + "," + y.ToString() + ")");
             cards[x, y].SetPosition(x, y);
             cards[x, y].isWhite = isWhiteTurn;
 
             cards[x, y].Link(card);
 
-            ////Debug.Log(cards[x, y].IsLinked());
+            //////Debug.Log(cards[x, y].IsLinked());
             activeCard.Add(go);
 
             if (cards[x, y].isWhite)
@@ -415,6 +415,7 @@ public class Board : MonoBehaviour
                 //		AP.CurrentVal -= cards [x, y].Cost ();
                 ++playerCardOnField;
                 leftPanelScriptPlayer.CreateHPBar(cards[x, y]);
+                player.OnEndDrag(x,y);
             }
             else if (!cards[x, y].isWhite)
             {
@@ -447,7 +448,7 @@ public class Board : MonoBehaviour
                 start = Vector3.right * j;
                 Debug.DrawLine(start, start + heightLine);
             }
-
+            
         }
 
         // Draw selection on board
@@ -466,18 +467,19 @@ public class Board : MonoBehaviour
 			enemy.ResetTurn(); 
 		} 
 		else { 
-			Debug.Log ("Turn: " + turnCounter);
+			//Debug.Log ("Turn: " + turnCounter);
 			player.ResetTurn(); 
 			turnCounter++;
 			if (turnCounter > 1) {
-				AP.CurrentVal += 2;
+				AP.CurrentVal += 5;
 			}
 
 		}
         isWhiteTurn = !isWhiteTurn;
         UpdateWhoTurnDebug();
 
-        Debug.Log(enemyDamage + " or " + playerDamage);
+        // This is for the surround damage thing!!!!
+        //Debug.Log(enemyDamage + " or " + playerDamage);
         if (enemyDamage > 0)
         {
             if (enemyDamagePoint.col + 1 < Globals.numCols && cards[enemyDamagePoint.col + 1, enemyDamagePoint.row] && !cards[enemyDamagePoint.col + 1, enemyDamagePoint.row].isWhite) { cards[enemyDamagePoint.col + 1, enemyDamagePoint.row].Damage(2); }
@@ -501,7 +503,7 @@ public class Board : MonoBehaviour
         // This will unselect that card
         if (selectedCard != null)
         {
-            Debug.Log("Selected card is being changed to null");
+            //Debug.Log("Selected card is being changed to null");
             selectedCard = null;
             BoardHighlights.Instance.HideHighlights();
         }
