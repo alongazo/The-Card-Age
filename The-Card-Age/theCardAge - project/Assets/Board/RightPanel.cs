@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 
 
-public class RightPanel : MonoBehaviour {
+public class RightPanel : MonoBehaviour
+{
 
     [SerializeField]
     private RawImage cardImage1;
@@ -50,34 +51,38 @@ public class RightPanel : MonoBehaviour {
 
     int slideIn1 = Animator.StringToHash("slideIn");
     int slideIn2 = Animator.StringToHash("slideIn");
-    
-	private Card currentCard = null;
+
+    private Card currentCard = null;
     private bool rightPanel1On = false;
 
-	private string prevCardTag = "-1";
+    private string prevCardTag = "-1";
 
-    private void Awake () {
+    private void Awake()
+    {
         anim1 = rightPanel1.GetComponent<Animator>();
         anim2 = rightPanel2.GetComponent<Animator>();
     }
-	private void Update()
-	{
-		if (currentCard != null)
-		{
-			if (rightPanel1On) {
-				cardHPBox1.text = currentCard.Health ();
+    private void Update()
+    {
+        if (currentCard != null)
+        {
+            if (rightPanel1On)
+            {
+                cardHPBox1.text = currentCard.Health();
 
-			} else {
-				cardHPBox2.text = currentCard.Health ();
-			}
-		}
-	}
+            }
+            else
+            {
+                cardHPBox2.text = currentCard.Health();
+            }
+        }
+    }
 
 
     public void ViewCardStat(Card card)
     {
-		// reset previous selected card from the hand;
-		prevCardTag = "-1";
+        // reset previous selected card from the hand;
+        prevCardTag = "-1";
 
         //Debug.Log("is card null: " + (card == null));
         if (card == null)
@@ -87,17 +92,17 @@ public class RightPanel : MonoBehaviour {
             rightPanel1On = false;
             anim1.SetBool(slideIn1, false);
             anim2.SetBool(slideIn2, false);
-			currentCard = null;
+            currentCard = null;
             return;
         }
-        
+
         if (prevRightPanelX != card.CurrentX || prevRightPanelY != card.CurrentY)
         {
             prevRightPanelX = card.CurrentX;
             prevRightPanelY = card.CurrentY;
-			// get pointer to card information so you can update stats on the panel
-			currentCard = card;
-		
+            // get pointer to card information so you can update stats on the panel
+            currentCard = card;
+
             if (rightPanel1On == false)
             {
                 rightPanel1On = true;
@@ -117,7 +122,7 @@ public class RightPanel : MonoBehaviour {
 
                 // Display move cost on right panel
                 cardMoveTextBox1.text = card.Movement();
-                
+
                 // Display status on right panel
                 cardStatusTextBox1.text = card.Status();
 
@@ -153,85 +158,90 @@ public class RightPanel : MonoBehaviour {
                 anim1.SetBool(slideIn1, false);
 
             }
-            
+
         }
 
 
 
     }
-	public void ViewCardStatOnHand(Card card, string cardTag)
-	{
-		//Debug.Log ("is card null: " + (card == null));
-		if (card == null) {
-			prevRightPanelX = -1;
-			prevRightPanelY = -1;
-			rightPanel1On = false;
-			anim1.SetBool (slideIn1, false);
-			anim2.SetBool (slideIn2, false);
+    public void ViewCardStatOnHand(Card card, string cardTag)
+    {
+        //Debug.Log ("is card null: " + (card == null));
+        if (card == null)
+        {
+            prevRightPanelX = -1;
+            prevRightPanelY = -1;
+            rightPanel1On = false;
+            anim1.SetBool(slideIn1, false);
+            anim2.SetBool(slideIn2, false);
 
-			return;
-		}
+            return;
+        }
 
-		if (prevCardTag != cardTag) {
-			//Debug.Log("view");
-			prevRightPanelX = card.CurrentX;
-			prevRightPanelY = card.CurrentY;
-			//Debug.Log("view2");
-			if (rightPanel1On == false) {
-				rightPanel1On = true;
+        if (prevCardTag != cardTag)
+        {
+            //Debug.Log("view");
+            prevRightPanelX = card.CurrentX;
+            prevRightPanelY = card.CurrentY;
+            //Debug.Log("view2");
+            if (rightPanel1On == false)
+            {
+                rightPanel1On = true;
 
-				// Display image
-				cardImage1.texture = card.Image ();
+                // Display image
+                cardImage1.texture = card.Image();
 
-				// Display HP on right panel
-				cardHPBox1.text = card.MaxHealth ();
-				cardMaxHPBox1.text = "/" + card.MaxHealth ();
+                // Display HP on right panel
+                cardHPBox1.text = card.MaxHealth();
+                cardMaxHPBox1.text = "/" + card.MaxHealth();
 
-				// Display strength on right panel
-				cardStrengthTextBox1.text = card.Strength ().ToString ();
+                // Display strength on right panel
+                cardStrengthTextBox1.text = card.Strength().ToString();
 
-				// Display defense on right panel
-				cardDefenseTextBox1.text = card.Defense ().ToString ();
+                // Display defense on right panel
+                cardDefenseTextBox1.text = card.Defense().ToString();
 
-				// Display move cost on right panel
-				cardMoveTextBox1.text = card.Movement ();
+                // Display move cost on right panel
+                cardMoveTextBox1.text = card.Movement();
 
-				// Display status on right panel
-				cardStatusTextBox1.text = card.Status ();
+                // Display status on right panel
+                cardStatusTextBox1.text = card.Status();
 
-				// play right panel slide in/out animation
-				anim1.SetBool (slideIn1, true);
-				anim2.SetBool (slideIn2, false);
-			} else if (rightPanel1On == true) {
-				rightPanel1On = false;
+                // play right panel slide in/out animation
+                anim1.SetBool(slideIn1, true);
+                anim2.SetBool(slideIn2, false);
+            }
+            else if (rightPanel1On == true)
+            {
+                rightPanel1On = false;
 
-				// Display image
-				cardImage2.texture = card.Image ();
+                // Display image
+                cardImage2.texture = card.Image();
 
-				// Display HP on right panel
-				cardHPBox2.text = card.MaxHealth ();
+                // Display HP on right panel
+                cardHPBox2.text = card.MaxHealth();
 
-				cardMaxHPBox2.text = "/" + card.MaxHealth ();
+                cardMaxHPBox2.text = "/" + card.MaxHealth();
 
-				// Display strength on right panel
-				cardStrengthTextBox2.text = card.Strength ().ToString ();
+                // Display strength on right panel
+                cardStrengthTextBox2.text = card.Strength().ToString();
 
-				// Display defense on right panel
-				cardDefenseTextBox2.text = card.Defense ().ToString ();
+                // Display defense on right panel
+                cardDefenseTextBox2.text = card.Defense().ToString();
 
-				// Display move cost on right panel
-				cardMoveTextBox2.text = card.Movement ();
+                // Display move cost on right panel
+                cardMoveTextBox2.text = card.Movement();
 
-				// Display status on right panel
-				cardStatusTextBox2.text = card.Status ();
+                // Display status on right panel
+                cardStatusTextBox2.text = card.Status();
 
 
-				anim2.SetBool (slideIn2, true);
-				anim1.SetBool (slideIn1, false);
+                anim2.SetBool(slideIn2, true);
+                anim1.SetBool(slideIn1, false);
 
-			}
-			prevCardTag = cardTag;
-		}
+            }
+            prevCardTag = cardTag;
+        }
 
-	}
+    }
 }

@@ -19,8 +19,10 @@ public struct Coordinate
 
 public class Board : MonoBehaviour
 {
+    [SerializeField]
+    public Transform gameOverCanvas;
 
-	private int turnCounter = 0;
+    private int turnCounter = 0;
 	[SerializeField]
 	private Stat AP;
     [SerializeField]
@@ -113,18 +115,18 @@ public class Board : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
-		/*
-		if (Input.GetKeyDown(KeyCode.A))
-		{
-	
-			AP.CurrentVal -= 1;
-		}
-		if (Input.GetKeyDown(KeyCode.S))
-		{
 
-			AP.CurrentVal += 1;
-		}
-		*/
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+
+            AP.CurrentVal -= 1;
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+
+            AP.CurrentVal += 1;
+        }
+
         updateSelection();
         // card attack animation / card move toward target
         
@@ -241,6 +243,55 @@ public class Board : MonoBehaviour
 	{
 		rightPanelScript.ViewCardStatOnHand(card, cardTag);
 	}
+    public void DetermineEndGame(Card c)
+    {
+        if (c.GetHPVal() <= 0)
+        {
+            // given card check if card is a boss if is game end if not card gets destory
+            Debug.Log("Determining End Game");
+            if (c.CardType() == CardType.Boss)
+            {
+                //Debug.Log("A boss has died");
+                //Debug.Log(c.CurrentX + " " + playerBoss.col + " " + c.CurrentX + " " + playerBoss.row);
+                //Debug.Log(c.CurrentX + " " + enemyBoss.col + " " + c.CurrentX + " " + enemyBoss.row);
+                if (c.Name() == "Knight")
+                {
+                    Debug.Log("Game Over");
+                    gameOverCanvas.GetComponentInChildren<Text>().text = "Game Over";
+                    gameOverCanvas.GetComponentInChildren<Text>().color = Color.red;
+                    gameOverCanvas.gameObject.SetActive(true);
+                    //		Time.timeScale = 0;
+                }
+                else if (c.Name() == "Troll")
+                {
+                    Debug.Log("You Win");
+                    gameOverCanvas.GetComponentInChildren<Text>().text = "You Win";
+                    Debug.Log("text change");
+                    gameOverCanvas.gameObject.SetActive(true);
+                    //	Time.timeScale = 0;
+                }
+            }
+            else
+            {
+                Debug.Log("card die");
+            }
+            if (c.isWhite)
+            {
+                playerCardOnField--;
+                player.RemoveCardAt(c.CurrentX, c.CurrentY);
+            }
+            else if (!c.isWhite)
+            {
+                enemyCardOnField--;
+                enemy.RemoveCardAt(c.CurrentX, c.CurrentY);
+            }
+            activeCard.Remove(c.gameObject);
+            Destroy(c.GetHPBar());
+            Destroy(c.gameObject);
+        }
+    }
+
+
     public void MoveCard(int x, int y)
     {
         Debug.Log(x + " " + y);
@@ -264,23 +315,24 @@ public class Board : MonoBehaviour
                 // destroy card "not done yet" currently card get destroyed before attack. 
                 // I will eventually destroy the card after attack when card class is completed
                 c.Attack(selectedCard);
-                if (c.GetHPVal() <= 0)
-                // destroy object and the health bar at the left side if the card health goes down to 0
-                {
-                    if (c.isWhite)
-                    {
-                        playerCardOnField--;
-                        player.RemoveCardAt(x, y);
-                    }
-                    else if (!c.isWhite)
-                    {
-                        enemyCardOnField--;
-                        enemy.RemoveCardAt(x, y);
-                    }
-                    activeCard.Remove(c.gameObject);
-                    Destroy(c.GetHPBar());
-                    Destroy(c.gameObject);
-                }
+                DetermineEndGame(c);
+                //if (c.GetHPVal() <= 0)
+                //// destroy object and the health bar at the left side if the card health goes down to 0
+                //{
+                //    if (c.isWhite)
+                //    {
+                //        playerCardOnField--;
+                //        player.RemoveCardAt(x, y);
+                //    }
+                //    else if (!c.isWhite)
+                //    {
+                //        enemyCardOnField--;
+                //        enemy.RemoveCardAt(x, y);
+                //    }
+                //    activeCard.Remove(c.gameObject);
+                //    Destroy(c.GetHPBar());
+                //    Destroy(c.gameObject);
+                //}
 
             }
             else if (cards[x, y] == null && !selectedCard.HasTakenAction())

@@ -44,65 +44,70 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        dist = Camera.main.WorldToScreenPoint(transform.position);
-        posX = Input.mousePosition.x - dist.x;
-        posY = Input.mousePosition.y - dist.y;
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            dist = Camera.main.WorldToScreenPoint(transform.position);
+            posX = Input.mousePosition.x - dist.x;
+            posY = Input.mousePosition.y - dist.y;
 
-        placeholder = new GameObject();
-        placeholder.transform.SetParent(this.transform.parent, false);
-        LayoutElement le = placeholder.AddComponent<LayoutElement>();
-        le.preferredWidth = this.GetComponent<LayoutElement>().preferredWidth;
-        le.preferredHeight = this.GetComponent<LayoutElement>().preferredHeight;
-        le.flexibleWidth = 0;
-        le.flexibleHeight = 0;
-        placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
+            placeholder = new GameObject();
+            placeholder.transform.SetParent(this.transform.parent, false);
+            LayoutElement le = placeholder.AddComponent<LayoutElement>();
+            le.preferredWidth = this.GetComponent<LayoutElement>().preferredWidth;
+            le.preferredHeight = this.GetComponent<LayoutElement>().preferredHeight;
+            le.flexibleWidth = 0;
+            le.flexibleHeight = 0;
+            placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
 
 
-        hand = this.transform.parent;
-        placeholderParent = hand;
-        this.transform.SetParent(this.transform.parent.parent);
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
-
+            hand = this.transform.parent;
+            placeholderParent = hand;
+            this.transform.SetParent(this.transform.parent.parent);
+            GetComponent<CanvasGroup>().blocksRaycasts = false;
+        }
         //dropzone[] zones = GameObject.FindObjectsOfType<dropzone>();
         //find all possible drop zone
     }
     public void OnDrag(PointerEventData eventData)
     {
-        Vector3 curPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dist.z);
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(curPos);
-        transform.position = worldPos - new Vector3(0, 0, (float)0.1);
-
-        if (placeholder.transform.parent != placeholderParent)
-            placeholder.transform.SetParent(placeholderParent, false);
-
-        int newSiblingIndex = placeholderParent.childCount;
-
-        for (int i = 0; i < placeholderParent.childCount; i++)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (this.transform.position.x < placeholderParent.GetChild(i).position.x)
+            Vector3 curPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dist.z);
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(curPos);
+            transform.position = worldPos - new Vector3(0, 0, (float)0.1);
+
+            if (placeholder.transform.parent != placeholderParent)
+                placeholder.transform.SetParent(placeholderParent, false);
+
+            int newSiblingIndex = placeholderParent.childCount;
+
+            for (int i = 0; i < placeholderParent.childCount; i++)
             {
-                newSiblingIndex = i;
-                if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
-                    newSiblingIndex--;
+                if (this.transform.position.x < placeholderParent.GetChild(i).position.x)
+                {
+                    newSiblingIndex = i;
+                    if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
+                        newSiblingIndex--;
 
-                break;
+                    break;
+                }
             }
+            placeholder.transform.SetSiblingIndex(newSiblingIndex);
         }
-        placeholder.transform.SetSiblingIndex(newSiblingIndex);
-
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        this.transform.SetParent(hand, false);
-        this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
-        //EventSystem.current.RaycastAll(eventData) // get a list of things underneath
-        Destroy(placeholder);
-        RaycastHit hit;
-        // find where the mouse is on the board when left click is released
-        if (boardScript.GetCurrentAP() > 0)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
+            this.transform.SetParent(hand, false);
+            this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+            //EventSystem.current.RaycastAll(eventData) // get a list of things underneath
+            Destroy(placeholder);
+            RaycastHit hit;
+            // find where the mouse is on the board when left click is released
+
+            if (boardScript.GetCurrentAP() > 0 && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ChessPlane")))
             {
                 // check if no card is on the tile
                 if (card.GetCardType() == CardType.Skill && boardScript.cards[boardScript.selectionX, boardScript.selectionY] != null)
@@ -119,18 +124,25 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
                         //if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
 
                         // Going to dampen the attack cause it's wayyy too much right now
-                        card.DetermineSkill(bossAttack-3, ref boardScript.cards[boardScript.selectionX, boardScript.selectionY]);//, targets.ToArray());
+                        card.DetermineSkill(bossAttack - 3, ref boardScript.cards[boardScript.selectionX, boardScript.selectionY]);//, targets.ToArray());
+                       // Debug.Log("spell used on " + boardScript.cards[boardScript.selectionX, boardScript.selectionY]);
+                       // Debug.Log("hp: " + boardScript.cards[boardScript.selectionX, boardScript.selectionY].GetHPVal());
+
+                        boardScript.DetermineEndGame(boardScript.cards[boardScript.selectionX, boardScript.selectionY]);
+
                         originated.Remove(card);
                         Destroy(this.gameObject);
 
                     }
-                    else {
+                    else
+                    {
                         Debug.Log("Can't use skill!");
                         if (card.IsPlayer())
                         {
                             Player.SetCanSkill(true);
                         }
-                        else {
+                        else
+                        {
                             Enemy.SetCanSkill(true);
                         }
                     }
@@ -148,10 +160,12 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
                     Destroy(this.gameObject);
                 }
             }
-            else {
+            else
+            {
 
                 this.transform.position += new Vector3(0, 0, (float)0.1);
             }
+            
         }
     }
 
