@@ -60,16 +60,18 @@ public class Enemy : MonoBehaviour
             Debug.Log("Not going to the actual placement stuff");
             // animation in here
             isMovingCard = board.CardIsAttacking(); // will change to not be immediate later on
-            Debug.Log("isMovingCard = " + isMovingCard);
+            //Debug.Log("isMovingCard = " + isMovingCard);
             if (!isMovingCard)
             {
-                numMoves = 1;
-                board.EndTurn();
+                if (numMoves == 1)
+                {
+                    board.EndTurn();
+                }
             }
         }
         else if (!board.IsWhiteTurn())
         {
-            Debug.Log("Not doing the right thing >o<");
+            //Debug.Log("Not doing the right thing >o<");
             if (numMoves == 0)
             {
                 // time for the enemy to make a move
@@ -112,8 +114,8 @@ public class Enemy : MonoBehaviour
                             index = GetCardOfType(CardType.Skill);
                             if (index > -1) // if there's a skill card, USE IT 
                             {
-                                // (except I haven't implemented anything for skill cards, so don't do anything yet)
-                                //Debug.Log("Going to use a skill");
+                                //Coordinate targetCoordinate = board.GetPlayerPositions()[Random.Range(0,board.GetPlayerPositions().Count)];
+                                
                             }
                         }
                     }

@@ -35,16 +35,16 @@ public class Card : MonoBehaviour {
     void Update()
     {
         // debugging
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            linkedPlayingCard.AttackEnemy(linkedPlayingCard);
-            health.CurrentVal = linkedPlayingCard.GetHealth();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            linkedPlayingCard.RestoreCard();
-            health.CurrentVal = linkedPlayingCard.GetHealth();
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    linkedPlayingCard.AttackEnemy(linkedPlayingCard);
+        //    health.CurrentVal = linkedPlayingCard.GetHealth();
+        //}
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    linkedPlayingCard.RestoreCard();
+        //    health.CurrentVal = linkedPlayingCard.GetHealth();
+        //}
         //if (linkedPlayingCard.GetHealth() == 0)
         //{
         //    // probably need to be destroyed?
@@ -163,6 +163,11 @@ public class Card : MonoBehaviour {
     {
         return linkedPlayingCard.GetCardType();
     }
+
+	public int Cost()
+	{
+		return linkedPlayingCard.GetCost();
+	}
 
     public Texture Image()
     {

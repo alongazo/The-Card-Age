@@ -21,7 +21,7 @@ public class Deck : MonoBehaviour
         heroCard = Globals.bossDatabase[cardNames[0].Split(':')[0]];
         heroCard.SetIsPlayer(isPlayer);
         int index = 0;
-        cardNames[0] = "Heal:1";
+        cardNames[0] = "Heal:1"; // This is the third heal
         foreach (string card in cardNames)
         {
             string[] info = card.Split(':');

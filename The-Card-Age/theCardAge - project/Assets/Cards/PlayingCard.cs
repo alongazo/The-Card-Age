@@ -199,6 +199,7 @@ public class PlayingCard : BaseCard
     public override int GetMovement() { return move; }
     public override string GetStatus() { return (status == "") ? "" : status; }
     public override bool IsPlayer() { return isPlayer; }
+	public override int GetCost() { return cost; }
 
     public override void SubHealth(int damage) { health -= damage; }
 
