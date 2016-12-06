@@ -7,7 +7,7 @@ public class SaveDeck : MonoBehaviour {
 
 	public void writeToFile()
     {
-        var fileName = "Assets/Cards/playerdeck.txt";
+        var fileName = "deck.txt";
         GameObject deck = GameObject.Find("PlayerDeck");
         if(File.Exists(fileName))
         {
@@ -15,13 +15,20 @@ public class SaveDeck : MonoBehaviour {
         }
         var of = File.CreateText(fileName);
         int deckSize = 0;
-        of.Write("Knight:1\r\n");
+        of.Write("Knight:");
         foreach(var card in deck.GetComponent<VillageDeck>().playableDeck)
         {
-            of.Write(card.Key + ":" + card.Value.ToString());
-            of.Write("\r\n");
+            for(int i=0;i<card.Value;i++)
+            {
+                of.Write(card.Key);
+                deckSize++;
+                if (deckSize < deck.GetComponent<VillageDeck>().currentSize)
+                {
+                    of.Write(",");
+                }
+            }
         }
-        
+        of.Write("\r\n");
         of.Close();
     }
 }

@@ -102,9 +102,9 @@ public class VillageDrag : MonoBehaviour
                     {
                         deck.GetComponent<VillageDeck>().playableDeck.Add(gameObject.name, 1);
                     }
-                    //Debug.Log(deck.GetComponent<VillageDeck>().currentSize);
-                    //Debug.Log(gameObject.name);
-                    //Debug.Log(deck.GetComponent<VillageDeck>().playableDeck[gameObject.name]);
+                    Debug.Log(deck.GetComponent<VillageDeck>().currentSize);
+                    Debug.Log(gameObject.name);
+                    Debug.Log(deck.GetComponent<VillageDeck>().playableDeck[gameObject.name]);
                     //deck.GetComponent<VillageDeck>().currentSize = deckIndex;
                     deck.GetComponent<VillageDeck>().currentSize += 1;
                     //newPos.y += 500;
@@ -116,7 +116,6 @@ public class VillageDrag : MonoBehaviour
                     deckImage.transform.localEulerAngles = new Vector3(0, 0, 0);
                     imagePos.z = 0;
                     deckImage.rectTransform.localPosition = imagePos;
-                    GameObject.Find("Water Splash").GetComponent<AudioSource>().Play();
                     Destroy(gameObject);
                 }
                 else
