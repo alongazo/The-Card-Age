@@ -4,37 +4,28 @@
 //using System.Collections.Generic;
 //using UnityEngine.EventSystems;
 
-//public class PlayerBase : MonoBehaviour
+//public class PlayerBase : MonoBehaviour, IEndDragHandler
 //{
 //    /// <summary>
-//    /// Attempting to make a Base class for both Player and Enemy
+//    //  Attempting to make a Base class for both Player and Enemy
 //    /// </summary>
-
-//    #region Inputs_from_Unity
 //    public dropzone handPlace;
 //    public Board board;
 //    public Text deckCount;
+    
 //    public TextAsset deckInfo;
-//    #endregion
-
-//    #region Static_Variables
-//    static List<PlayingCard> handDeck;
-//    static bool canSkill;
-//    static bool doubleSummon;
-//    static bool surroundDamage;
-//    #endregion
-
-//    #region Static_Functions
-//    public static void SetCanSkill(bool truth) { canSkill = truth; }
-//    public static void SetSummon() { doubleSummon = true; }
-//    public static void SetSurround() { surroundDamage = true; }
-
-//    public static bool CanSkill() { return canSkill; }
-//    #endregion
 
 //    GameObject wholeDeck;
+//    static List<PlayingCard> handDeck;
+
+//    static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
+//    public static bool CanSkill() { return canSkill; }
+//    public static bool doubleSummon;
+//    public static bool surroundDamage;
 //    int surroundTurnCount;
 //    int surroundDamageAmount; public void SetSurroundDamage(int damage) { surroundDamage = true; surroundDamageAmount = damage; surroundTurnCount = 5; }
+
+
 
 //    //Coordinate startCoordinate;
 
@@ -106,7 +97,7 @@
 //        cardsOnBoard.Add(startCoordinate);
 //    }
 
-
+    
 //    // Object name = "Card" for player, "Enemy Card" for enemy
 //    // showBack -> true if using aback.png instead of the file name
 //    // See if this is really necessary.... um... the Player and Enemy might have call this function...
@@ -118,7 +109,7 @@
 
 //        GameObject newDrag = new GameObject(objectName + handDeck.Count.ToString());
 //        newDrag.AddComponent<Image>();
-//        newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + ((showBack) ? "aback.png" : card.GetImage()));
+//        newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + ((showBack)? "aback.png" : card.GetImage()));
 //        newDrag.GetComponent<Image>().preserveAspect = true;
 //        newDrag.AddComponent<LayoutElement>();
 //        newDrag.AddComponent<CanvasGroup>();
@@ -141,7 +132,7 @@
 //        GameObject newDrag = new GameObject(objectName + handDeck.Count.ToString());
 //        newDrag.AddComponent<drag>();
 //        newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
-//        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["wyvern"]);
+//        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["Wyvern"]);
 //        newDrag.GetComponent<drag>().setOriginator(ref handDeck);
 //        newDrag.GetComponent<drag>().boardScript = board;
 

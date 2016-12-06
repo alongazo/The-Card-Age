@@ -1,14 +1,14 @@
 Knight:1
-unicorn:2
-dwarf:5
-angel:1
-blessed_blade:1
-brave:4
-fortify:1
-heart_of_the_cards:1
-holy_strike:2
-light's_glory:2
-sacrifice:1
-heal:2
-wyvern:2
-dash:5
+Unicorn:2
+Dwarf:5
+Angel:1
+Blessed Blade:1
+Brave:4
+Fortify:1
+Heart of the Cards:1
+Holy Strike:2
+Light's Glory:2
+Sacrifice:1
+Heal:2
+Wyvern:2
+Dash:5

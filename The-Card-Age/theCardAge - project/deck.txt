@@ -1,1 +1,14 @@
-Knight:
+Knight:1
+Unicorn:2
+Dwarf:5
+Angel:1
+Blessed_Blade:1
+Brave:4
+Fortify:1
+Heart_of_the_Cards:1
+Holy_Strike:2
+Light's_Glory:2
+Sacrifice:1
+Heal:2
+Wyvern:2
+Dash:5

@@ -1,40 +1,40 @@
 Knight,Hero,knight.png,A trained soldier destined for greatness.,:,0,:,1,0,1,8,50,3,:,None
 Troll,Enemy,troll.png,Notorious for leading groups of monsters on raids of defenseless villages.,:,0,:,1,0,1,11,40,1,:,None
-alp,Enemy,alp.png,"A demon that sits on sleepers with a crushing weight, relishing on the paralyzed terror of its victims when they are forced awake.",:,1,:,1,1,1,4,20,0,:,None
-angel,Hero,angel.png,"The symbol of goodness itself, it grants the blessing of the gods to those it deems worthy.",:,1,:,1,1,1,5,15,0,:,None
-brag,Enemy,brag.png,"Beware this false mount, for it finds delight in throwing its unsuspecting riders into the deep abyss.",:,1,:,1,1,1,5,10,0,:,None
-div,Enemy,div.png,"Legend has is that whomever can capture this demon can make it his slave, but very few have been successful in catching it.",:,1,:,1,1,1,6,10,0,:,None
-dwarf,Hero,dwarf.png,Mines in the deep underground for rare materials and untold treasures.,:,1,:,1,1,1,3,15,0,:,None
-griffin,Neutral,griffin.png,"Many have tried to ride this creature, but only the ones it's deemed worthy have lived to tell the tale.",:,1,:,1,1,1,5,25,0,:,None
-lamia,Neutral,lamia.png,"Even despite the horrible rumors surrounding its name, this creature is still willing to offer aid to humans. For a price.",:,1,:,1,1,1,4,10,0,:,None
-leshak,Enemy,leshak.png,Its friendly appearance masks its guise as it beckons travellers to their demise.,:,1,:,1,1,1,5,10,0,:,None
-metsik,Hero,metsik.png,Farmers create straw effigies for this creature so it has a physical form to watch over the crops and animals with.,:,1,:,1,1,1,4,25,0,:,None
-pixie,Neutral,pixie.png,"This creature follows the commands of a flute player, though it will punish its master if neglected.",:,1,:,1,1,1,3,10,0,:,None
-slime,Enemy,slime.png,"A boneless, somewhat sentient glob created by the wastes and negativity of humans.",:,1,:,1,1,1,4,25,0,:,None
-undine,Neutral,undine.png,"Be warned, this beautiful creature makes a fine wife, but death will come instantly to those who are not true to her.",:,1,:,1,1,1,3,15,0,:,None
-unicorn,Hero,unicorn.png,A mystical mount that is rumored to use magic through its sharp horn.,:,1,:,1,1,1,4,20,0,:,None
-wyvern,Neutral,wyvern.png,"A mysterious relative of the dragons, this creature is oft more friendly to humans, though harder to trust.",:,1,:,1,1,1,5,25,0,:,None
-zaltys,Hero,zaltys.png,Those who keep a Žaltys in their house are blessed with protection and good luck.,:,1,:,1,1,1,3,10,0,:,None
-bide,Neutral,bide.png,Reciprocate damage taken by double the power.,:,2,:,1,1,0,20,0,0,:,Retaliate
-blessed_blade,Hero,blessed_blade.png,Deal 3 times the hero's attack power.,:,2,:,1,1,0,30,0,0,:,Attack
-brave,Hero,brave.png,Deal 2 times the hero's attack power.,:,2,:,1,1,0,20,0,0,:,Attack
-cancel,Neutral,cancel.png,Cancel out an enemy's skill.,:,2,:,1,1,0,0,0,0,:,Cancel
-clobber,Enemy,clobber.png,Deals 3 times the boss's damage.,:,2,:,1,1,0,30,0,0,:,Attack
-dash,Neutral,dash.png,Deal 1.5 times the attacker's power.,:,2,:,1,1,0,15,0,0,:,Attack
-defend,Neutral,defend.png,Grant target +3 defense.,:,2,:,1,1,0,0,0,3,:,Fortify
-demonic_flame,Enemy,demonic_flame.png,Deals 1.5 times the boss's damage.,:,2,:,1,1,0,15,0,0,:,Attack
-double_summon,Neutral,double_summon.png,Summon two minions onto the field.,:,2,:,1,1,0,0,0,0,:,Summon 2
-esuna,Hero,esuna.png,Cure any status ailments.,:,2,:,1,1,0,0,0,0,:,Esuna
-fortify,Hero,fortify.png,Grant target +5 defense.,:,2,:,1,1,0,0,0,5,:,Fortify
-glob_throw,Enemy,glob_throw.png,Deals 1.5 times the boss's damage.,:,2,:,1,1,0,15,0,0,:,Attack
-heal,Neutral,heal.png,Restore target's HP by 40%,:,2,:,1,1,0,0,40,0,:,Heal
-heart_of_the_cards,Hero,heart_of_the_cards.png,Deal damage proportional to the number of cards in the hand.,:,2,:,1,1,0,0,0,0,:,Card_Damage 10
-holy_strike,Hero,holy_strike.png,Deal 2.5 times the hero's attack power.,:,2,:,1,1,0,25,0,0,:,Attack
-light's_glory,Hero,light's_glory.png,Restore target's HP by 75%,:,2,:,1,1,0,0,75,0,:,Heal
-lure,Enemy,lure.png,Adjacent enemies lose -2 health at the end of the turn for 5 turns. Canceling this card terminates its effects and no loss in health.,:,2,:,1,1,0,0,0,0,:,Surround 2
-nightmare,Enemy,nightmare.png,Target is paralyzed (unable to move) for 1 turn.,:,2,:,1,1,0,0,0,0,:,Paralysis
-sacrifice,Hero,sacrifice.png,Take damage to heal an ally by 5 HP.,:,2,:,1,1,0,0,0,0,:,Sacrifice 5
-shadow_slash,Enemy,shadow_slash.png,Deal 2 times the boss's damage.,:,2,:,1,1,0,20,0,0,:,Attack
-slime_shield,Enemy,slime_shield.png,Grant target +3 defense.,:,2,:,1,1,0,0,0,3,:,Fortify
-sneak_attack,Enemy,sneak_attack.png,Deal 2 quick hits of reduced strength.,:,2,:,1,1,0,0,0,0,:,"Multiple 2,50,65"
-wind_slice,Neutral,wind_slice.png,"Deal 3 quick hits, with reduced damage.",:,2,:,1,1,0,0,0,0,:,"Multiple 3,40,50"
+Alp,Enemy,alp.png,"A demon that sits on sleepers with a crushing weight, relishing on the paralyzed terror of its victims when they are forced awake.",:,1,:,1,1,1,4,20,0,:,None
+Angel,Hero,angel.png,"The symbol of goodness itself, it grants the blessing of the gods to those it deems worthy.",:,1,:,1,1,1,5,15,0,:,None
+Brag,Enemy,brag.png,"Beware this false mount, for it finds delight in throwing its unsuspecting riders into the deep abyss.",:,1,:,1,1,1,5,10,0,:,None
+Div,Enemy,div.png,"Legend has is that whomever can capture this demon can make it his slave, but very few have been successful in catching it.",:,1,:,1,1,1,6,10,0,:,None
+Dwarf,Hero,dwarf.png,Mines in the deep underground for rare materials and untold treasures.,:,1,:,1,1,1,3,15,0,:,None
+Griffin,Neutral,griffin.png,"Many have tried to ride this creature, but only the ones it's deemed worthy have lived to tell the tale.",:,1,:,1,1,1,5,25,0,:,None
+Lamia,Neutral,lamia.png,"Even despite the horrible rumors surrounding its name, this creature is still willing to offer aid to humans. For a price.",:,1,:,1,1,1,4,10,0,:,None
+Leshak,Enemy,leshak.png,Its friendly appearance masks its guise as it beckons travellers to their demise.,:,1,:,1,1,1,5,10,0,:,None
+Metsik,Hero,metsik.png,Farmers create straw effigies for this creature so it has a physical form to watch over the crops and animals with.,:,1,:,1,1,1,4,25,0,:,None
+Pixie,Neutral,pixie.png,"This creature follows the commands of a flute player, though it will punish its master if neglected.",:,1,:,1,1,1,3,10,0,:,None
+Slime,Enemy,slime.png,"A boneless, somewhat sentient glob created by the wastes and negativity of humans.",:,1,:,1,1,1,4,25,0,:,None
+Undine,Neutral,undine.png,"Be warned, this beautiful creature makes a fine wife, but death will come instantly to those who are not true to her.",:,1,:,1,1,1,3,15,0,:,None
+Unicorn,Hero,unicorn.png,A mystical mount that is rumored to use magic through its sharp horn.,:,1,:,1,1,1,4,20,0,:,None
+Wyvern,Neutral,wyvern.png,"A mysterious relative of the dragons, this creature is oft more friendly to humans, though harder to trust.",:,1,:,1,1,1,5,25,0,:,None
+Zaltys,Hero,zaltys.png,Those who keep a Žaltys in their house are blessed with protection and good luck.,:,1,:,1,1,1,3,10,0,:,None
+Bide,Neutral,bide.png,Reciprocate damage taken by double the power.,:,2,:,1,1,0,20,0,0,:,Retaliate
+Blessed Blade,Hero,blessed_blade.png,Deal 3 times the hero's attack power.,:,2,:,1,1,0,30,0,0,:,Attack
+Brave,Hero,brave.png,Deal 2 times the hero's attack power.,:,2,:,1,1,0,20,0,0,:,Attack
+Cancel,Neutral,cancel.png,Cancel out an enemy's skill.,:,2,:,1,1,0,0,0,0,:,Cancel
+Clobber,Enemy,clobber.png,Deals 3 times the boss's damage.,:,2,:,1,1,0,30,0,0,:,Attack
+Dash,Neutral,dash.png,Deal 1.5 times the attacker's power.,:,2,:,1,1,0,15,0,0,:,Attack
+Defend,Neutral,defend.png,Grant target +3 defense.,:,2,:,1,1,0,0,0,3,:,Fortify
+Demonic Flame,Enemy,demonic_flame.png,Deals 1.5 times the boss's damage.,:,2,:,1,1,0,15,0,0,:,Attack
+Double Summon,Neutral,double_summon.png,Summon two minions onto the field.,:,2,:,1,1,0,0,0,0,:,Summon 2
+Esuna,Hero,esuna.png,Cure any status ailments.,:,2,:,1,1,0,0,0,0,:,Esuna
+Fortify,Hero,fortify.png,Grant target +5 defense.,:,2,:,1,1,0,0,0,5,:,Fortify
+Glob Throw,Enemy,glob_throw.png,Deals 1.5 times the boss's damage.,:,2,:,1,1,0,15,0,0,:,Attack
+Heal,Neutral,heal.png,Restore target's HP by 40%,:,2,:,1,1,0,0,40,0,:,Heal
+Heart of the Cards,Hero,heart_of_the_cards.png,Deal damage proportional to the number of cards in the hand.,:,2,:,1,1,0,0,0,0,:,Card_Damage 10
+Holy Strike,Hero,holy_strike.png,Deal 2.5 times the hero's attack power.,:,2,:,1,1,0,25,0,0,:,Attack
+Light's Glory,Hero,light's_glory.png,Restore target's HP by 75%,:,2,:,1,1,0,0,75,0,:,Heal
+Lure,Enemy,lure.png,Adjacent enemies lose -2 health at the end of the turn for 5 turns. Canceling this card terminates its effects and no loss in health.,:,2,:,1,1,0,0,0,0,:,Surround 2
+Nightmare,Enemy,nightmare.png,Target is paralyzed (unable to move) for 1 turn.,:,2,:,1,1,0,0,0,0,:,Paralysis
+Sacrifice,Hero,sacrifice.png,Take damage to heal an ally by 5 HP.,:,2,:,1,1,0,0,0,0,:,Sacrifice 5
+Shadow Slash,Enemy,shadow_slash.png,Deal 2 times the boss's damage.,:,2,:,1,1,0,20,0,0,:,Attack
+Slime Shield,Enemy,slime_shield.png,Grant target +3 defense.,:,2,:,1,1,0,0,0,3,:,Fortify
+Sneak Attack,Enemy,sneak_attack.png,Deal 2 quick hits of reduced strength.,:,2,:,1,1,0,0,0,0,:,"Multiple 2,50,65"
+Wind Slice,Neutral,wind_slice.png,"Deal 3 quick hits, with reduced damage.",:,2,:,1,1,0,0,0,0,:,"Multiple 3,40,50"

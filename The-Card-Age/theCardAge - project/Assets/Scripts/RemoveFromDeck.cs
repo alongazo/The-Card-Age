@@ -9,7 +9,7 @@ public class RemoveFromDeck : MonoBehaviour {
 	public void OnMouseEnter()
     {
         Image x = Instantiate(xImage, transform) as Image;
-        xImage.color = new Vector4(255, 0, 0, 255);
+        //xImage.color = new Vector4(100, 0, 0, 255);
         x.transform.localPosition = new Vector3(-4.5f, .07f, -.004f);
         x.transform.localEulerAngles = new Vector3(0, 0, 0);
         x.rectTransform.sizeDelta = new Vector2(.12f, .7f);

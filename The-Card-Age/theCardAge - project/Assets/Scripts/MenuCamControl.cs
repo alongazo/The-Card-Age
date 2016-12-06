@@ -13,6 +13,7 @@ public class MenuCamControl : MonoBehaviour
     public float counter = 0;
     public float duration = 20f;
     public bool startTimer = false;
+    public bool cameraInMotion = false;
     //private Vector3 lastPosition;
     // Use this for initialization
     void Start()
@@ -32,7 +33,7 @@ public class MenuCamControl : MonoBehaviour
         {
             counter += Time.deltaTime/duration;
         }
-        if(counter >=.27)
+        if(counter >=.2)
         {
             transform.position = currentMount.position;
             transform.rotation = currentMount.rotation;
@@ -45,6 +46,7 @@ public class MenuCamControl : MonoBehaviour
             
             //count++;
             GameObject.Find("SettingTracker").GetComponent<TrackSetting>().currentSetting = setting;
+            cameraInMotion = false;
         }
         /*float velocity = Vector3.Magnitude(transform.position - lastPosition);
         if (currentMount.gameObject.name == "SellCameraMount")
@@ -57,9 +59,13 @@ public class MenuCamControl : MonoBehaviour
 
     public void setMount(Transform newMount)
     {
-        currentMount = newMount;
-        newCoords = currentMount.position;
-        startTimer = true;
+        if (!cameraInMotion)
+        {
+            currentMount = newMount;
+            newCoords = currentMount.position;
+            startTimer = true;
+            cameraInMotion = true;
+        }
     }
     public void changeSetting(string changedSetting)
     {
