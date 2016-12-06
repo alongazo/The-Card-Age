@@ -19,10 +19,10 @@ public class TextChanger : MonoBehaviour {
             foreach (var card in deck.GetComponent<VillageDeck>().playableDeck)
             {
                 if (card.Value != 0)
-                    deckSize+=card.Value;
+                    deckSize++;
             }
         }
-        deckAmount.text = deckSize.ToString() + "/30";
+        deckAmount.text = deckSize.ToString() + "/31";
     }
     public void ChangeText()
     {
@@ -31,6 +31,6 @@ public class TextChanger : MonoBehaviour {
         {
             deckSize++;
         }
-        deckAmount.text = deckSize.ToString() + "/30";
+        deckAmount.text = deckSize.ToString() + "/31";
     }
 }
