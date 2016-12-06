@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
@@ -122,7 +121,7 @@ public class Player : MonoBehaviour
 
         GameObject newDrag = new GameObject("Card " + handDeck.Count.ToString());
         newDrag.AddComponent<Image>();
-        newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + card.GetImage());
+        newDrag.GetComponent<Image>().sprite = Resources.Load("Card_Images/" + card.GetName(), typeof(Sprite)) as Sprite;
         newDrag.GetComponent<Image>().preserveAspect = true;
         newDrag.AddComponent<LayoutElement>();
         newDrag.AddComponent<CanvasGroup>();

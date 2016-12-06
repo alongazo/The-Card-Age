@@ -467,7 +467,7 @@ public class Board : MonoBehaviour
             turnCounter++;
             if (turnCounter > 1)
             {
-                AP.CurrentVal += 5;
+                AP.CurrentVal += 3;
             }
             player.DrawCard(false);
 

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -115,7 +114,7 @@ public class Enemy : MonoBehaviour
                             {
                                 Coordinate randCard = cardsOnBoard[Random.Range(0, cardsOnBoard.Count)];
                                 board.SelectCard(randCard);
-                                if (board.cards[randCard.col, randCard.row - 1] == null)
+                                if (randCard.row > 0 && board.cards[randCard.col, randCard.row - 1] == null)
                                 {
                                     board.MoveCard(randCard.col, randCard.row - 1);
                                 } else if (randCard.col > 0 && board.cards[randCard.col - 1,randCard.row] == null) {
@@ -216,7 +215,7 @@ public class Enemy : MonoBehaviour
 
         GameObject newDrag = new GameObject("Enemy Card " + handDeck.Count.ToString());
         newDrag.AddComponent<Image>();
-        newDrag.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Card_Images/" + card.GetImage());//"Assets/Card_Images/aback.png");
+        newDrag.GetComponent<Image>().sprite = Resources.Load("Card_Images/" + card.GetName(), typeof(Sprite)) as Sprite;//"Assets/Card_Images/aback.png");
         newDrag.GetComponent<Image>().preserveAspect = true;
 
         newDrag.AddComponent<LayoutElement>();

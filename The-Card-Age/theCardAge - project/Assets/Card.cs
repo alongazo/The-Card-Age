@@ -34,22 +34,8 @@ public class Card : MonoBehaviour {
     
     void Update()
     {
-        // debugging
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    linkedPlayingCard.AttackEnemy(linkedPlayingCard);
-        //    health.CurrentVal = linkedPlayingCard.GetHealth();
-        //}
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    linkedPlayingCard.RestoreCard();
-        //    health.CurrentVal = linkedPlayingCard.GetHealth();
-        //}
-        //if (linkedPlayingCard.GetHealth() == 0)
-        //{
-        //    // probably need to be destroyed?
-        //}
     }
+
     public void LinkBarToObject(GameObject card)
     {
         health.LinkBarToObject(card);
@@ -171,17 +157,13 @@ public class Card : MonoBehaviour {
 
     public Texture Image()
     {
-        string texture = "Assets/Card_Images/" + linkedPlayingCard.GetImage();
-        ////Debug.Log("image is found at " + texture);
-        return (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(texture, typeof(Texture2D));
+        return Resources.Load("Card_Images/" + linkedPlayingCard.GetName(), typeof(Texture2D)) as Texture2D;
     }
 
     public Sprite Icon()
     {
-        //Debug.Log("This is my name " + this.Name());
-        string icon = "Assets/Playing_Cards/MonsterIcon/" + this.Name() + "Icon.psd";
-        //Debug.Log("icon is found at " + icon);
-        return (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(icon, typeof(Sprite));
+        return Resources.Load("MonsterIcon/" + Name() + "Icon", typeof(Sprite)) as Sprite;
+
     }
     public void Damage(int damage) { linkedPlayingCard.Damage(damage); }
 }

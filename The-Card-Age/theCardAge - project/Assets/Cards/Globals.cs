@@ -4,19 +4,24 @@ using System.Collections.Generic;
 
 public class Globals : MonoBehaviour
 {
+    static public Dictionary<string, Sprite> cardImages;
     static public Dictionary<string, BossCard> bossDatabase;
     static public Dictionary<string, PlayingCard> cardDatabase;
 
     static public int numRows = 6;
     static public int numCols = 6;
 
+
     public TextAsset textfile;
     
 
     void Awake()
     {
+        cardImages = new Dictionary<string, Sprite>();
         bossDatabase = new Dictionary<string, BossCard>();
         cardDatabase = new Dictionary<string, PlayingCard>();
+
+        Sprite[] allCardSprites = Resources.LoadAll("Card_Images/", typeof(Sprite)) as Sprite[];
 
         PlayingCard newCard;
         BossCard newBossCard;
