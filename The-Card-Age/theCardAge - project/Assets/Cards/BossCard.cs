@@ -14,7 +14,6 @@ public class BossCard : PlayingCard
     : base(initInfo, type)
     {
         base.LoadCard(stats);
-        actions.Insert(2, "Defend");
         ap = baseAP = stats[1];
         //endOfTurn = false;
 
@@ -32,7 +31,6 @@ public class BossCard : PlayingCard
     public void LoadCard(string[] initInfo, CardType type, int[] stats)
     {
         base.LoadCard(stats);
-        actions.Insert(2, "Defend");
         ap = baseAP = stats[1];
         //endOfTurn = false;
 

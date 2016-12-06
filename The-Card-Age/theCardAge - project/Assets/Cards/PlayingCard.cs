@@ -16,7 +16,7 @@ public class PlayingCard : BaseCard
     int rank;
     int cost;
     int move;
-    bool isPlayer;
+    bool isForPlayer;
 
     protected int attack, baseAttack;
     public int attackMultiplier = 2;
@@ -27,8 +27,6 @@ public class PlayingCard : BaseCard
     protected string skill;
     protected string status;
     public int sacrificeAmt = 5;
-
-    protected List<string> actions;
 
     public int idNumber;
 
@@ -43,8 +41,6 @@ public class PlayingCard : BaseCard
 
         cardType = type;
         discard = false;
-
-        actions = new List<string>();
     }
     public PlayingCard(PlayingCard toCopy)
     {
@@ -56,12 +52,11 @@ public class PlayingCard : BaseCard
         attack = toCopy.attack; baseAttack = toCopy.baseAttack;
         health = toCopy.health; baseHealth = toCopy.baseHealth;
         defense = toCopy.defense; baseDefense = toCopy.baseDefense;
-        actions = toCopy.actions;
         discard = toCopy.discard;
         skill = toCopy.skill;
         status = toCopy.status;
         idNumber = toCopy.idNumber;
-        isPlayer = toCopy.isPlayer;
+        isForPlayer = toCopy.isForPlayer;
     }
     public PlayingCard()
     {
@@ -74,14 +69,8 @@ public class PlayingCard : BaseCard
         health = baseHealth = info[4];
         defense = baseDefense = info[5];
 
-        if (cardType == CardType.Minion || cardType == CardType.Boss)
-        {
-            actions.Add("Attack"); actions.Add("Move");
-        }
-        this.skill = status.Split(' ')[0].Replace("\r", ""); // need tp figure out how to separate the status -> how does the status store things?
-
+        this.skill = status.Split(' ')[0].Replace("\r", "");
         this.status = status;
-        actions.Add("Discard");
     }
 
 
@@ -122,7 +111,26 @@ public class PlayingCard : BaseCard
         return base.GetHashCode();
     }
 
-
+   public void SetIsForPlayer(bool isPlayer)
+    {
+        this.isForPlayer = isPlayer; // true if owned by player, false if owned by enemy
+        if (cardType == CardType.Skill)
+        {
+            switch (this.skill)
+            {
+                case "Attack":
+                case "Cancel":
+                case "Surround":
+                case "Multiple":
+                case "Paralysis":
+                case "Card_Damage":
+                    this.isForPlayer = !this.isForPlayer; // true if owned by enemy, false if owned by player
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     // Helper functions 
     int CalculateDamage(int enemyDefense, int attackToMultiply)
@@ -165,8 +173,6 @@ public class PlayingCard : BaseCard
         return moves;
     }
 
-    public void SetIsPlayer(bool truth) { isPlayer = truth; }
-
     public override void RestoreCard()
     {
         discard = false;
@@ -198,13 +204,10 @@ public class PlayingCard : BaseCard
     public override int GetMaxHealth() { return baseHealth; }
     public override int GetMovement() { return move; }
     public override string GetStatus() { return (status == "") ? "" : status; }
-    public override bool IsPlayer() { return isPlayer; }
+    public override bool IsForPlayer() { return isForPlayer; }
 	public override int GetCost() { return cost; }
 
     public override void SubHealth(int damage) { health -= damage; }
-
-    // Get functions - possibly put into BaseCard?
-    public List<string> GetActions() { return actions; }
 
     // Skill card skills - template class T is either PlayingCard or BossCard
     void Heal(PlayingCard target)
@@ -225,8 +228,21 @@ public class PlayingCard : BaseCard
     }
     void Sacrifice(PlayingCard target)
     {
+        if (target.isForPlayer)
+        {
+            Board bossPlace = GameObject.Find("BoardManager").GetComponent<Board>();
+            bossPlace.cards[bossPlace.playerBoss.col, bossPlace.playerBoss.row].linkedPlayingCard.SubHealth(5);
+            bossPlace.cards[bossPlace.playerBoss.col, bossPlace.playerBoss.row].UpdateHealth();
+        }
+        else
+        {
+            Board bossPlace = GameObject.Find("BoardManager").GetComponent<Board>();
+            bossPlace.cards[bossPlace.enemyBoss.col, bossPlace.enemyBoss.row].linkedPlayingCard.SubHealth(5);
+            bossPlace.cards[bossPlace.enemyBoss.col, bossPlace.enemyBoss.row].UpdateHealth();
+        }
         health -= sacrificeAmt;
         target.health += sacrificeAmt;
+        target.linkedBoardCard.UpdateHealth();
     }
     void SurroundDamage(PlayingCard[] targets, int damage)
     {
@@ -295,6 +311,7 @@ public class PlayingCard : BaseCard
 
     public void DetermineSkill(int bossAttack, ref Card target)//, Card[] targets)
     {
+        Debug.Log(cardName + " can be used on Player (" + isForPlayer + "), with skill " + skill);
         switch (skill)
         {
             case "Attack":
@@ -302,15 +319,15 @@ public class PlayingCard : BaseCard
                 target.Attack(this, bossAttack);
                 break;
             case "Cancel":
-                Player.SetCanSkill(isPlayer);
-                Enemy.SetCanSkill(!isPlayer);
+                Player.SetCanSkill(!isForPlayer);
+                Enemy.SetCanSkill(isForPlayer);
                 break;
             case "Fortify":
                 Fortify(target.linkedPlayingCard);
                 break;
             case "Summon":
-                Player.doubleSummon = isPlayer;
-                Enemy.doubleSummon = !isPlayer;
+                Player.doubleSummon = isForPlayer;
+                Enemy.doubleSummon = !isForPlayer;
                 break;
             case "Esuna":
                 target.linkedPlayingCard.status = "None";

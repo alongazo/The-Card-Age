@@ -16,7 +16,6 @@ public class Enemy : MonoBehaviour
 
     GameObject wholeDeck;
     List<PlayingCard> handDeck;
-    string selectedAction;
 
     bool isMovingCard;
     static bool canSkill; public static void SetCanSkill(bool truth) { canSkill = truth; }
@@ -28,7 +27,6 @@ public class Enemy : MonoBehaviour
     int numMoves;
 
     List<Coordinate> cardsOnBoard = new List<Coordinate>();
-    List<Coordinate> myCardPositions;
 
     void Start()
     {
@@ -39,7 +37,6 @@ public class Enemy : MonoBehaviour
         wholeDeck.GetComponent<Deck>().Initialize(deck_text, false);
         handDeck = new List<PlayingCard>();
         isMovingCard = false;
-        selectedAction = "";
         Initialize();
         board.EndTurn(); // required because for some reason, board.IsWhiteTurn() returns false right after initiation...
         canSkill = true;
@@ -58,18 +55,28 @@ public class Enemy : MonoBehaviour
     {
         if (isMovingCard && !board.IsWhiteTurn())
         {
-            //////Debug.Log("Not going to the actual placement stuff");
             // animation in here
             isMovingCard = board.CardIsAttacking(); // will change to not be immediate later on
-            //////Debug.Log("isMovingCard = " + isMovingCard);
             if (!isMovingCard && numMoves == 1)
+            {
+                board.EndTurn();
+                return;
+            }
+            bool noMoreMoves = true;
+            foreach (Coordinate activeCard in cardsOnBoard)
+            {
+                if (!board.cards[activeCard.col,activeCard.row].HasTakenAction())
+                {
+                    noMoreMoves = false;
+                }
+            }
+            if (noMoreMoves)
             {
                 board.EndTurn();
             }
         }
         else if (!board.IsWhiteTurn())
         {
-            //////Debug.Log("Not doing the right thing >o<");
             if (numMoves == 0)
             {
                 // time for the enemy to make a move
@@ -88,8 +95,8 @@ public class Enemy : MonoBehaviour
                     int index = GetCardOfType(CardType.Minion);
                     if (index == -1) // if there's no more minion cards...
                     {
-                        // if there's no minion card, then the enemy has two choices: move a card or play a skill card
-                        if (Random.Range(0, 5) < 5) // has a 2/3rds chance to move over playing a skill card
+                        //if there's no minion card, then the enemy has two choices: move a card or play a skill card
+                        if (Random.Range(0, 5) < 5) // has a 1/5rds chance to move over playing a skill card
                         {
                             //////Debug.Log("Going to move a card");
                             List<Coordinate> attackers = new List<Coordinate>();
@@ -100,40 +107,55 @@ public class Enemy : MonoBehaviour
                                 int i = Random.Range(0, attackers.Count);
                                 board.SelectCard(attackers[i]);
                                 board.MoveCard(targets[i].col, targets[i].row);
-                                ////Debug.Log("Attacker at (" + attackers[i].col + "," + attackers[i].row + ")");
-                                ////Debug.Log("Target at (" + targets[i].col + "," + targets[i].row + ")");
                                 isMovingCard = true;
                                 attackers.RemoveAt(i);
                                 targets.RemoveAt(i);
                             }
+                            else
+                            {
+                                Coordinate randCard = cardsOnBoard[Random.Range(0, cardsOnBoard.Count)];
+                                board.SelectCard(randCard);
+                                if (board.cards[randCard.col, randCard.row - 1] == null)
+                                {
+                                    board.MoveCard(randCard.col, randCard.row - 1);
+                                } else if (randCard.col > 0 && board.cards[randCard.col - 1,randCard.row] == null) {
+                                    board.MoveCard(randCard.col - 1, randCard.row);
+                                } else if (randCard.col < Globals.numCols-1 && board.cards[randCard.col+1,randCard.row] == null)
+                                {
+                                    board.MoveCard(randCard.col + 1, randCard.row);
+                                }
+                                isMovingCard = true;
+                            }
                         }
-                        // commenting this out so it doesn't break your code!!!
-                        //else
-                        //{
-                        //    index = GetCardOfType(CardType.Skill);
-                        //    Debug.Log("Index of Skill card is " + index);
-                        //    if (index > -1) // if there's a skill card, USE IT 
-                        //    {
-                        //        // Need to get a target
-                        //        List<Coordinate> playerPositions = board.GetPlayerPositions();
-                        //        if (playerPositions != null)
-                        //        {
-                        //            Coordinate targetCoordinate = playerPositions[Random.Range(0, playerPositions.Count)];
-                        //            Debug.Log("Target at (" + targetCoordinate.col + "," + targetCoordinate.row + ") out of " + playerPositions.Count + "targets");
+                        else
+                        {
+                            index = GetCardOfType(CardType.Skill);
+                            if (index > -1) // if there's a skill card, USE IT 
+                            {
+                                // Need to get a target
+                                List<Coordinate> playerPositions = board.GetPlayerPositions();
+                                if (playerPositions != null)
+                                {
+                                    Coordinate targetCoordinate;
+                                    if (handDeck[index].IsForPlayer())
+                                    {
+                                        targetCoordinate = playerPositions[Random.Range(0, playerPositions.Count)];
+                                    }
+                                    else
+                                    {
+                                        targetCoordinate = cardsOnBoard[Random.Range(0, cardsOnBoard.Count)];
+                                    }
 
-
-
-                        //            // Need to put the card onto the target (remember, it's not on the board...)
-                        //            GameObject newDrag = handPlace.transform.GetChild(index).gameObject;
-                        //            Debug.Log("Using skill " + handDeck[index].GetName());
-                        //            newDrag.GetComponent<drag>().OnSkillDrag(targetCoordinate.col, targetCoordinate.row);
-                        //        }
-                        //    }
-                        //}
+                                    // Need to put the card onto the target (remember, it's not on the board...)
+                                    GameObject newDrag = handPlace.transform.GetChild(index).gameObject;
+                                    newDrag.GetComponent<drag>().OnSkillDrag(targetCoordinate.col, targetCoordinate.row);
+                                    numMoves--;
+                                }
+                            }
+                        }
                     }
                     else // if there's a minion card, PUT IT DOWN
                     {
-                        //Debug.Log("Going to put down a minion");
                         PlaceCard(index);
                         numMoves--;
                         isMovingCard = true;
@@ -179,18 +201,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void selectACard(PlayingCard card)
+    string ToTitleCase(string input)
     {
-        selectedAction = card.GetActions()[0];
+        return input[0].ToString().ToUpper() + input.Substring(1);
     }
-
-    public string getAction() { return selectedAction; }
-
 
     void SetCardToHand(PlayingCard card)
     {
         // Trying to add this to a drag object?
-        string prefabName = card.GetName().Replace(" ", "") + "Prefab";
+        string prefabName = ToTitleCase(card.GetName().Replace(" ", "")) + "Prefab";
         int prefabIndex = board.FindPrefabIndex(prefabName);
         // want to add the required components to here:
         //  Drag (script) with TypeOfItem = Weapon and ItemIndex = prefabIndex
@@ -313,7 +332,7 @@ public class Enemy : MonoBehaviour
         GameObject newDrag = new GameObject("Enemy Card " + handDeck.Count.ToString());
         newDrag.AddComponent<drag>();
         newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
-        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["Wyvern"]);
+        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["wyvern"]);
         newDrag.GetComponent<drag>().setOriginator(ref handDeck);
         newDrag.GetComponent<drag>().boardScript = board;
         int col, row;

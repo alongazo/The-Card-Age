@@ -112,31 +112,39 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
                 // check if no card is on the tile
                 if (card.GetCardType() == CardType.Skill && boardScript.cards[boardScript.selectionX, boardScript.selectionY] != null)
                 { //TRYING TO IMPLEMENT SKILL CARDS!
-                    if (card.IsPlayer() && Player.CanSkill() || !card.IsPlayer() && Enemy.CanSkill())
+                    if (Player.CanSkill())
                     {
-                        ////Debug.Log("Using skill on a card");
-                        boardScript.MinusAP(card.GetCost());
-                        int bossAttack = boardScript.GetAttackOfBoss(card.IsPlayer());
-                        //List<Card> targets = new List<Card>();
-                        //if (boardScript.selectionX + 1 < Globals.numCols) { targets.Add(boardScript.cards[boardScript.selectionX+1, boardScript.selectionY]); }
-                        //if (boardScript.selectionX - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX-1, boardScript.selectionY]); }
-                        //if (boardScript.selectionY + 1 < Globals.numRows) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY+1]); }
-                        //if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
+                        if (card.IsForPlayer() == boardScript.cards[boardScript.selectionX, boardScript.selectionY].isWhite)
+                        {
+                            ////Debug.Log("Using skill on a card");
+                            boardScript.MinusAP(card.GetCost());
+                            int bossAttack = boardScript.GetAttackOfBoss(true);
 
-                        // Going to dampen the attack cause it's wayyy too much right now
-                        card.DetermineSkill(bossAttack - 3, ref boardScript.cards[boardScript.selectionX, boardScript.selectionY]);//, targets.ToArray());
-                       // Debug.Log("spell used on " + boardScript.cards[boardScript.selectionX, boardScript.selectionY]);
-                       // Debug.Log("hp: " + boardScript.cards[boardScript.selectionX, boardScript.selectionY].GetHPVal());
 
-                        boardScript.DetermineEndGame(boardScript.cards[boardScript.selectionX, boardScript.selectionY]);
+                            // Going to dampen the attack cause it's wayyy too much right now
+                            card.DetermineSkill(bossAttack - 3, ref boardScript.cards[boardScript.selectionX, boardScript.selectionY]);
 
-                        originated.Remove(card);
-                        Destroy(this.gameObject);
+                            boardScript.DetermineEndGame(boardScript.cards[boardScript.selectionX, boardScript.selectionY]);
 
+                            originated.Remove(card);
+                            Destroy(this.gameObject);
+                        }
+                        else
+                        {
+                            if (card.IsForPlayer())
+                            {
+                                Debug.Log("This card should be used on your cards.");
+                            }
+                            else
+                            {
+                                Debug.Log("This card should be used on the enemy's cards.");
+                            }
+                            this.transform.position += new Vector3(0, 0, (float)0.1);
+                        }
                     }
                     else {
                         ////Debug.Log("Can't use skill!");
-                        if (card.IsPlayer())
+                        if (card.IsForPlayer())
                         {
                             Player.SetCanSkill(true);
                         }
@@ -196,26 +204,20 @@ public class drag : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     {
         if (card.GetCardType() == CardType.Skill && boardScript.cards[x, y] != null)
         { //TRYING TO IMPLEMENT SKILL CARDS!
-            if (card.IsPlayer() && Player.CanSkill() || !card.IsPlayer() && Enemy.CanSkill())
+            if (Enemy.CanSkill())
             {
                 ////Debug.Log("Using skill on a card");
                 boardScript.MinusAP(card.GetCost());
-                int bossAttack = boardScript.GetAttackOfBoss(card.IsPlayer());
-                //List<Card> targets = new List<Card>();
-                //if (boardScript.selectionX + 1 < Globals.numCols) { targets.Add(boardScript.cards[boardScript.selectionX+1, boardScript.selectionY]); }
-                //if (boardScript.selectionX - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX-1, boardScript.selectionY]); }
-                //if (boardScript.selectionY + 1 < Globals.numRows) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY+1]); }
-                //if (boardScript.selectionY - 1 > 0) { targets.Add(boardScript.cards[boardScript.selectionX, boardScript.selectionY-1]); }
-
+                int bossAttack = boardScript.GetAttackOfBoss(false);
                 // Going to dampen the attack cause it's wayyy too much right now
                 card.DetermineSkill(bossAttack - 3, ref boardScript.cards[x,y]);//, targets.ToArray());
+                boardScript.DetermineEndGame(boardScript.cards[x, y]);
                 originated.Remove(card);
                 Destroy(this.gameObject);
-
             }
             else {
                 Debug.Log("Can't use skill!");
-                if (card.IsPlayer())
+                if (card.IsForPlayer())
                 {
                     Player.SetCanSkill(true);
                 }

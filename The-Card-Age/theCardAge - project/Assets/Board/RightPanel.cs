@@ -85,7 +85,7 @@ public class RightPanel : MonoBehaviour
         prevCardTag = "-1";
 
         //Debug.Log("is card null: " + (card == null));
-        if (card == null)
+        if (card == null || (prevRightPanelX == card.CurrentX && prevRightPanelY == card.CurrentY))
         {
             prevRightPanelX = -1;
             prevRightPanelY = -1;

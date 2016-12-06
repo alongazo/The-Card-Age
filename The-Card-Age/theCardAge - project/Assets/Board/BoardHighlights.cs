@@ -54,11 +54,14 @@ public class BoardHighlights : MonoBehaviour
                     {
                         go.GetComponent<Renderer>().material.SetColor("_Color", ruby);
                     } 
-                    else
+                    else if (grid.cards[i, j] == null)
                     {
                         go.GetComponent<Renderer>().material.SetColor("_Color", gold);
                     }
-           
+                    else
+                    {
+                        go.SetActive(false);
+                    }
                 }
             }
         }

@@ -1,14 +1,14 @@
 Troll:1
-Alp:3
-Slime:4
-Pixie:6
-Clobber:3
-Demonic Flame:2
-Glob Throw:2
-Lure:1
-Nightmare:1
-Shadow Slash:1
-Slime Shield:1
-Sneak Attack:2
-Heal:2
-Wyvern:1
+alp:3
+slime:4
+pixie:6
+clobber:3
+demonic_flame:2
+glob_throw:2
+lure:1
+nightmare:1
+shadow_slash:1
+slime_shield:1
+sneak_attack:2
+heal:2
+wyvern:1

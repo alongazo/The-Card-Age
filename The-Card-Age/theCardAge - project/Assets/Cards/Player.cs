@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
             if (card == null) { return; }
             handDeck.Add(card);
             SetCardToHand(card);
-            if (again) { turnIsDone = true; }
+            if (again) { board.EndTurn(); }
         }
         deckCount.text = wholeDeck.GetComponent<Deck>().SizeOFDeck().ToString();
     }
@@ -103,19 +103,16 @@ public class Player : MonoBehaviour
         //cardsOnBoard.Add(new Coordinate(3, 1));
     }
 
-
-    public void selectACard(PlayingCard card)
+    string ToTitleCase(string input)
     {
-        selectedAction = card.GetActions()[0];
+        return input[0].ToString().ToUpper() + input.Substring(1);
     }
-
-    public string getAction() { return selectedAction; }
-
 
     void SetCardToHand(PlayingCard card)
     {
         // Trying to add this to a drag object?
-        string prefabName = card.GetName().Replace(" ", "") + "Prefab";
+        string prefabName = ToTitleCase(card.GetName().Replace(" ", "")) + "Prefab";
+        
         int prefabIndex = board.FindPrefabIndex(prefabName);
         // want to add the required components to here:
         //  Drag (script) with TypeOfItem = Weapon and ItemIndex = prefabIndex
@@ -148,7 +145,7 @@ public class Player : MonoBehaviour
         GameObject newDrag = new GameObject("Card " + handDeck.Count.ToString());
         newDrag.AddComponent<drag>();
         newDrag.GetComponent<drag>().setItemIndex(prefabIndex);
-        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["Wyvern"]);
+        newDrag.GetComponent<drag>().setCard(Globals.cardDatabase["wyvern"]);
         newDrag.GetComponent<drag>().setOriginator(ref handDeck);
         newDrag.GetComponent<drag>().boardScript = board;
         int col, row;

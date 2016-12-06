@@ -42,7 +42,7 @@ public abstract class BaseCard
     public virtual int GetMaxHealth() { return 0; }
     public virtual int GetMovement() { return 0; }
     public virtual string GetStatus() { return ""; }
-    public virtual bool IsPlayer() { return false; }
+    public virtual bool IsForPlayer() { return false; }
 	public virtual int GetCost() { return 0; }
 
     public virtual void SubHealth(int damage) { }

@@ -19,17 +19,17 @@ public class Deck : MonoBehaviour
         //Debug.Log("Inside Deck constructor for this bosscard: " + bossName);
 
         heroCard = Globals.bossDatabase[cardNames[0].Split(':')[0]];
-        heroCard.SetIsPlayer(isPlayer);
+        heroCard.SetIsForPlayer(isPlayer);
         int index = 0;
-        cardNames[0] = "Heal:1"; // This is the third heal
+        cardNames[0] = "heal:1"; // This is the third heal
         foreach (string card in cardNames)
         {
             string[] info = card.Split(':');
             for (int i = 0; i < Convert.ToInt32(info[1]); i++)
             {
-                playableDeck.Add(Globals.cardDatabase[info[0]]);
+                playableDeck.Add(new PlayingCard(Globals.cardDatabase[info[0]]));
                 playableDeck[index].idNumber = index;
-                playableDeck[index].SetIsPlayer(isPlayer);
+                playableDeck[index].SetIsForPlayer(isPlayer);
                 index++;
             }
         }
